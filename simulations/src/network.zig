@@ -1,43 +1,26 @@
 const std = @import("std");
+const print = std.debug.print;
 
-// =============================================================================
-//  CONFIGURATION
-// =============================================================================
+const network_file = "data/networkInit.txt";
+const spike_input_file = "data/spikelist.txt";
 
-const SimConfig = struct {
-    num_neurons: u32 = 50,
-    // Simulation should match the generated spike train
-    time_steps: u32 = 1000,
-    // File containing the input spikes from the previous step
-    spike_input_file: []const u8 = "data/spikelist.txt",
-    // File to save the final network graph for visualization
-    initial_network_output_file: []const u8 = "data/initialnetwork.dot",
-    final_network_output_file: []const u8 = "data/finalnetwork.dot",
+const Config = @This();
 
-    // --- Neuron Parameters (Leaky Integrate-and-Fire Model) ---
-    potential_decay: f32 = 0.95, // Leak factor per time step (e.g., 5% leak)
-    potential_rest: f32 = 0.0,
-    potential_threshold: f32 = 1.0,
-    potential_reset: f32 = 0.0,
-    input_spike_potential: f32 = 0.25, // How much an external input spike increases potential
-
-    // --- Synapse & Learning Parameters (STDP) ---
-    initial_connections_per_neuron: u32 = 5,
-    // How "far" a neuron can connect initially
-    connection_radius: i32 = 5,
-    // Learning rates for potentiation (strengthening) and depression (weakening)
-    stdp_lr_positive: f32 = 0.005,
-    stdp_lr_negative: f32 = 0.003,
-    // Time windows for STDP. A smaller tau means spikes must be closer together.
-    stdp_tau_positive: f32 = 20.0,
-    stdp_tau_negative: f32 = 20.0,
-    // Synapse weights will be clamped within this range
-    max_weight: f32 = 1.0,
-    min_weight: f32 = 0.01,
-};
-// =============================================================================
-//  DATA STRUCTURES
-// =============================================================================
+num_neurons: u32 = 50,
+time_steps: u32 = 1000,
+potential_decay: f32 = 0.95, // Leak factor per time step (e.g., 5% leak)
+potential_rest: f32 = 0.0,
+potential_threshold: f32 = 1.0,
+potential_reset: f32 = 0.0,
+input_spike_potential: f32 = 0.25, // How much an external input spike increases potential
+initial_connection_num: u32 = 5,
+connection_radius: i32 = 5,
+stdp_lr_positive: f32 = 0.005,
+stdp_lr_negative: f32 = 0.003,
+stdp_tau_positive: f32 = 20.0,
+stdp_tau_negative: f32 = 20.0,
+max_weight: f32 = 1.0,
+min_weight: f32 = 0.01,
 
 const Synapse = struct {
     target_neuron_idx: u32,
@@ -45,11 +28,8 @@ const Synapse = struct {
 };
 
 const Neuron = struct {
-    // Current state
     potential: f32,
     last_spike_time: u32,
-
-    // List of outgoing connections
     connections: std.ArrayList(Synapse),
 };
 
@@ -65,12 +45,8 @@ const Network = struct {
     }
 };
 
-// =============================================================================
-//  NETWORK INITIALIZATION
-// =============================================================================
-
 /// Creates and initializes the SNN with random, spatially-close connections.
-fn initNetwork(allocator: std.mem.Allocator, config: SimConfig) !Network {
+fn initNetwork(config: Config, allocator: std.mem.Allocator) !Network {
     const neurons = try allocator.alloc(Neuron, config.num_neurons);
     errdefer allocator.free(neurons);
 
@@ -84,19 +60,20 @@ fn initNetwork(allocator: std.mem.Allocator, config: SimConfig) !Network {
             .connections = std.ArrayList(Synapse).init(allocator),
         };
 
-        // Create initial outgoing connections
         var k: u32 = 0;
-        while (k < config.initial_connections_per_neuron) {
+        add_connections: while (k < config.initial_connection_num) {
             // Pick a target neuron `j` that is spatially close to `i`
             const offset: i32 = random.intRangeAtMost(i32, -config.connection_radius, config.connection_radius);
             var j: i32 = @as(i32, @intCast(i)) + offset;
 
-            // Handle wrap-around for neurons at the edges
-            if (j < 0) j += @intCast(config.num_neurons);
-            if (j >= config.num_neurons) j -= @intCast(config.num_neurons);
+            if (j < 0) j = -j;
+            if (j >= config.num_neurons) j -= @intCast(config.connection_radius);
 
-            // Don't connect a neuron to itself
+            // Don't connect a neuron to itself or more than one per pair
             if (j == i) continue;
+            for (neurons[i].connections.items) |connection| {
+                if (j == connection.target_neuron_idx) continue :add_connections;
+            }
 
             try neurons[i].connections.append(Synapse{
                 .target_neuron_idx = @intCast(j),
@@ -112,13 +89,9 @@ fn initNetwork(allocator: std.mem.Allocator, config: SimConfig) !Network {
     };
 }
 
-// =============================================================================
-//  SPIKE DATA LOADER
-// =============================================================================
-
 /// Loads spike data from the specified file into a format that's fast to access during simulation.
 /// Returns an ArrayList where the index is the time step, and the value is a slice of neuron indices that spiked.
-fn loadSpikeInput(allocator: std.mem.Allocator, config: SimConfig) !std.ArrayList([]u32) {
+fn loadSpikeInput(config: Config, allocator: std.mem.Allocator) !std.ArrayList([]u32) {
     var spike_map = std.ArrayList([]u32).init(allocator);
     errdefer spike_map.deinit();
     try spike_map.resize(config.time_steps);
@@ -140,7 +113,7 @@ fn loadSpikeInput(allocator: std.mem.Allocator, config: SimConfig) !std.ArrayLis
     }
 
     // Read the file and populate temp_spikes
-    const file = try std.fs.cwd().openFile(config.spike_input_file, .{});
+    const file = try std.fs.cwd().openFile(spike_input_file, .{});
     defer file.close();
 
     var buf_reader = std.io.bufferedReader(file.reader());
@@ -174,68 +147,33 @@ fn loadSpikeInput(allocator: std.mem.Allocator, config: SimConfig) !std.ArrayLis
     return spike_map;
 }
 
-// =============================================================================
-//  NETWORK VISUALIZATION EXPORT
-// =============================================================================
-
-/// Saves the network structure to a .dot file for visualization with Graphviz.
-fn saveNetworkAsDot(network: Network, filename: []const u8, weight_threshold: f32) !void {
+fn saveNetworkAsText(network: Network, filename: []const u8) !void {
     const file = try std.fs.cwd().createFile(filename, .{});
     defer file.close();
     var writer = file.writer();
 
-    try writer.writeAll("digraph SNN {\n");
-    try writer.writeAll("    rankdir=\"LR\";\n");
-    try writer.writeAll("    bgcolor=\"#222222\";\n");
-    try writer.writeAll("    node [shape=circle, style=filled, fillcolor=\"#44aadd\", fontcolor=white, color=white];\n");
-    try writer.writeAll("    edge [color=\"#cccccc\"];\n\n");
+    try writer.writeAll("# Neural Network Connections\n");
 
-    // Define all nodes first
-    for (0..network.neurons.len) |i| {
-        try writer.print("    {d};\n", .{i});
-    }
-    try writer.writeAll("\n");
-
-    // Define all edges with weights as attributes
-    for (0..network.neurons.len) |i| {
-        for (network.neurons[i].connections.items) |synapse| {
-            // Only draw connections that meet the weight threshold
-            if (synapse.weight > weight_threshold) {
-                // penwidth makes the line thicker for stronger weights
-                const pen_width = 1.0 + (synapse.weight * 4.0);
-                // opacity makes the line more solid for stronger weights
-                const opacity = 0.2 + (synapse.weight * 0.8);
-
-                try writer.print("    {d} -> {d} [penwidth={d:.2}, color=\"#00ffff{X:0>2}\", tooltip=\"{d:.4}\"];\n", .{
-                    i,
-                    synapse.target_neuron_idx,
-                    pen_width,
-                    @as(u8, @intFromFloat(opacity * 255)), // Append opacity as hex
-                    synapse.weight,
-                });
-            }
+    for (network.neurons) |neuron| {
+        for (neuron.connections.items) |connection| {
+            try writer.print("{d} ", .{connection.target_neuron_idx});
         }
+        try writer.writeAll("\n");
     }
-    try writer.writeAll("}\n");
 }
 
-// =============================================================================
-//  SIMULATION
-// =============================================================================
 pub fn run(allocator: std.mem.Allocator) !void {
-    const config = SimConfig{};
+    const config: Config = .{};
 
-    // --- SETUP ---
     std.debug.print("Initializing network...\n", .{});
-    var network = try initNetwork(allocator, config);
+    var network = try initNetwork(config, allocator);
     defer network.deinit();
 
-    // *** ADDED: SAVE INITIAL STATE ***
-    std.debug.print("Saving initial network graph to '{s}'...\n", .{config.initial_network_output_file});
-    try saveNetworkAsDot(network, config.initial_network_output_file, 0.0); // Threshold 0.0 to show ALL connections
+    std.debug.print("Saving initial network graph to '{s}'...\n", .{network_file});
+    try saveNetworkAsText(network, network_file); // Threshold 0.0 to show ALL connections
 
-    std.debug.print("Loading spike data from '{s}'...\n", .{config.spike_input_file});
-    const spike_input = try loadSpikeInput(allocator, config);
+    std.debug.print("Loading spike data from '{s}'...\n", .{spike_input_file});
+    const spike_input = try loadSpikeInput(config, allocator);
     defer {
         for (spike_input.items) |s| allocator.free(s);
         spike_input.deinit();
@@ -311,20 +249,14 @@ pub fn run(allocator: std.mem.Allocator) !void {
     }
     std.debug.print("Simulation finished.\n\n", .{});
 
-    // --- REPORT & SAVE FINAL RESULTS ---
-    std.debug.print("Saving final network graph to '{s}'...\n", .{config.final_network_output_file});
-    try saveNetworkAsDot(network, config.final_network_output_file, 0.1); // Threshold 0.1 to show only strong connections
-    std.debug.print("Done. Use a tool like Graphviz to render the .dot files.\n", .{});
-    const stdout = std.io.getStdOut().writer();
-    try stdout.print("# Final Synaptic Weights\n", .{});
-    try stdout.print("# Format: <from_neuron> -> <to_neuron> [weight]\n", .{});
+    // const stdout = std.io.getStdOut().writer();
 
-    for (0..config.num_neurons) |i| {
-        for (network.neurons[i].connections.items) |synapse| {
-            // Only print connections that have strengthened significantly
-            if (synapse.weight > 0.1) {
-                try stdout.print("{d} -> {d} [{d:.4}]\n", .{ i, synapse.target_neuron_idx, synapse.weight });
-            }
-        }
-    }
+    // for (0..config.num_neurons) |i| {
+    //     for (network.neurons[i].connections.items) |synapse| {
+    //         // Only print connections that have strengthened significantly
+    //         if (synapse.weight > 0.1) {
+    //             try stdout.print("{d} -> {d} [{d:.4}]\n", .{ i, synapse.target_neuron_idx, synapse.weight });
+    //         }
+    //     }
+    // }
 }
