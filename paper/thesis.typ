@@ -1,8 +1,13 @@
 /* Configurations */
 
+#import "@preview/lovelace:0.3.0": *
+
 #set text(font: "Source Serif 4 18pt", size: 11pt)
 #show math.equation : set text(font:"TeX Gyre Schola Math", size: 10.5pt)
-#show heading: set text(font:"Source Serif 4",weight: "semibold", style: "italic")
+// #show raw : set text(font:"CommitMono")
+#show raw : set text(font:"Departure Mono")
+#set list(marker: sym.square.filled.small)
+#show heading: set text(font:"Source Serif 4",weight: "semibold", style:"italic")
 #set heading(numbering: "1.1 ~ ")
 #show heading.where(
   level: 1
@@ -10,7 +15,8 @@
   #set align(center)
   #set text(20pt)
   #v(1em)
-  #counter(heading).display() #smallcaps(it.body) 
+  #counter(heading).display()#it.body 
+  // #counter(heading).display() #it.body 
   #v(1em)
 ]
 
@@ -19,7 +25,7 @@
 ): it => block(width: 100%)[
   #set text(16pt)
   #v(1em)
-  #counter(heading).display() #smallcaps(it.body)
+  #counter(heading).display()#it.body
   #v(0.5em)
 ]
 
@@ -27,19 +33,20 @@
 #set par(justify: true)
 
 
-#block(width:100%)[#set text(size: 27pt, weight: "semibold", style: "normal", font: "Source Serif 4")
+#block(width:100%)[#set text(size: 27pt, weight: "semibold", style: "italic", font: "Source Serif 4" )
   #set align(center)
-  #smallcaps[Machine Learning With Spiking Neural Networks]
+  #smallcaps[MACHINE LEARNING WITH SPIKES]
   #v(1em)
 ]
 
-#align(center)[ Brage Wiseth \ Universitiy of Oslo \ #link("mailto:bragewi@uio.no")]
-
+#align(center)[#set text(font: "Departure Mono")
+Brage Wiseth \ Universitiy of Oslo \ #link("mailto:bragewi@uio.no")
 #align(center)[#datetime.today().display()]
+]
 
 #v(3em)
 
-= Introduction And Theoretical Framework
+= INTRODUCTION AND THEORY
 
 The concept of intelligence, how it arises ... is probably been some of the longest standing
 questions in human history. How and if it can be reproduced artificially is a particuarly hot topic
@@ -48,7 +55,7 @@ brings the promise of unlocking new technology discovering new drugs or material
 last invention humans ever need to make. In recent years we have crept ever closer to answer some
 of these questions. New state of the art artificial inteligence systems have achieved remarkable
 success like the sophisticated language capabilities of GPT models and the protein-folding
-predictions of AlphaFold. [TODO: needs citation]
+predictions of AlphaFold. ``` TODO: needs citation ```
 
 Despite these triumphs, a significant gap persists between artificial systems and their biological
 counterparts. Evidently these AI systems might posses superhuman capabilities in one or a few domain
@@ -73,15 +80,16 @@ and efficiency, distinguishing core principles from intricate biological details
 necessary for artificial implementation. Concretly this thesis wants to
 - Explore how information flow based on sparse event might be implemented in a network, encoding
 - Explore learning algorithms suitable for such a network, and challange SOTA
-#emoji.brain
-[TODO: add or remove research questions]
+
+``` TODO: add or remove research questions ```
+
 
 The different sections of the thesis
 - A
 - B
 - C
 
-== The Estasblished Approach
+== THE ESTASBLISHED APPROACH
 
 [TODO: add MLP explanation and ilustration]
 The term Aritifical Inteligence forms an umbrella over many different techniques that make use of
@@ -107,25 +115,26 @@ combination---multiple layers of interconnected units, typically using non-linea
 functions, trained via backpropagation---defines the MLP, which became a foundational architecture
 for neural networks and paved the way for the deep learning revolution.
 
-== Problems with the Established Approach
+== PROBLEMS WITH THE ESTABLISHED APPROACH
 
 backprop it requires freezing the entire network and separates computation and learning
 into two separate stages, local connectetions that should be independent of eachother have to wait
 
-
-== Neuroscience 101
+== NEUROSCIENCE 101
 
 The perceptron, and its evolution into Multi-Layer Perceptrons (MLPs), represent foundational
 models in artificial intelligence inspired by early concepts of neural computation. Indeed, certain
 core principles resonate with biological observations: the brain comprises interconnected neurons,
-often organized in broadly hierarchical structures or layers#footnote[
-While often conceptualized in layers (e.g., layers of the neocortex), the brain's connectivity
-is vastly more complex than typical feedforward ANNs, featuring extensive recurrent connections,
-feedback loops, and long-range projections that make a simple 'unrolling' into discrete layers an
-oversimplification
+often organized in broadly hierarchical structures or layers
+#footnote[
+  While often conceptualized in layers (e.g., layers of the neocortex), the brain's connectivity
+  is vastly more complex than typical feedforward ANNs, featuring extensive recurrent connections,
+  feedback loops, and long-range projections that make a simple 'unrolling' into discrete layers an
+  oversimplification
+]
 that process information sequentially
 from sensory input to higher cognitive areas. Furthermore, individual neurons integrate incoming
-signals—analogous to a weighted sum in MLPs—and generate an output spike or 'fire' only when a
+signals—analogous to a weighted sum in MLPs and generate an output spike or 'fire' only when a
 certain threshold is exceeded, a mechanism abstracted by the activation functions used in artificial
 neurons.
 
@@ -165,7 +174,7 @@ dynamics—motivate the exploration of Spiking Neural Networks (SNNs), which exp
 individual spike events and their timing, offering a potentially more powerful and biologically
 plausible framework for computation than traditional MLPs.
 
-== The Problem With Spikes: Discontinuity
+== THE PROBLEM WITH SPIKES: DISCONTINUITY
 
 While models like Spiking Neural Networks (SNNs) offer greater biological plausibility and
 potential advantages in processing temporal information and energy efficiency, their adoption faces
@@ -194,7 +203,7 @@ from flowing backward through the network to update the weights effectively. Thi
 represents a substantial obstacle, as it seemingly precludes the use of the highly successful and
 well-understood gradient-based optimization toolkit that underpins much of modern AI.
 
-== New Approaches
+== NEW APPROACHES
 
 Surrogate Gradients: A popular approach involves using a "surrogate" function during the
 backward pass of training. While the forward pass uses the discontinuous spike generation, the
@@ -228,12 +237,13 @@ optimization remains a critical area of active research and development. The suc
 practice hinges significantly on the effectiveness and scalability of these alternative or adapted
 training techniques.
 
-= Methodology
+= METHODOLOGY
+```
+Step: explore learning algorithms
+experiment 1 set up random pattern across 1 dimension, inject a repeating pattern
+for the network to learn
 
-Step: explore learning algorithms\
-experiment 1 set up random pattern across 1 dimension, inject a repeating pattern for the network to learn
-
-Step: explore edge detection\
+Step: explore edge detection
 can be achived by duplicating and inverting the signal
 
 Step: explore different neuronal models
@@ -247,13 +257,30 @@ Step: expand network to more layers figure out how to connect (AER)
 Step: explore how learning algos work with multi-layer
 
 Step: try to learn MNIST
+```
 
-[NOTETOSELF: Steps either build on eachother or are independent, this way we can do bite size
-research and stop at any point if we run out of time, we dont have to make an entire system
-in order to have something to write about] 
+```
+NOTETOSELF: Steps either build on eachother or are independent, this way we can do
+bite size research and stop at any point if we run out of time, we dont have to
+make an entire system in order to have something to write about
+``` 
 
+#{ set text(font: "Departure Mono", size:9pt)
+align(center,
+pseudocode-list(hooks: .5em, line-numbering: none)[
+  + do something
+  + do something else
+  + while still something to do
+    + do even more
+    + if not done yet *then*
+      + wait a bit
+      + resume working
+    + else
+      + go home
+])
+}
 = Results
 
 = Discussion
 
-#bibliography("citations.bib")
+#bibliography("references.bib")
