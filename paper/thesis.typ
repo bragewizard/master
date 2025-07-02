@@ -38,59 +38,82 @@
 #align(center)[#datetime.today().display()]
 
 #v(3em)
+
 = Introduction And Theoretical Framework
 
-The quest to create intelligent machines represents a long-standing ambition, one that has gained
-significant momentum in recent decades with the advent of artificial neural networks.
-Drawing high-level inspiration from the computational principles of the mammalian brain, these
-models, particularly deep learning architectures like multilayer perceptrons, have achieved
-remarkable success. They underpin many transformative technologies, exemplified by breakthroughs
-like the sophisticated language capabilities of GPT models and the protein-folding predictions of
-AlphaFold. [TODO: needs citation]
+The concept of intelligence, how it arises ... is probably been some of the longest standing
+questions in human history. How and if it can be reproduced artificially is a particuarly hot topic
+today. Getting answers to these questions will not only help us understand our own minds but also
+brings the promise of unlocking new technology discovering new drugs or materials, it may be the
+last invention humans ever need to make. In recent years we have crept ever closer to answer some
+of these questions. New state of the art artificial inteligence systems have achieved remarkable
+success like the sophisticated language capabilities of GPT models and the protein-folding
+predictions of AlphaFold. [TODO: needs citation]
 
 Despite these triumphs, a significant gap persists between artificial systems and their biological
-counterparts. Current state-of-the-art ANNs, while functionally powerful, require vast computational
-resources and energy for both training and operation. This demand stands in stark contrast
-to the biological brain---an extraordinarily complex and efficient organ estimated to operate
-on merely 20-30 Watts while performing tasks far beyond the capabilities of current AI. This
-profound difference in efficiency and capability suggests that contemporary ANN paradigms, often
-characterized by dense matrix multiplications and trained via backpropagation, might be missing or
-oversimplifying fundamental principles crucial for truly intelligent and scalable computation.
+counterparts. Evidently these AI systems might posses superhuman capabilities in one or a few domain
+none of them surpass humans in all, what we call Artificial General Inteligence (AGI). Also more
+relevant to this thesis is that current state-of-the-art ANNs, while functionally powerful, require
+vast amount of data, computatuon and energy resources. This demand stands in stark contrast to the
+biological brain---an extraordinarily complex and efficient organ estimated to operate on merely
+20-30 Watts while also beeing in the AGI category. This profound difference in efficiency and
+capability suggests that contemporary ANN paradigms, might be missing or oversimplifying fundamental
+principles crucial for truly intelligent and scalable computation.
 
-This thesis argues that overcoming the critical limitations of scalability and energy efficiency in
-artificial intelligence likely requires moving beyond current mainstream ANN architectures. It will
-explore the potential of incorporating more sophisticated biological principles into AI design.
-This involves investigating alternative computational paradigms, potentially inspired by mechanisms
-such as sparse, event-driven processing observed in Spiking Neural Networks (SNNs), the role of
-temporal dynamics in neural coding, or the potential computational advantages of systems operating
-near critical states. The central challenge lies in identifying and abstracting the truly essential
-biological mechanisms for intelligence and efficiency, distinguishing core principles from intricate
-biological details that may not be necessary for artificial implementation.
+This thesis wants to explore new approaches that first and foremost might solve the critical
+limitations of scalability and energy efficiency in artificial intelligence. But also hopefully lay
+the foundation for systems that might eventually fall into the AGI category. This likely requires
+moving beyond current mainstream ANN architectures. It will explore the potential of incorporating
+more sophisticated biological principles into AI design. This involves investigating alternative
+computational paradigms, potentially inspired by mechanisms such as sparse, event-driven processing
+observed in Spiking Neural Networks (SNNs), the role of temporal dynamics in neural coding, or the
+potential computational advantages of systems operating near critical states. The central challenge
+lies in identifying and abstracting the truly essential biological mechanisms for intelligence
+and efficiency, distinguishing core principles from intricate biological details that may not be
+necessary for artificial implementation. Concretly this thesis wants to
+- Explore how information flow based on sparse event might be implemented in a network, encoding
+- Explore learning algorithms suitable for such a network, and challange SOTA
+#emoji.brain
+[TODO: add or remove research questions]
+
+The different sections of the thesis
+- A
+- B
+- C
+
+== The Estasblished Approach
+
+[TODO: add MLP explanation and ilustration]
+The term Aritifical Inteligence forms an umbrella over many different techniques that make use of
+machines to do some intelligent task. The most promising way to acheive AI to day is trough deep
+neural networks. The neural networks of today almost exscluvely use some variation of the Multi
+Layer Perceptron (MLP) concept. It is a fairly old idea based on a simple model on how the brain
+processes information. The MLP evolved from early attempts to create computational models inspired
+by biological neurons. The model of the neuron that the MLP is based on has synapses just like
+the biological one, the synapses functions as inputs which when firing will exite the reciving
+neuron more or less depending on the strenth of the connection. If the reciving neuron get exited
+above a threshold it will fire and pass the signal downstream to another reciving neuron. Which
+is conceptually similar to how real neurons operate.  Its roots lie in the foundational work of
+who proposed a simplified binary threshold model of a neuron, and perceptron, which introduced a
+learning rule for a single computational neuron capable of classifying linearly separable patterns.
+However, to the MLP was the understanding that stacking multiple layers of these perceptron-like
+units could overcome these limitations by creating more complex decision boundaries. The critical
+breakthrough enabling the practical use of MLPs was the independent development and subsequent
+popularization of the backpropagation algorithm in the 1970s and 1980s (with key work by Werbos,
+Parker, LeCun, and notably Rumelhart, Hinton, and Williams in 1986). Backpropagation provided an
+efficient method to calculate the gradient of the error function with respect to the network's
+weights, allowing for effective training of these deeper, multi-layered architectures. This
+combination---multiple layers of interconnected units, typically using non-linear activation
+functions, trained via backpropagation---defines the MLP, which became a foundational architecture
+for neural networks and paved the way for the deep learning revolution.
+
+== Problems with the Established Approach
+
+backprop it requires freezing the entire network and separates computation and learning
+into two separate stages, local connectetions that should be independent of eachother have to wait
 
 
-== The Current Level of Brain Inspiration
-
-Almost all models use some variation of the Multi Layer Perceptron (MLP)
-concept. It is a fairly old idea based on a simple model on how the brain processes information.
-The MLP evolved from early attempts to create computational models inspired
-by biological neurons. Its roots lie in the foundational work of who
-proposed a simplified binary threshold model of a neuron, and Frank Rosenblatt's Perceptron (late
-1950s), which introduced a learning rule for a single computational neuron capable of classifying
-linearly separable patterns. However, progress stalled significantly after Minsky and Papert's
-1969 book Perceptrons, which rigorously demonstrated the limitations of these single-layer models,
-famously highlighting their inability to solve non-linearly separable problems like the XOR
-function. The key insight leading to the MLP was the understanding that stacking multiple layers
-of these perceptron-like units could overcome these limitations by creating more complex decision
-boundaries. The critical breakthrough enabling the practical use of MLPs was the independent
-development and subsequent popularization of the backpropagation algorithm in the 1970s and 1980s
-(with key work by Werbos, Parker, LeCun, and notably Rumelhart, Hinton, and Williams in 1986).
-Backpropagation provided an efficient method to calculate the gradient of the error function with
-respect to the network's weights, allowing for effective training of these deeper, multi-layered
-architectures. This combination---multiple layers of interconnected units, typically using non-linear
-activation functions, trained via backpropagation---defines the MLP, which became a foundational
-architecture for neural networks and paved the way for the deep learning revolution.
-
-== More advanced brain models
+== Neuroscience 101
 
 The perceptron, and its evolution into Multi-Layer Perceptrons (MLPs), represent foundational
 models in artificial intelligence inspired by early concepts of neural computation. Indeed, certain
@@ -110,12 +133,14 @@ However, this abstraction, while powerful, significantly simplifies the underlyi
 Decades of rigorous neuroscience research reveal that brain function emerges from complex
 electro-chemical and molecular dynamics far richer than the simple weighted sum and static
 activation. While it's crucial to discern which biological details are fundamental to computation
-versus those that are merely implementation specifics#footnote[
-Disentangling core computational mechanisms from biological implementation details is a major
-ongoing challenge in neuroscience and neuromorphic engineering. Some complex molecular processes
-might be essential for learning or adaptation, while others might primarily serve metabolic or
-structural roles not directly involved in the instantaneous computation being modeled.]
-, moving beyond the standard MLP model is
+versus those that are merely implementation specifics
+#footnote[
+  Disentangling core computational mechanisms from biological implementation details is a major
+  ongoing challenge in neuroscience and neuromorphic engineering. Some complex molecular processes
+  might be essential for learning or adaptation, while others might primarily serve metabolic or
+  structural roles not directly involved in the instantaneous computation being modeled.
+],
+moving beyond the standard MLP model is
 necessary to capture more sophisticated aspects of neural processing.
 
 A primary departure lies in the nature of neural communication. Unlike the continuous-valued
@@ -140,7 +165,7 @@ dynamics—motivate the exploration of Spiking Neural Networks (SNNs), which exp
 individual spike events and their timing, offering a potentially more powerful and biologically
 plausible framework for computation than traditional MLPs.
 
-== Challenges in Training Advanced Neural Models: The Problem of Discontinuity
+== The Problem With Spikes: Discontinuity
 
 While models like Spiking Neural Networks (SNNs) offer greater biological plausibility and
 potential advantages in processing temporal information and energy efficiency, their adoption faces
@@ -169,7 +194,7 @@ from flowing backward through the network to update the weights effectively. Thi
 represents a substantial obstacle, as it seemingly precludes the use of the highly successful and
 well-understood gradient-based optimization toolkit that underpins much of modern AI.
 
-This challenge has spurred significant research into alternative training methodologies for SNNs:
+== New Approaches
 
 Surrogate Gradients: A popular approach involves using a "surrogate" function during the
 backward pass of training. While the forward pass uses the discontinuous spike generation, the
@@ -205,20 +230,27 @@ training techniques.
 
 = Methodology
 
-step 1 explore learning algorithms
+Step: explore learning algorithms\
 experiment 1 set up random pattern across 1 dimension, inject a repeating pattern for the network to learn
 
-optional step explore different neuronal models
+Step: explore edge detection\
+can be achived by duplicating and inverting the signal
 
-step 2 expand to 2d
+Step: explore different neuronal models
 
-step 3 expand network to more layers figure out how to connect (AER)
+Step: prove mathematical equivalence to other ANNs
 
-step 4 explore how learning algos from 1 work with multi-layer
+Step: expand to 2d
 
-step 5 try to learn MNIST
+Step: expand network to more layers figure out how to connect (AER)
 
-all steps build on eachother this way i can stop at any point if I run out of time
+Step: explore how learning algos work with multi-layer
+
+Step: try to learn MNIST
+
+[NOTETOSELF: Steps either build on eachother or are independent, this way we can do bite size
+research and stop at any point if we run out of time, we dont have to make an entire system
+in order to have something to write about] 
 
 = Results
 
