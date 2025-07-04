@@ -7,8 +7,8 @@
 
 #set text(font: "Source Serif 4 18pt", size: 11pt)
 #show math.equation : set text(font:"TeX Gyre Schola Math", size: 10.5pt)
-#show raw : set text(font:"Departure Mono")
-#set list(marker: sym.square.filled.tiny, indent: 1em)
+#show raw : set text(font:"CommitMono", weight: "medium", size:9pt)
+#set list(marker: sym.square.filled.small, indent: 1em)
 #show heading: set text(font:"Source Serif 4",weight: "semibold", style:"italic")
 #show heading.where( level: 1 ): it => block(width: 100%)[
   #set align(center); #set text(20pt); #v(1em); #upper(it) #v(1em)
@@ -17,10 +17,10 @@
   #set text(16pt); #v(1em); #upper(it) #v(0.5em)
 ]
 #show heading.where( level: 3 ): it => block(width: 100%)[
-  #set text(12pt); #v(0.5em); #upper(it) #v(0.3em)
+  #set text(12pt); #v(1em); #upper(it) #v(0.3em)
 ]
 #show heading.where( level: 4 ): it => block(width: 100%)[
-  #set text(11pt); #v(0.3em); #upper(it) #v(0.1em)
+  #set text(11pt); #v(1em); #upper(it) #v(0.5em)
 ]
 #set heading(numbering: "1.1 ~ ")
 
@@ -28,14 +28,14 @@
 // FRONTPAGE
 // ================================================================================================
 
-#set page(fill: yellow, margin: (left: 2in))
+#set page(fill: gradient.linear(rgb("003049"),rgb("B2FFA8"),angle:45deg), margin: (left: 2in))
 #line(start: (0%, 5%), end: (8.5in, 5%), stroke: (thickness: 2pt))
 #align(horizon + left)[
-  #text(size: 27pt, weight: "semibold", style: "italic", font: "Source Serif 4" )[
+  #text(size: 30pt, weight: "semibold", style: "italic", font: "Source Serif 4" )[
     MACHINE LEARNING WITH SPIKES
   ]
   #v(1em)
-  #text(font: "Departure Mono")[
+  #text(font: "CommitMono", weight: "medium")[
     Brage Wiseth\ Universitiy of Oslo\
     #link("mailto:bragewi@uio.no")\
     #datetime.today().display()
@@ -49,22 +49,28 @@
 
 #set page(fill:none, margin:auto,numbering: "1")
 #set par(justify: true)
-
-#heading(level: 1,outlined: false,numbering: none)[ABSTRACT]
-
-#lorem(300)
+#counter(page).update(1)
 
 #heading(level: 1,outlined: false,numbering: none)[ACKNOWLEDGEMENTS]
 
 #lorem(40)
 
-#outline(depth:3)
+#v(4em)
+#heading(level: 1,outlined: false,numbering: none)[ABSTRACT]
+
+#lorem(300)
+#pagebreak()
+
+#{
+  set text(font: "CommitMono")
+  outline(depth:3, indent: auto)
+}
 
 // ================================================================================================
 // BODY
 // ================================================================================================
 
-= INTRODUCTION AND THEORY
+= Introduction And Theory
 
 The concept of intelligence, how it arises and what needs to be in place for it to occur, is
 probably been some of the longest standing questions in human history. How and if it can be
@@ -108,7 +114,7 @@ The different sections of the thesis
   - B
   - C
 
-== ESTASBLISHED METHODS
+== Estasblished Methods
 
 ``` TODO: add explanation and ilustrations ```
 The term Aritifical Inteligence forms an umbrella over many different techniques that make use
@@ -133,7 +139,7 @@ for neural networks and paved the way for the deep learning revolution. GPT, alp
 these fundamentals with differetn variations of architechtures which boils down to how many layers
 how large layers how dense layers and how they should be connected (attention, RNN, CNN, resnet)
 
-=== PROBLEMS WITH THE ESTABLISHED METHODS
+=== Problems With The Established Methods
 
 said introductory that it is inneficient, explain here why
 needs global synchronization---hard to scale
@@ -143,7 +149,7 @@ backprop it requires freezing the entire network and separates computation and l
 into two separate stages, local connectetions that should be independent of eachother have to wait
 extreme quantization models (1bit) also highlight the ineficiancy ``` TODO: citation needed ```
 
-== NEUROSCIENCE 101
+== Neuroscience 101
 
 ``` TODO: add relevant theory here that we refrence to later, do not add stuff that
 does not add important context nor future reference ```
@@ -165,21 +171,54 @@ signals—analogous to a weighted sum in MLPs and generate an output spike or 'f
 certain threshold is exceeded, a mechanism abstracted by the activation functions used in artificial
 neurons.
 
-=== NEURON MODELS
+=== Neuron Models
 
 synapses
 axons
 ion channels
 neurotransmitters
-integrate and fire
+ressonator neurons and integrator neurons ???
+Integrate-and-Fire Neurons (IF):  
+Output neurons accumulate spikes from their connected synapses within a short time window. If the
+accumulated input exceeds a threshold (e.g., 4/4 synapses fire), the neuron fires. This process
+ensures that only significant patterns propagate further. They need to reset after, either leaky
+or instant, also dependng on wether they fired or not
 
-=== ENCODING
+=== Encoding
 
 rate encoding
 time to first spike
 neurons might be intensity to delay converters
 
-=== LEARNING
+temporal coding
+
+Allow only the first n of m spikes to pass through ($N$ of $M$ encoding)
+Alternativly use Rank Order Coding or N of M Rank Order
+
+Alternativly use a dynamic $N$. This could be a thresold per region of an image
+use relative threshold so that dark spots still get their information trough
+
+For images, divide the input into spatial chunks and apply n-of-m coding within each chunk to
+preserve spatial information.
+
+For sequences like text, audio, or video, apply n-of-m coding
+to time frames. For video, combine n-of-m coding across both spatial chunks
+and temporal frames. Can be linked to brain waves.
+
+=== Learning
+
+Use lateral inhibition
+
+Use Homeostatic Plasticity
+
+Use Synaptic Competition
+
+Grow Synapses: If a neuron is close to firing (e.g., 3/4 synapses activate), connect its
+final synapse to the most recent active input neuron. This mimics biological synapse growth
+
+Move Synapses: Adjust existing synapses toward frequently active input neurons to refine connections.  
+
+Prune Synapses: Remove inactive synapses over time to maintain efficiency and sparsity.
 
 Bio-Inspired Local Learning Rules: Drawing inspiration from neuroscience, researchers explore
 learning rules based on local activity, such as Spike-Timing-Dependent Plasticity (STDP). STDP
@@ -206,7 +245,7 @@ optimization remains a critical area of active research and development. The suc
 practice hinges significantly on the effectiveness and scalability of these alternative or adapted
 training techniques.
 
-==== SPIKES DO NOT PLAY NICE WITH GRADIENTS
+#heading(level:4,numbering:none)[SPIKES DO NOT PLAY NICE WITH GRADIENTS]
 
 While models like Spiking Neural Networks (SNNs) offer greater biological plausibility and
 potential advantages in processing temporal information and energy efficiency, their adoption faces
@@ -242,9 +281,13 @@ approximation (e.g., a fast sigmoid or a clipped linear function). This allows b
 algorithms (often termed "spatio-temporal backpropagation" or similar) to estimate gradients and
 train deep SNNs, albeit with approximations.
 
-=== NETWORK
+=== Network
 
+inhibitory connections
+Adress event representaion (AER)
+Binary weights, only check if there is and outgoing/incomming spike or not
 critical brain theory
+Prove that the network satisties the universal approximation theorem
 
 However, this abstraction, while powerful, significantly simplifies the underlying neurobiology.
 Decades of rigorous neuroscience research reveal that brain function emerges from complex
@@ -282,7 +325,7 @@ dynamics—motivate the exploration of Spiking Neural Networks (SNNs), which exp
 individual spike events and their timing, offering a potentially more powerful and biologically
 plausible framework for computation than traditional MLPs.
 
-= METHODOLOGY
+= Methodology
 
 ```
 Step: explore learning algorithms
@@ -310,8 +353,8 @@ NOTETOSELF: Steps either build on eachother or are independent, this way we can 
 bite size research and stop at any point if we run out of time, we dont have to
 make an entire system in order to have something to write about
 ``` 
-= RESULTS
+= Results
 
-= DISCUSSION
+= Discussion
 
 #bibliography("references.bib")
