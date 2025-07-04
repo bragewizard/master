@@ -1,50 +1,68 @@
-#import "@preview/lovelace:0.3.0": *
+#import "@preview/lovelace:0.3.0": pseudocode-list
 #import "@preview/wrap-it:0.1.1": wrap-content
+
+// ================================================================================================
+// CONFIG
+// ================================================================================================
 
 #set text(font: "Source Serif 4 18pt", size: 11pt)
 #show math.equation : set text(font:"TeX Gyre Schola Math", size: 10.5pt)
-// #show raw : set text(font:"CommitMono")
 #show raw : set text(font:"Departure Mono")
-#set list(marker: sym.square.filled.small)
+#set list(marker: sym.square.filled.tiny, indent: 1em)
 #show heading: set text(font:"Source Serif 4",weight: "semibold", style:"italic")
-#set heading(numbering: "1.1 ~ ")
 #show heading.where( level: 1 ): it => block(width: 100%)[
-  #set align(center)
-  #set text(20pt)
-  #v(1em)
-  #counter(heading).display()#it.body 
-  #v(1em)
+  #set align(center); #set text(20pt); #v(1em); #upper(it) #v(1em)
 ]
 #show heading.where( level: 2 ): it => block(width: 100%)[
-  #set text(16pt)
-  #v(1em)
-  #counter(heading).display()#it.body
-  #v(0.5em)
+  #set text(16pt); #v(1em); #upper(it) #v(0.5em)
 ]
 #show heading.where( level: 3 ): it => block(width: 100%)[
-  #set text(12pt)
-  #v(0.5em)
-  #it.body
-  #v(0.3em)
+  #set text(12pt); #v(0.5em); #upper(it) #v(0.3em)
 ]
-#set page(numbering: "1")
+#show heading.where( level: 4 ): it => block(width: 100%)[
+  #set text(11pt); #v(0.3em); #upper(it) #v(0.1em)
+]
+#set heading(numbering: "1.1 ~ ")
+
+// ================================================================================================
+// FRONTPAGE
+// ================================================================================================
+
+#set page(fill: yellow, margin: (left: 2in))
+#line(start: (0%, 5%), end: (8.5in, 5%), stroke: (thickness: 2pt))
+#align(horizon + left)[
+  #text(size: 27pt, weight: "semibold", style: "italic", font: "Source Serif 4" )[
+    MACHINE LEARNING WITH SPIKES
+  ]
+  #v(1em)
+  #text(font: "Departure Mono")[
+    Brage Wiseth\ Universitiy of Oslo\
+    #link("mailto:bragewi@uio.no")\
+    #datetime.today().display()
+  ]
+]
+#pagebreak()
+
+// ================================================================================================
+// ABSTRACT, ACKNOWLEDGEMENTS AND OUTLINE
+// ================================================================================================
+
+#set page(fill:none, margin:auto,numbering: "1")
 #set par(justify: true)
 
+#heading(level: 1,outlined: false,numbering: none)[ABSTRACT]
 
-#block(width:100%)[
-  #set text(size: 27pt, weight: "semibold", style: "italic", font: "Source Serif 4" )
-  #set align(center)
-  #smallcaps[MACHINE LEARNING WITH SPIKES]
-  #v(1em)
-]
+#lorem(300)
 
-#align(center)[
-  #set text(font: "Departure Mono")
-  Brage Wiseth\ Universitiy of Oslo\ #link("mailto:bragewi@uio.no")
-  #align(center)[#datetime.today().display()]
-]
+#heading(level: 1,outlined: false,numbering: none)[ACKNOWLEDGEMENTS]
 
-#v(3em)
+#lorem(40)
+
+#outline(depth:3)
+
+// ================================================================================================
+// BODY
+// ================================================================================================
 
 = INTRODUCTION AND THEORY
 
@@ -78,29 +96,30 @@ computational advantages of systems operating near critical states. The central 
 in identifying and abstracting the truly essential biological mechanisms for intelligence and
 efficiency, distinguishing core principles from intricate biological details that may not be
 necessary for artificial implementation. Concretly this thesis wants to
-- Explore how information flow based on sparse event might be implemented in a network, encoding
-- Explore learning algorithms suitable for such a network, and challange SOTA
-
 ``` TODO: add or remove research questions ```
 
+  - Explore how information flow based on sparse event might be implemented in a network, encoding
+  - Explore learning algorithms suitable for such a network, and challange SOTA
+
+
 The different sections of the thesis
-- A
-- B
-- C
+
+  - A
+  - B
+  - C
 
 == ESTASBLISHED METHODS
 
-``` TODO: add MLP explanation and ilustrations ```
-The term Aritifical Inteligence forms an umbrella over many different techniques that make use of
-machines to do some intelligent task. The most promising way to acheive AI to day is trough deep
-neural networks. The neural networks of today almost exsclusivly use some variation of the Multi
-Layer Perceptron (MLP) concept. It is a fairly old idea based on a simple model on how the brain
-processes information. The MLP evolved from early attempts to create computational models inspired
-by biological neurons. The model of the neuron that the MLP is based on has synapses just like
-the biological one, the synapses functions as inputs which when firing will exite the reciving
-neuron more or less depending on the strenth of the connection. If the reciving neuron get exited
-above a threshold it will fire and pass the signal downstream to another reciving neuron. Which
-is conceptually similar to how real neurons operate. This simple model is called a perceptron,
+``` TODO: add explanation and ilustrations ```
+The term Aritifical Inteligence forms an umbrella over many different techniques that make use
+of machines to do some intelligent task. The most promising way to acheive AI to day is trough
+deep neural networks. The neural networks of today are almost exclusivly based on the simple
+perceptron neuron model. It is a fairly old idea based on a simple model on how the brain processes
+information. The model of the neuron that the is based on has synapses just like the biological
+one, the synapses functions as inputs which when firing will exite the reciving neuron more or less
+depending on the strenth of the connection. If the reciving neuron get exited above a threshold
+it will fire and pass the signal downstream to another reciving neuron. Which is conceptually
+similar to how real neurons operate. $ z = a(sum x w) $ This simple model is called a perceptron,
 which introduced a learning rule for a single computational neuron capable of classifying linearly
 separable patterns. However, to the MLP was the understanding that stacking multiple layers of
 these perceptron-like units could overcome these limitations by creating more complex decision
@@ -114,7 +133,7 @@ for neural networks and paved the way for the deep learning revolution. GPT, alp
 these fundamentals with differetn variations of architechtures which boils down to how many layers
 how large layers how dense layers and how they should be connected (attention, RNN, CNN, resnet)
 
-== PROBLEMS WITH THE ESTABLISHED METHODS
+=== PROBLEMS WITH THE ESTABLISHED METHODS
 
 said introductory that it is inneficient, explain here why
 needs global synchronization---hard to scale
@@ -127,7 +146,8 @@ extreme quantization models (1bit) also highlight the ineficiancy ``` TODO: cita
 == NEUROSCIENCE 101
 
 ``` TODO: add relevant theory here that we refrence to later, do not add stuff that
-we do not talk about ```
+does not add important context nor future reference ```
+
 Altough the perceptron captures common key aspects of biologial neuron models
 The perceptron, and its evolution into Multi-Layer Perceptrons (MLPs), represent foundational
 models in artificial intelligence inspired by early concepts of neural computation. Indeed, certain
@@ -145,7 +165,84 @@ signals—analogous to a weighted sum in MLPs and generate an output spike or 'f
 certain threshold is exceeded, a mechanism abstracted by the activation functions used in artificial
 neurons.
 
-neurons are intensity to delay converters
+=== NEURON MODELS
+
+synapses
+axons
+ion channels
+neurotransmitters
+integrate and fire
+
+=== ENCODING
+
+rate encoding
+time to first spike
+neurons might be intensity to delay converters
+
+=== LEARNING
+
+Bio-Inspired Local Learning Rules: Drawing inspiration from neuroscience, researchers explore
+learning rules based on local activity, such as Spike-Timing-Dependent Plasticity (STDP). STDP
+adjusts synaptic weights based on the relative timing of pre- and post-synaptic spikes (Gerstner
+et al., 1996; Bi & Poo, 1998). While biologically plausible and inherently suited to spike timing,
+purely local rules like STDP often struggle to match the performance of gradient-based methods on
+complex supervised learning tasks and can be harder to scale or direct towards a specific global
+objective. Hybrid approaches combining STDP with other mechanisms are also being investigated.
+
+Conversion Methods: Another strategy involves training a conventional ANN (like an MLP or CNN)
+using standard backpropagation and then converting the trained network into an SNN (Cao et al.,
+2015; Diehl et al., 2015). This leverages the power of gradient-based training but may not fully
+exploit the unique temporal dynamics SNNs offer, and often requires careful parameter tuning during
+conversion.
+
+Gradient-Free Optimization: Techniques like evolutionary algorithms or reinforcement learning
+can optimize SNN parameters without requiring explicit gradients, but they often suffer from lower
+sample efficiency and scalability issues compared to gradient descent, particularly for very large
+networks.
+
+Therefore, while moving towards more biologically realistic, event-driven models like SNNs is
+conceptually appealing, overcoming the fundamental incompatibility with standard gradient-based
+optimization remains a critical area of active research and development. The success of SNNs in
+practice hinges significantly on the effectiveness and scalability of these alternative or adapted
+training techniques.
+
+==== SPIKES DO NOT PLAY NICE WITH GRADIENTS
+
+While models like Spiking Neural Networks (SNNs) offer greater biological plausibility and
+potential advantages in processing temporal information and energy efficiency, their adoption faces
+significant challenges, primarily stemming from the nature of their core computational element: the
+discrete spike.
+
+A cornerstone of the success of modern deep learning, particularly with Multi-Layer Perceptrons
+(MLPs) and related architectures, is the backpropagation algorithm (Rumelhart et al., 1986).
+Backpropagation relies fundamentally on the network's components being differentiable;
+specifically, the activation functions mapping a neuron's weighted input sum to its output must
+have a well-defined gradient. This allows the chain rule of calculus to efficiently compute how
+small changes in network weights affect the final output error, enabling effective gradient-based
+optimization (like Stochastic Gradient Descent and its variants). These techniques have proven
+exceptionally powerful for training deep networks on large datasets.
+
+However, when we transition from the continuous-valued, rate-coded signals typical of MLPs to the
+binary, event-based spikes used in SNNs, this differentiability is lost. The spiking mechanism
+itself—where a neuron fires an all-or-none spike only when its internal state (e.g., membrane
+potential) crosses a threshold—is inherently discontinuous. Mathematically, this firing decision is
+often represented by a step function (like the Heaviside step function), whose derivative is zero
+almost everywhere and undefined (or infinite) at the threshold.
+
+Consequently, standard backpropagation cannot be directly applied to SNNs. Gradients calculated
+using the chain rule become zero or undefined at the spiking neurons, preventing error signals
+from flowing backward through the network to update the weights effectively. This incompatibility
+represents a substantial obstacle, as it seemingly precludes the use of the highly successful and
+well-understood gradient-based optimization toolkit that underpins much of modern AI.
+
+Surrogate Gradients: A popular approach involves using a "surrogate"
+function during the backward pass of training. While the forward pass uses the discontinuous spike
+generation, the backward pass replaces the step function's derivative with a smooth, differentiable
+approximation (e.g., a fast sigmoid or a clipped linear function). This allows backpropagation-like
+algorithms (often termed "spatio-temporal backpropagation" or similar) to estimate gradients and
+train deep SNNs, albeit with approximations.
+
+=== NETWORK
 
 critical brain theory
 
@@ -185,78 +282,8 @@ dynamics—motivate the exploration of Spiking Neural Networks (SNNs), which exp
 individual spike events and their timing, offering a potentially more powerful and biologically
 plausible framework for computation than traditional MLPs.
 
-== SPIKES DO NOT PLAY NICE WITH GRADIENTS
-
-While models like Spiking Neural Networks (SNNs) offer greater biological plausibility and
-potential advantages in processing temporal information and energy efficiency, their adoption faces
-significant challenges, primarily stemming from the nature of their core computational element: the
-discrete spike.
-
-A cornerstone of the success of modern deep learning, particularly with Multi-Layer Perceptrons
-(MLPs) and related architectures, is the backpropagation algorithm (Rumelhart et al., 1986).
-Backpropagation relies fundamentally on the network's components being differentiable;
-specifically, the activation functions mapping a neuron's weighted input sum to its output must
-have a well-defined gradient. This allows the chain rule of calculus to efficiently compute how
-small changes in network weights affect the final output error, enabling effective gradient-based
-optimization (like Stochastic Gradient Descent and its variants). These techniques have proven
-exceptionally powerful for training deep networks on large datasets.
-
-However, when we transition from the continuous-valued, rate-coded signals typical of MLPs to the
-binary, event-based spikes used in SNNs, this differentiability is lost. The spiking mechanism
-itself—where a neuron fires an all-or-none spike only when its internal state (e.g., membrane
-potential) crosses a threshold—is inherently discontinuous. Mathematically, this firing decision is
-often represented by a step function (like the Heaviside step function), whose derivative is zero
-almost everywhere and undefined (or infinite) at the threshold.
-
-Consequently, standard backpropagation cannot be directly applied to SNNs. Gradients calculated
-using the chain rule become zero or undefined at the spiking neurons, preventing error signals
-from flowing backward through the network to update the weights effectively. This incompatibility
-represents a substantial obstacle, as it seemingly precludes the use of the highly successful and
-well-understood gradient-based optimization toolkit that underpins much of modern AI.
-
-== NEW APPROACHES
-
-So with the knowledge of the established art and some concepts from neuroscince
-we can begin to explore new approaches.
-Surrogate Gradients: A popular approach involves using a "surrogate" function during the
-backward pass of training. While the forward pass uses the discontinuous spike generation, the
-backward pass replaces the step function's derivative with a smooth, differentiable approximation
-(e.g., a fast sigmoid or a clipped linear function).
-This allows backpropagation-like algorithms (often termed "spatio-temporal backpropagation" or
-similar) to estimate gradients and train deep SNNs, albeit with approximations.
-
-=== ENCODING
-
-=== NETWORK
-
-=== LEARNING
-
-Bio-Inspired Local Learning Rules: Drawing inspiration from neuroscience, researchers explore
-learning rules based on local activity, such as Spike-Timing-Dependent Plasticity (STDP). STDP
-adjusts synaptic weights based on the relative timing of pre- and post-synaptic spikes (Gerstner
-et al., 1996; Bi & Poo, 1998). While biologically plausible and inherently suited to spike timing,
-purely local rules like STDP often struggle to match the performance of gradient-based methods on
-complex supervised learning tasks and can be harder to scale or direct towards a specific global
-objective. Hybrid approaches combining STDP with other mechanisms are also being investigated.
-
-Conversion Methods: Another strategy involves training a conventional ANN (like an MLP or CNN)
-using standard backpropagation and then converting the trained network into an SNN (Cao et al.,
-2015; Diehl et al., 2015). This leverages the power of gradient-based training but may not fully
-exploit the unique temporal dynamics SNNs offer, and often requires careful parameter tuning during
-conversion.
-
-Gradient-Free Optimization: Techniques like evolutionary algorithms or reinforcement learning
-can optimize SNN parameters without requiring explicit gradients, but they often suffer from lower
-sample efficiency and scalability issues compared to gradient descent, particularly for very large
-networks.
-
-Therefore, while moving towards more biologically realistic, event-driven models like SNNs is
-conceptually appealing, overcoming the fundamental incompatibility with standard gradient-based
-optimization remains a critical area of active research and development. The success of SNNs in
-practice hinges significantly on the effectiveness and scalability of these alternative or adapted
-training techniques.
-
 = METHODOLOGY
+
 ```
 Step: explore learning algorithms
 experiment 1 set up random pattern across 1 dimension, inject a repeating pattern
@@ -283,23 +310,8 @@ NOTETOSELF: Steps either build on eachother or are independent, this way we can 
 bite size research and stop at any point if we run out of time, we dont have to
 make an entire system in order to have something to write about
 ``` 
+= RESULTS
 
-#{ set text(font: "Departure Mono", size:9pt)
-align(center,
-pseudocode-list(hooks: .5em, line-numbering: none)[
-  + do something
-  + do something else
-  + while still something to do
-    + do even more
-    + if not done yet *then*
-      + wait a bit
-      + resume working
-    + else
-      + go home
-])
-}
-= Results
-
-= Discussion
+= DISCUSSION
 
 #bibliography("references.bib")
