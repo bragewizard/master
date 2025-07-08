@@ -62,7 +62,7 @@
 #pagebreak()
 
 #{
-  set text(font: "CommitMono")
+  // set text(font: "CommitMono")
   outline(depth:3, indent: auto)
 }
 
@@ -72,6 +72,7 @@
 
 = Introduction And Theory
 
+// TODO: needs citation
 The concept of intelligence, how it arises and what needs to be in place for it to occur, is
 probably been some of the longest standing questions in human history. How and if it can be
 reproduced artificially is a particuarly hot topic today. Getting answers to these questions will
@@ -79,7 +80,7 @@ not only help us understand our own minds but also brings the promise of unlocki
 discovering new drugs or materials, it may be the last invention humans ever need to make. In recent
 years we have crept ever closer to answer some of these questions. New state of the art artificial
 inteligence systems have achieved remarkable success like the sophisticated language capabilities of
-GPT models and the protein-folding predictions of AlphaFold. ``` TODO: needs citation ```
+GPT models and the protein-folding predictions of AlphaFold.
 
 Despite these triumphs, a significant gap persists between artificial systems and their biological
 counterparts. Evidently, these AI systems might posses superhuman capabilities in one or a few
@@ -87,9 +88,9 @@ domains but none of them surpass humans in all, what we call Artificial General 
 Also more relevant to this thesis is that current state-of-the-art ANNs, require vast amount of
 data, computatuon and energy resources. This demand stands in stark contrast to the biological
 brain---an extraordinarily complex and efficient organ estimated to operate on merely 20-30 Watts
-``` TODO: needs citation ``` while also sitting comfortably in the AGI category. This profound
-difference in efficiency and capability suggests that contemporary ANN paradigms, might be missing
-or oversimplifying fundamental principles crucial for truly intelligent and scalable computation.
+while also sitting comfortably in the AGI category. This profound difference in efficiency and
+capability suggests that contemporary ANN paradigms, might be missing or oversimplifying fundamental
+principles crucial for truly intelligent and scalable computation.
 
 In this thesis we explore new approaches that first and foremost might solve the critical
 limitations of scalability and energy efficiency in artificial intelligence. But also hopefully
@@ -102,21 +103,26 @@ computational advantages of systems operating near critical states. The central 
 in identifying and abstracting the truly essential biological mechanisms for intelligence and
 efficiency, distinguishing core principles from intricate biological details that may not be
 necessary for artificial implementation. Concretly this thesis wants to
-``` TODO: add or remove research questions ```
+// TODO: add or remove research questions
 
-  - Explore how information flow based on sparse event might be implemented in a network, encoding
-  - Explore learning algorithms suitable for such a network, and challange SOTA
+  - Explore how information-flow based on sparse event might be implemented in a network, encoding
+  - Explore learning algorithms suitable for such a network
 
+In the succeeding sections we will lay down the theoretical foundations that we base our methods on
 
-The different sections of the thesis
+_Established Methods_. We will get familiar with the current AI methods
 
-  - A
-  - B
-  - C
+_Neuroscience 101_. Review neuroscience literature
+
+_Method_. Outline the methods and how you can recreate the work 
+
+_Results_. bla bla bla
+
+_Discussions_. blabla bla future work bla bla
 
 == Estasblished Methods
 
-``` TODO: add explanation and ilustrations ```
+// TODO: add explanation and ilustrations
 The term Aritifical Inteligence forms an umbrella over many different techniques that make use
 of machines to do some intelligent task. The most promising way to acheive AI to day is trough
 deep neural networks. The neural networks of today are almost exclusivly based on the simple
@@ -133,133 +139,104 @@ boundaries. The critical breakthrough enabling the practical use of MLPs was the
 development and subsequent popularization of the backpropagation algorithm. Backpropagation
 provided an efficient method to calculate the gradient of the error function with respect to the
 network's weights, allowing for effective training of these deeper, multi-layered architectures.
-This combination---multiple layers of interconnected units, typically using non-linear activation
-functions, trained via backpropagation---defines the MLP, which became a foundational architecture
-for neural networks and paved the way for the deep learning revolution. GPT, alphafold, etc. all use
-these fundamentals with differetn variations of architechtures which boils down to how many layers
-how large layers how dense layers and how they should be connected (attention, RNN, CNN, resnet)
-
-=== Problems With The Established Methods
-
-said introductory that it is inneficient, explain here why
-needs global synchronization---hard to scale
-matrix multiply is inneficient
-unimportant paramenters still needs to be computed (zeros)
-backprop it requires freezing the entire network and separates computation and learning
-into two separate stages, local connectetions that should be independent of eachother have to wait
-extreme quantization models (1bit) also highlight the ineficiancy ``` TODO: citation needed ```
-
-== Neuroscience 101
-
-``` TODO: add relevant theory here that we refrence to later, do not add stuff that
-does not add important context nor future reference ```
-
-Altough the perceptron captures common key aspects of biologial neuron models
-The perceptron, and its evolution into Multi-Layer Perceptrons (MLPs), represent foundational
-models in artificial intelligence inspired by early concepts of neural computation. Indeed, certain
-core principles resonate with biological observations: the brain comprises interconnected neurons,
-often organized in broadly hierarchical structures or layers
+This combination---multiple layers of interconnected units
 #footnote[
   While often conceptualized in layers (e.g., layers of the neocortex), the brain's connectivity
   is vastly more complex than typical feedforward ANNs, featuring extensive recurrent connections,
-  feedback loops, and long-range projections that make a simple 'unrolling' into discrete layers an
-  oversimplification
-]
-that process information sequentially
-from sensory input to higher cognitive areas. Furthermore, individual neurons integrate incoming
-signals—analogous to a weighted sum in MLPs and generate an output spike or 'fire' only when a
-certain threshold is exceeded, a mechanism abstracted by the activation functions used in artificial
-neurons.
+  feedback loops, and long-range projections that make a simple 'unrolling' into discrete layers
+  an oversimplification
+],
+typically using non-linear activation functions, trained via backpropagation---defines the MLP,
+which became a foundational architecture for neural networks and paved the way for the deep
+learning revolution. GPT, alphafold, etc. all use these fundamentals with differetn variations of
+architechtures which boils down to how many layers how large layers how dense layers and how they
+should be connected (attention, RNN, CNN, resnet)
+
+=== Problems With The Established Methods
+
+We mentioned in the introduction that the deep learning technique is ineficient compared to the
+brain.  The reason why is not clear, from a hardware standpoint the brain simply has better hardware
+much more connections per area and the computation is baked into the hardware. From an algorithmic
+standpoint there may also be room for imporovement, In order to compute with deep learning and
+perceptron networks we need to compute all the entries even tho they might not contribute or are
+zero. Take an image for example, the human visual system is really good at ignoring unimportant
+details and we only have a tiny area of focus. even then we dont porcess much unless something
+interesting happens like movement. In deep learning we have to process the entire image. The status
+quo needs global synchronization, every previous layer need to finish computing before the next
+can start, this can be hard to scale for large systems where multiple proccesors need to talk to
+eachother. The same applies to backpropagation it requires freezing the entire network and separates
+computation and learning into two separate stages, local connectetions that should be independent of
+eachother have to wait extreme quantization models (1bit) also highlight the ineficiency
+// TODO: citations needed
+
+== Neuroscience 101
+
+// TODO: add relevant theory here that we refrence to later, do not add stuff that
+// does not add important context nor future reference
+Altough the perceptron captures common key aspects of biologial neuron models A lot is left on the
+table. A lot of progress and new ideas has surfaced since the invention of the perceptron. The simple
+neuron previously though to be simple like the perceptron model turns out to be more complex, the
+information encoding is also a key research topic not explored by older models. How to brain learn
+is also entirly different than what deep learning uses, changing the models and information encoding
+forces us to rethink how the learning algorithms in the brain works. Network architechture, fully
+asynchronus
 
 === Neuron Models
 
-synapses
-axons
-ion channels
-neurotransmitters
-ressonator neurons and integrator neurons ???
-Integrate-and-Fire Neurons (IF):  
-Output neurons accumulate spikes from their connected synapses within a short time window. If the
-accumulated input exceeds a threshold (e.g., 4/4 synapses fire), the neuron fires. This process
-ensures that only significant patterns propagate further. They need to reset after, either leaky
-or instant, also dependng on wether they fired or not
+// ressonator neurons and integrator neurons ???
+// Integrate-and-Fire Neurons (IF):  
+// Output neurons accumulate spikes from their connected synapses within a short time window. If the
+// accumulated input exceeds a threshold (e.g., 4/4 synapses fire), the neuron fires. This process
+// ensures that only significant patterns propagate further. They need to reset after, either leaky
+// or instant, also dependng on wether they fired or not
+The neuron is the fundamental bulding block of the brain. Comprised of an axon synapses dendrites.
+When presynaptic neurons fire the postsynaptic neuron increaes in potential if it reaches a
+threshold it will itself fire. Neurons communicate with neurotransmitters such as dopmine and
+glutamate. There are ion channels and some calsium idk.
 
 === Encoding
 
-rate encoding
-time to first spike
-neurons might be intensity to delay converters
-
-temporal coding
-
-Allow only the first n of m spikes to pass through ($N$ of $M$ encoding)
-Alternativly use Rank Order Coding or N of M Rank Order
-
-Alternativly use a dynamic $N$. This could be a thresold per region of an image
-use relative threshold so that dark spots still get their information trough
-
-For images, divide the input into spatial chunks and apply n-of-m coding within each chunk to
-preserve spatial information.
-
-For sequences like text, audio, or video, apply n-of-m coding
-to time frames. For video, combine n-of-m coding across both spatial chunks
-and temporal frames. Can be linked to brain waves.
+// rate encoding
+// time to first spike
+// neurons might be intensity to delay converters
+// temporal coding
+// Allow only the first n of m spikes to pass through ($N$ of $M$ encoding) Alternativly use Rank Order
+// Coding or N of M Rank Order
+// Alternativly use a dynamic $N$. This could be a thresold per region of an image use relative
+// threshold so that dark spots still get their information trough
+// For images, divide the input into spatial chunks and apply n-of-m coding within each chunk to
+// preserve spatial information.
+// For sequences like text, audio, or video, apply n-of-m coding to time frames. For video, combine
+// n-of-m coding across both spatial chunks and temporal frames. Can be linked to brain waves.
+It is observed that neurons fire in short bursts called spikes. Experiments show that neurons fire
+repetably. A sequence of spikes is called a spike train, and exactly how information is encoded in a
+spike train is a topic of hot debate in neuroscience. A popular idea is that information is encoded
+in the average value of spikes per time called rate encoding
 
 === Learning
 
-Use lateral inhibition
-
-Use Homeostatic Plasticity
-
-Use Synaptic Competition
-
-Grow Synapses: If a neuron is close to firing (e.g., 3/4 synapses activate), connect its
-final synapse to the most recent active input neuron. This mimics biological synapse growth
-
-Move Synapses: Adjust existing synapses toward frequently active input neurons to refine connections.  
-
-Prune Synapses: Remove inactive synapses over time to maintain efficiency and sparsity.
-
-Bio-Inspired Local Learning Rules: Drawing inspiration from neuroscience, researchers explore
-learning rules based on local activity, such as Spike-Timing-Dependent Plasticity (STDP). STDP
-adjusts synaptic weights based on the relative timing of pre- and post-synaptic spikes (Gerstner
-et al., 1996; Bi & Poo, 1998). While biologically plausible and inherently suited to spike timing,
-purely local rules like STDP often struggle to match the performance of gradient-based methods on
-complex supervised learning tasks and can be harder to scale or direct towards a specific global
-objective. Hybrid approaches combining STDP with other mechanisms are also being investigated.
-
-Conversion Methods: Another strategy involves training a conventional ANN (like an MLP or CNN)
-using standard backpropagation and then converting the trained network into an SNN (Cao et al.,
-2015; Diehl et al., 2015). This leverages the power of gradient-based training but may not fully
-exploit the unique temporal dynamics SNNs offer, and often requires careful parameter tuning during
-conversion.
-
-Gradient-Free Optimization: Techniques like evolutionary algorithms or reinforcement learning
-can optimize SNN parameters without requiring explicit gradients, but they often suffer from lower
-sample efficiency and scalability issues compared to gradient descent, particularly for very large
-networks.
-
-Therefore, while moving towards more biologically realistic, event-driven models like SNNs is
-conceptually appealing, overcoming the fundamental incompatibility with standard gradient-based
-optimization remains a critical area of active research and development. The success of SNNs in
-practice hinges significantly on the effectiveness and scalability of these alternative or adapted
-training techniques.
-
-#heading(level:4,numbering:none)[SPIKES DO NOT PLAY NICE WITH GRADIENTS]
-
-While models like Spiking Neural Networks (SNNs) offer greater biological plausibility and
-potential advantages in processing temporal information and energy efficiency, their adoption faces
-significant challenges, primarily stemming from the nature of their core computational element: the
-discrete spike.
+// The brain does not use backpropagation
+// Use lateral inhibition
+// Use Homeostatic Plasticity
+// Use Synaptic Competition
+// Grow Synapses: If a neuron is close to firing (e.g., 3/4 synapses activate), connect its final
+// synapse to the most recent active input neuron. This mimics biological synapse growth
+// Move Synapses: Adjust existing synapses toward frequently active input neurons to refine
+// connections.
+// Prune Synapses: Remove inactive synapses over time to maintain efficiency and sparsity.
+_Spikes Do Not Play Nice With Gradients_. While models like Spiking Neural Networks (SNNs) offer
+greater biological plausibility and potential advantages in processing temporal information and
+energy efficiency, their adoption faces significant challenges, primarily stemming from the nature
+of their core computational element: the discrete spike.
 
 A cornerstone of the success of modern deep learning, particularly with Multi-Layer Perceptrons
-(MLPs) and related architectures, is the backpropagation algorithm (Rumelhart et al., 1986).
-Backpropagation relies fundamentally on the network's components being differentiable;
-specifically, the activation functions mapping a neuron's weighted input sum to its output must
-have a well-defined gradient. This allows the chain rule of calculus to efficiently compute how
-small changes in network weights affect the final output error, enabling effective gradient-based
-optimization (like Stochastic Gradient Descent and its variants). These techniques have proven
-exceptionally powerful for training deep networks on large datasets.
+(MLPs) and related architectures, is the backpropagation algorithm. Backpropagation relies
+fundamentally on the network's components being differentiable; specifically, the activation
+functions mapping a neuron's weighted input sum to its output must have a well-defined gradient.
+This allows the chain rule of calculus to efficiently compute how small changes in network weights
+affect the final output error, enabling effective gradient-based optimization (like Stochastic
+Gradient Descent and its variants). These techniques have proven exceptionally powerful for training
+deep networks on large datasets.
 
 However, when we transition from the continuous-valued, rate-coded signals typical of MLPs to the
 binary, event-based spikes used in SNNs, this differentiability is lost. The spiking mechanism
@@ -283,11 +260,11 @@ train deep SNNs, albeit with approximations.
 
 === Network
 
-inhibitory connections
-Adress event representaion (AER)
-Binary weights, only check if there is and outgoing/incomming spike or not
-critical brain theory
-Prove that the network satisties the universal approximation theorem
+// Adress event representaion (AER)
+// critical brain theory
+// inhibitory connections (maybe more relevant in the neuron section)
+// Binary weights (also maybe more relevant in the neuron section)
+// only check if there is and outgoing/incomming spike or not
 
 However, this abstraction, while powerful, significantly simplifies the underlying neurobiology.
 Decades of rigorous neuroscience research reveal that brain function emerges from complex
@@ -300,59 +277,54 @@ versus those that are merely implementation specifics
   might be essential for learning or adaptation, while others might primarily serve metabolic or
   structural roles not directly involved in the instantaneous computation being modeled.
 ],
-moving beyond the standard MLP model is
-necessary to capture more sophisticated aspects of neural processing.
+moving beyond the standard MLP model is necessary to capture more sophisticated aspects of neural
+processing.
 
 A primary departure lies in the nature of neural communication. Unlike the continuous-valued
 activations typically passed between layers in an MLP (often interpreted as representing average
 firing rates), biological neurons communicate primarily through discrete, stereotyped, all-or-none
-electrical events known as action potentials, or 'spikes'. Information
-in the brain is encoded not just in the rate of these spikes (rate coding), but critically also
-in their precise timing, relative delays, and synchronous firing across populations (temporal
-coding) (Gerstner et al., 2014). For instance, the relative timing of spikes arriving at a neuron
-can determine its response, allowing the brain to process temporal patterns with high fidelity – a
-capability less naturally captured by standard MLPs. Spikes can thus be seen as event-based signals
-carrying rich temporal information.
+electrical events known as action potentials, or 'spikes'. Information in the brain is encoded
+not just in the rate of these spikes (rate coding), but critically also in their precise timing,
+relative delays, and synchronous firing across populations (temporal coding) (Gerstner et al.,
+2014). For instance, the relative timing of spikes arriving at a neuron can determine its response,
+allowing the brain to process temporal patterns with high fidelity – a capability less naturally
+captured by standard MLPs. Spikes can thus be seen as event-based signals carrying rich temporal
+information.
 
 Furthermore, neural systems exhibit complex dynamics beyond simple feedforward processing. Evidence
 suggests that cortical networks may operate near a critical state, balanced at the 'edge of chaos,'
 a regime potentially optimal for information transmission, storage capacity, and computational
-power. Systems like the visual cortex demonstrate this
-complexity, where intricate patterns of spatio-temporal spiking activity underlie feature detection,
-object recognition, and dynamic processing. These
-biologically observed principles—event-based communication, temporal coding, and complex network
-dynamics—motivate the exploration of Spiking Neural Networks (SNNs), which explicitly model
-individual spike events and their timing, offering a potentially more powerful and biologically
-plausible framework for computation than traditional MLPs.
+power. Systems like the visual cortex demonstrate this complexity, where intricate patterns of
+spatio-temporal spiking activity underlie feature detection, object recognition, and dynamic
+processing. These biologically observed principles—event-based communication, temporal coding,
+and complex network dynamics—motivate the exploration of Spiking Neural Networks (SNNs), which
+explicitly model individual spike events and their timing, offering a potentially more powerful and
+biologically plausible framework for computation than traditional MLPs.
 
 = Methodology
 
-```
-Step: explore learning algorithms
-experiment 1 set up random pattern across 1 dimension, inject a repeating pattern
-for the network to learn
+// Step: explore learning algorithms
+// experiment 1 set up random pattern across 1 dimension, inject a repeating pattern
+// for the network to learn
+// Step: explore edge detection
+// can be achived by duplicating and inverting the signal
+// Step: explore different neuronal models
+// Step: prove mathematical equivalence to other ANNs Prove that the network satisties the universal
+// approximation theorem
+// Step: expand to 2d
+// Step: expand network to more layers figure out how to connect (AER)
+// Step: explore how learning algos work with multi-layer
+// Step: try to learn MNIST
+// NOTETOSELF: Steps either build on eachother or are independent, this way we can do
+// bite size research and stop at any point if we run out of time, we dont have to
+// make an entire system in order to have something to write about
 
-Step: explore edge detection
-can be achived by duplicating and inverting the signal
+== Neuron Models
 
-Step: explore different neuronal models
+== Learning
 
-Step: prove mathematical equivalence to other ANNs
+== Network
 
-Step: expand to 2d
-
-Step: expand network to more layers figure out how to connect (AER)
-
-Step: explore how learning algos work with multi-layer
-
-Step: try to learn MNIST
-```
-
-```
-NOTETOSELF: Steps either build on eachother or are independent, this way we can do
-bite size research and stop at any point if we run out of time, we dont have to
-make an entire system in order to have something to write about
-``` 
 = Results
 
 = Discussion
