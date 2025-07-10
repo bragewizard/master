@@ -129,17 +129,17 @@ deep neural networks. The neural networks of today are almost exclusivly based o
 perceptron neuron model. It is a fairly old idea based on a simple model on how the brain processes
 information. The model of the neuron that the is based on has synapses just like the biological
 one, the synapses functions as inputs which when firing will exite the reciving neuron more or less
-depending on the strenth of the connection. If the reciving neuron get exited above a threshold
-it will fire and pass the signal downstream to another reciving neuron. Which is conceptually
-similar to how real neurons operate. $ z = a(sum x w) $ This simple model is called a perceptron,
-which introduced a learning rule for a single computational neuron capable of classifying linearly
-separable patterns. However, to the MLP was the understanding that stacking multiple layers of
-these perceptron-like units could overcome these limitations by creating more complex decision
-boundaries. The critical breakthrough enabling the practical use of MLPs was the independent
-development and subsequent popularization of the backpropagation algorithm. Backpropagation
-provided an efficient method to calculate the gradient of the error function with respect to the
-network's weights, allowing for effective training of these deeper, multi-layered architectures.
-This combination---multiple layers of interconnected units
+depending on the strenth of the connection. If the reciving neuron get exited above a threshold it
+will fire and pass the signal downstream to another reciving neuron. Which is conceptually similar
+to how real neurons operate. $ z = a(sum x w) $ #figure(include("figures/perceptron") This simple
+model is called a perceptron, which introduced a learning rule for a single computational neuron
+capable of classifying linearly separable patterns. However, to the MLP was the understanding that
+stacking multiple layers of these perceptron-like units could overcome these limitations by creating
+more complex decision boundaries. The critical breakthrough enabling the practical use of MLPs
+was the independent development and subsequent popularization of the backpropagation algorithm.
+Backpropagation provided an efficient method to calculate the gradient of the error function with
+respect to the network's weights, allowing for effective training of these deeper, multi-layered
+architectures. This combination---multiple layers of interconnected units
 #footnote[
   While often conceptualized in layers (e.g., layers of the neocortex), the brain's connectivity
   is vastly more complex than typical feedforward ANNs, featuring extensive recurrent connections,
@@ -155,7 +155,7 @@ should be connected (attention, RNN, CNN, resnet)
 === Problems With The Established Methods
 
 We mentioned in the introduction that the deep learning technique is ineficient compared to the
-brain.  The reason why is not clear, from a hardware standpoint the brain simply has better hardware
+brain. The reason why is not clear, from a hardware standpoint the brain simply has better hardware
 much more connections per area and the computation is baked into the hardware. From an algorithmic
 standpoint there may also be room for imporovement, In order to compute with deep learning and
 perceptron networks we need to compute all the entries even tho they might not contribute or are
@@ -321,7 +321,9 @@ biologically plausible framework for computation than traditional MLPs.
 
 == Neuron Models
 
+
 == Learning
+
 
 == Network
 
