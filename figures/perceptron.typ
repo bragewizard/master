@@ -2,7 +2,7 @@
 // Note: current settings use about 2 GiB of RAM and 20 s of compilation time.
 #import "@preview/cetz:0.4.0"
 
-#set page(width: auto, height: auto, margin: 0.6pt)
+// #set page(width: auto, height: auto, margin: 0.6pt)
 
 #let perceptron(
   fill: black,
@@ -18,7 +18,7 @@
   cetz.draw.circle((8,3), fill:white)
 }
 
-#cetz.canvas({
+#cetz.canvas(length:.8cm,{
   import cetz.draw: *
   perceptron()
 })

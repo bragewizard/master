@@ -131,7 +131,9 @@ information. The model of the neuron that the is based on has synapses just like
 one, the synapses functions as inputs which when firing will exite the reciving neuron more or less
 depending on the strenth of the connection. If the reciving neuron get exited above a threshold it
 will fire and pass the signal downstream to another reciving neuron. Which is conceptually similar
-to how real neurons operate. $ z = a(sum x w) $ #figure(include("figures/perceptron") This simple
+to how real neurons operate. $ z = a(sum x w) $
+#figure(caption:"hello")[#include("../figures/perceptron.typ")]
+This simple
 model is called a perceptron, which introduced a learning rule for a single computational neuron
 capable of classifying linearly separable patterns. However, to the MLP was the understanding that
 stacking multiple layers of these perceptron-like units could overcome these limitations by creating
