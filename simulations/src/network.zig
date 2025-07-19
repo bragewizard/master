@@ -1,16 +1,17 @@
 const std = @import("std");
 const print = std.debug.print;
 
-const network_file = "data/networkInit.txt";
+const network_file_init = "data/networkInit.txt";
+const network_file_trained = "data/networkTrained.txt";
 const spike_input_file = "data/spikelist.txt";
 
 const Config = @This();
 
 num_neurons: u32 = 50,
 time_steps: u32 = 1000,
-potential_decay: f32 = 0.95, // Leak factor per time step (e.g., 5% leak)
+potential_decay: f32 = 0.99, // Leak factor per time step (e.g., 5% leak)
 potential_rest: f32 = 0.0,
-potential_threshold: f32 = 1.0,
+potential_threshold: f32 = 0.5,
 potential_reset: f32 = 0.0,
 input_spike_potential: f32 = 0.25, // How much an external input spike increases potential
 initial_connection_num: u32 = 5,
@@ -169,8 +170,8 @@ pub fn run(allocator: std.mem.Allocator) !void {
     var network = try initNetwork(config, allocator);
     defer network.deinit();
 
-    std.debug.print("Saving initial network graph to '{s}'...\n", .{network_file});
-    try saveNetworkAsText(network, network_file); // Threshold 0.0 to show ALL connections
+    std.debug.print("Saving initial network graph to '{s}'...\n", .{network_file_init});
+    try saveNetworkAsText(network, network_file_init); // Threshold 0.0 to show ALL connections
 
     std.debug.print("Loading spike data from '{s}'...\n", .{spike_input_file});
     const spike_input = try loadSpikeInput(config, allocator);
@@ -249,14 +250,17 @@ pub fn run(allocator: std.mem.Allocator) !void {
     }
     std.debug.print("Simulation finished.\n\n", .{});
 
-    // const stdout = std.io.getStdOut().writer();
+    const stdout = std.io.getStdOut().writer();
 
-    // for (0..config.num_neurons) |i| {
-    //     for (network.neurons[i].connections.items) |synapse| {
-    //         // Only print connections that have strengthened significantly
-    //         if (synapse.weight > 0.1) {
-    //             try stdout.print("{d} -> {d} [{d:.4}]\n", .{ i, synapse.target_neuron_idx, synapse.weight });
-    //         }
-    //     }
-    // }
+    for (0..config.num_neurons) |i| {
+        for (network.neurons[i].connections.items) |synapse| {
+            // Only print connections that have strengthened significantly
+            if (synapse.weight > 0.1) {
+                try stdout.print("{d} -> {d} [{d:.4}]\n", .{ i, synapse.target_neuron_idx, synapse.weight });
+            }
+        }
+    }
+
+    std.debug.print("Saving trained network graph to '{s}'...\n", .{network_file_trained});
+    try saveNetworkAsText(network, network_file_trained); // Threshold 0.0 to show ALL connections
 }

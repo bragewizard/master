@@ -132,7 +132,7 @@ one, the synapses functions as inputs which when firing will exite the reciving 
 depending on the strenth of the connection. If the reciving neuron get exited above a threshold it
 will fire and pass the signal downstream to another reciving neuron. Which is conceptually similar
 to how real neurons operate. $ z = a(sum x w) $
-#figure(caption:"hello")[#include("../figures/perceptron.typ")]
+#figure(caption:"perceptron")[#include("../figures/perceptron.typ")]
 This simple
 model is called a perceptron, which introduced a learning rule for a single computational neuron
 capable of classifying linearly separable patterns. However, to the MLP was the understanding that
@@ -305,6 +305,7 @@ biologically plausible framework for computation than traditional MLPs.
 
 = Methodology
 
+#figure(caption:"spike train")[#image("../figures/spiketrain.svg")]
 // Step: explore learning algorithms
 // experiment 1 set up random pattern across 1 dimension, inject a repeating pattern
 // for the network to learn
