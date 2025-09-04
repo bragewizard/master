@@ -16,13 +16,6 @@ pub fn build(b: *std.Build) void {
         .root_module = exe_mod,
     });
 
-    const zigimg_dependency = b.dependency("zigimg", .{
-        .target = target,
-        .optimize = optimize,
-    });
-
-    exe.root_module.addImport("zigimg", zigimg_dependency.module("zigimg"));
-
     b.installArtifact(exe);
 
     const run_cmd = b.addRunArtifact(exe);

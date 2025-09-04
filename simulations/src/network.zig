@@ -58,7 +58,7 @@ fn initNetwork(config: Config, allocator: std.mem.Allocator) !Network {
         neurons[i] = Neuron{
             .potential = config.potential_rest,
             .last_spike_time = 0, // Initialize to 0
-            .connections = std.ArrayList(Synapse).init(allocator),
+            .connections = .empty,
         };
 
         var k: u32 = 0;
@@ -76,7 +76,7 @@ fn initNetwork(config: Config, allocator: std.mem.Allocator) !Network {
                 if (j == connection.target_neuron_idx) continue :add_connections;
             }
 
-            try neurons[i].connections.append(Synapse{
+            try neurons[i].connections.append(allocator, Synapse{
                 .target_neuron_idx = @intCast(j),
                 .weight = random.float(f32) * 0.1, // Start with small random weights
             });
