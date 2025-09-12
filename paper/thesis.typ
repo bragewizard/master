@@ -5,42 +5,57 @@
 // CONFIG
 // ================================================================================================
 
-#set text(font: "Source Serif 4 18pt", size: 11pt)
+// #set text(font: "Source Serif 4 18pt", size: 11pt)
+#set text(font: "Geist", size: 10.5pt)
 #show math.equation : set text(font:"TeX Gyre Schola Math", size: 10.5pt)
-#show raw : set text(font:"CommitMono", weight: "medium", size:9pt)
+#show raw : set text(font:"GeistMono NF", weight: "medium", size:9pt)
 #set list(marker: sym.square.filled.small, indent: 1em)
-#show heading: set text(font:"Source Serif 4",weight: "semibold", style:"italic")
+// #show heading: set text(font:"Source Serif 4",weight: "semibold", style:"italic")
+#show heading: set text(font:"Geist",weight: "bold", style:"italic")
 #show heading.where( level: 1 ): it => block(width: 100%)[
-  #set align(center); #set text(20pt); #v(1em); #upper(it) #v(1em)
+  #set align(left + horizon); #set text(20pt)
+  #grid(columns: 2, column-gutter: .8em)[
+  #line(end:(0em,1.8em),stroke: 2pt + gray)][
+  #upper(it)]
+  #v(.8em)
 ]
 #show heading.where( level: 2 ): it => block(width: 100%)[
-  #set text(16pt); #v(1em); #upper(it) #v(0.5em)
+  #set align(left + horizon); #set text(16pt)
+  #grid(columns: 2, column-gutter: .8em)[
+  #line(end:(0em,1.6em),stroke: 2pt + gray)][
+  #upper(it)]
+  #v(.8em)
+  // #set text(16pt); #upper(it); #v(0.5em)
 ]
 #show heading.where( level: 3 ): it => block(width: 100%)[
-  #set text(12pt); #v(1em); #upper(it) #v(0.3em)
+  #set text(12pt,weight: "semibold"); #upper(it) #v(0.3em)
 ]
 #show heading.where( level: 4 ): it => block(width: 100%)[
-  #set text(11pt); #v(1em); #upper(it) #v(0.5em)
+  #set text(11pt,weight: "semibold"); #upper(it) #v(0.3em)
 ]
 #set heading(numbering: "1.1 ~ ")
+
+#let serif-text(body) = {
+  set text(font: "Source Serif 4 18pt", size: 11pt)
+  body
+}
 
 // ================================================================================================
 // FRONTPAGE
 // ================================================================================================
 
-#set page(fill: gradient.linear(rgb("003049"),rgb("B2FFA8"),angle:45deg), margin: (left: 2in))
-#line(start: (0%, 5%), end: (8.5in, 5%), stroke: (thickness: 2pt))
-#align(horizon + left)[
-  #text(size: 30pt, weight: "semibold", style: "italic", font: "Source Serif 4" )[
+#set page(fill: gradient.linear(rgb("FFDA50"),rgb("FF5013"),angle:45deg), margin: (left: 2in))
+#v(6cm)
+#grid(columns: 2, column-gutter: 2em, align: left + horizon)[
+  #line(end: (0em, 6cm), stroke:2pt)][
+  #text(size: 32pt, weight: "black", style: "italic", font: "Geist" )[
     MACHINE LEARNING WITH SPIKES
   ]
-  #v(1em)
-  #text(font: "CommitMono", weight: "medium")[
+
+  #text(font: "Geist", weight: "semibold",style: "italic")[
     Brage Wiseth\ Universitiy of Oslo\
-    #link("mailto:bragewi@uio.no")\
     #datetime.today().display()
-  ]
-]
+  ]]
 #pagebreak()
 
 // ================================================================================================
@@ -52,19 +67,24 @@
 #counter(page).update(1)
 
 #heading(level: 1,outlined: false,numbering: none)[ACKNOWLEDGEMENTS]
-
+#serif-text()[
 #lorem(40)
+]
 
 #v(4em)
 #heading(level: 1,outlined: false,numbering: none)[ABSTRACT]
-
+#serif-text()[
 #lorem(300)
+]
 #pagebreak()
 
 #{
-  // set text(font: "CommitMono")
+  // set text(font: "GeistMono NFP", weight: "medium", size: 10pt)
+  set text(font: "Geist", weight: "medium", size: 10pt)
   outline(depth:3, indent: auto)
 }
+
+#pagebreak()
 
 // ================================================================================================
 // BODY
@@ -73,6 +93,7 @@
 = Introduction And Theory
 
 // TODO: needs citation
+#serif-text()[
 The concept of intelligence, how it arises and what needs to be in place for it to occur, is
 probably been some of the longest standing questions in human history. How and if it can be
 reproduced artificially is a particuarly hot topic today. Getting answers to these questions will
@@ -119,10 +140,12 @@ _Method_. Outline the methods and how you can recreate the work
 _Results_. bla bla bla
 
 _Discussions_. blabla bla future work bla bla
+]
 
-== Estasblished Methods
+== Established Methods
 
 // TODO: add explanation and ilustrations
+#serif-text()[
 The term Aritifical Inteligence forms an umbrella over many different techniques that make use
 of machines to do some intelligent task. The most promising way to acheive AI to day is trough
 deep neural networks. The neural networks of today are almost exclusivly based on the simple
@@ -153,9 +176,11 @@ which became a foundational architecture for neural networks and paved the way f
 learning revolution. GPT, alphafold, etc. all use these fundamentals with differetn variations of
 architechtures which boils down to how many layers how large layers how dense layers and how they
 should be connected (attention, RNN, CNN, resnet)
+]
 
 === Problems With The Established Methods
 
+#serif-text()[
 We mentioned in the introduction that the deep learning technique is ineficient compared to the
 brain. The reason why is not clear, from a hardware standpoint the brain simply has better hardware
 much more connections per area and the computation is baked into the hardware. From an algorithmic
@@ -169,12 +194,14 @@ can start, this can be hard to scale for large systems where multiple proccesors
 eachother. The same applies to backpropagation it requires freezing the entire network and separates
 computation and learning into two separate stages, local connectetions that should be independent of
 eachother have to wait extreme quantization models (1bit) also highlight the ineficiency
+]
 // TODO: citations needed
 
 == Neuroscience 101
 
 // TODO: add relevant theory here that we refrence to later, do not add stuff that
 // does not add important context nor future reference
+#serif-text()[
 Altough the perceptron captures common key aspects of biologial neuron models A lot is left on the
 table. A lot of progress and new ideas has surfaced since the invention of the perceptron. The simple
 neuron previously though to be simple like the perceptron model turns out to be more complex, the
@@ -182,6 +209,7 @@ information encoding is also a key research topic not explored by older models. 
 is also entirly different than what deep learning uses, changing the models and information encoding
 forces us to rethink how the learning algorithms in the brain works. Network architechture, fully
 asynchronus
+]
 
 === Neuron Models
 
@@ -191,10 +219,12 @@ asynchronus
 // accumulated input exceeds a threshold (e.g., 4/4 synapses fire), the neuron fires. This process
 // ensures that only significant patterns propagate further. They need to reset after, either leaky
 // or instant, also dependng on wether they fired or not
+#serif-text()[
 The neuron is the fundamental bulding block of the brain. Comprised of an axon synapses dendrites.
 When presynaptic neurons fire the postsynaptic neuron increaes in potential if it reaches a
 threshold it will itself fire. Neurons communicate with neurotransmitters such as dopmine and
 glutamate. There are ion channels and some calsium idk.
+]
 
 === Encoding
 
