@@ -4,7 +4,7 @@ from matplotlib.animation import FuncAnimation
 import matplotlib.colors as mcolors
 import numpy as np
 
-def visualizeSpikes(file_path):
+def visualize_spikes(file_path):
     spikes = []
     try:
         with open(file_path, 'r') as f:
@@ -43,7 +43,7 @@ def visualizeSpikes(file_path):
     plt.show()
 
 
-def visualizeStimuliAnimation(stimuli_sequence, title="Spatiotemporal Stimuli"):
+def visualize_stimuli_animation(stimuli_sequence, title="Spatiotemporal Stimuli"):
     if not stimuli_sequence:
         print("Stimuli sequence is empty.")
         return
@@ -66,7 +66,7 @@ def visualizeStimuliAnimation(stimuli_sequence, title="Spatiotemporal Stimuli"):
     ani = FuncAnimation(fig, update, frames=len(stimuli_sequence), blit=True, interval=100)
     plt.show()
 
-def plotNeuronVoltageTrace(title, time, V, Ie, Ii):
+def plot_neuron_voltage_trace(title, time, V, Ie, Ii):
     fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(10, 6), sharex=True)
     ax1.plot(time, V, label='Voltage (V)', color='black')
     ax1.axhline(15, ls='--', color='red', label='Threshold')
@@ -83,7 +83,7 @@ def plotNeuronVoltageTrace(title, time, V, Ie, Ii):
     ax2.grid(True, alpha=0.5)
     plt.show()
 
-def visualizeStaticRasterPlot(spike_times, title="Static Raster Plot"):
+def visualize_static_raster_plot(spike_times, title="Static Raster Plot"):
     plt.figure(figsize=(10, 6))
     height, width = spike_times.shape
     y_coords, x_coords = np.where(~np.isnan(spike_times))
@@ -97,7 +97,7 @@ def visualizeStaticRasterPlot(spike_times, title="Static Raster Plot"):
     plt.grid(True, linestyle='--', alpha=0.6)
     plt.show()
 
-def visualizeSequenceRasterPlot(stimuli_sequence, frame_duration=100, title="Spatiotemporal Raster Plot"):
+def visualize_sequence_raster_plot(stimuli_sequence, frame_duration=100, title="Spatiotemporal Raster Plot"):
     if not stimuli_sequence:
         print("Stimuli sequence is empty.")
         return
@@ -129,14 +129,13 @@ def visualizeSequenceRasterPlot(stimuli_sequence, frame_duration=100, title="Spa
     plt.grid(True, linestyle='--', alpha=0.5, axis='y')
     plt.show()
 
-def visualizeImage(image, title):
+def visualize_image(image):
     plt.figure(figsize=(4, 4))
     plt.imshow(image, cmap='gray', vmin=0, vmax=255)
-    plt.title(title)
     plt.axis('off')
     plt.show()
 
-def visualizeSpikeTimes(spike_times, title="Spike Times"):
+def visualize_spike_times(spike_times, title="Spike Times"):
     plt.figure(figsize=(6, 6))
     masked_spike_times = np.ma.masked_where(np.isnan(spike_times), spike_times)
     plt.imshow(masked_spike_times, cmap='viridis_r', interpolation='nearest', vmin=0, vmax=100)
@@ -149,7 +148,7 @@ def visualizeSpikeTimes(spike_times, title="Spike Times"):
     plt.yticks(fontsize=8)
     plt.show()
 
-def visualizeRasterPlot(spike_times, title="Raster Plot"):
+def visualize_raster_plot(spike_times, title="Raster Plot"):
     plt.figure(figsize=(10, 6))
     height, width = spike_times.shape
     y_coords, x_coords = np.where(~np.isnan(spike_times))
@@ -163,7 +162,7 @@ def visualizeRasterPlot(spike_times, title="Raster Plot"):
     plt.grid(True, linestyle='--', alpha=0.6)
     plt.show()
 
-def visualize3dSpikes(spike_times, title="3D Spiking Plot"):
+def visualize_3d_spikes(spike_times, title="3D Spiking Plot"):
     fig = plt.figure(figsize=(8, 8))
     ax = fig.add_subplot(111, projection='3d')
     ax.set_title(title)
