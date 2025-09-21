@@ -32,7 +32,7 @@ def create_global_theme(dpg):
             dpg.add_theme_color(dpg.mvPlotCol_FrameBg, (30, 30, 30), category=dpg.mvThemeCat_Plots)
             dpg.add_theme_color(dpg.mvPlotCol_PlotBg, (20, 20, 20), category=dpg.mvThemeCat_Plots)
         with dpg.theme_component(dpg.mvLineSeries):
-            dpg.add_theme_style(dpg.mvPlotStyleVar_LineWeight, 2, category=dpg.mvThemeCat_Plots)
+            dpg.add_theme_style(dpg.mvPlotStyleVar_LineWeight, 1, category=dpg.mvThemeCat_Plots)
     return global_theme
 
 def scatter_green(dpg):
@@ -40,7 +40,7 @@ def scatter_green(dpg):
         with dpg.theme_component(dpg.mvScatterSeries):
             dpg.add_theme_color(dpg.mvPlotCol_Line, value=(180, 224, 68) , category=dpg.mvThemeCat_Plots)
             dpg.add_theme_style(dpg.mvPlotStyleVar_Marker, dpg.mvPlotMarker_Circle, category=dpg.mvThemeCat_Plots)
-            dpg.add_theme_style(dpg.mvPlotStyleVar_MarkerSize, 3, category=dpg.mvThemeCat_Plots)
+            dpg.add_theme_style(dpg.mvPlotStyleVar_MarkerSize, 1, category=dpg.mvThemeCat_Plots)
     return green
 
 def scatter_orange(dpg):
@@ -48,5 +48,5 @@ def scatter_orange(dpg):
         with dpg.theme_component(dpg.mvScatterSeries):
             dpg.add_theme_color(dpg.mvPlotCol_Line, value=(255, 159, 70) , category=dpg.mvThemeCat_Plots)
             dpg.add_theme_style(dpg.mvPlotStyleVar_Marker, dpg.mvPlotMarker_Circle, category=dpg.mvThemeCat_Plots)
-            dpg.add_theme_style(dpg.mvPlotStyleVar_MarkerSize, 3, category=dpg.mvThemeCat_Plots)
+            dpg.add_theme_style(dpg.mvPlotStyleVar_MarkerSize, 1, category=dpg.mvThemeCat_Plots)
     return orange

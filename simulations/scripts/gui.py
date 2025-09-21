@@ -61,13 +61,13 @@ def update_series_data(spikes, indices):
     print(f"✅ Neuron {target_neuron_idx} received {len(neuron_input_times)} synaptic inputs.")
     while True:
         update_frame_counter()
-        new_y_value = generate_brain_signal(simulation_time)
+        # new_y_value = generate_brain_signal(simulation_time)
         w_exc = dpg.get_value("w_exc_slider")
         w_inh = dpg.get_value("w_inh_slider")
         I_exc = 0.0
         I_inh = 0.0
         
-        y_data.append(new_y_value)
+        # y_data.append(new_y_value)
         time_data.append(simulation_time)
 
         exc_mask = weights > 0
@@ -81,13 +81,13 @@ def update_series_data(spikes, indices):
         # spike_times_inh = [s[0] for s in incoming_spikes if s[1] == -1 and time_data[0] <= s[0] <= time_data[-1]]
         # spike_times_out = [s[0] for s in incoming_spikes if s[1] == 2 and time_data[0] <= s[0] <= time_data[-1]]
 
-        dpg.set_value('series_tag', [list(time_data), list(y_data)])
+        # dpg.set_value('series_tag', [list(time_data), list(y_data)])
         # dpg.set_value('exc_spikes_series', [list(neuron_input_times), list(neuron_input_weights)])
         dpg.set_value('exc_spikes_series', [list(exc_times), list(exc_indices)])
         dpg.set_value('inh_spikes_series', [list(inh_times), list(inh_indices)])
         # dpg.set_value('out_spikes_series',[[t for t in spike_times_out], [0 for _ in spike_times_out]])
         dpg.set_axis_limits("x_axis", time_data[0], time_data[-1])
-        dpg.set_axis_limits("x_axis2", time_data[0], time_data[-1])
+        # dpg.set_axis_limits("x_axis2", time_data[0], time_data[-1])
         simulation_time += TIME_STEP
         time.sleep(0.01)
 
@@ -140,7 +140,7 @@ def run_gui(input_image):
                     no_title_bar=True):
         with dpg.group(horizontal=True):
             with dpg.child_window(width=VIEWPORT_WIDTH * 0.7):
-                with dpg.plot(label="Neuron Membrane Potential", height=VIEWPORT_HEIGHT // 2 - 40, width=-1):
+                with dpg.plot(label="Neuron Membrane Potential", height=VIEWPORT_HEIGHT - 40, width=-1):
                     dpg.add_plot_legend()
                     dpg.add_plot_axis(dpg.mvXAxis, label="Time (s)", tag="x_axis")
                     dpg.add_plot_axis(dpg.mvYAxis, label="Displacement", tag="y_axis")
@@ -149,19 +149,19 @@ def run_gui(input_image):
                     dpg.add_scatter_series(x=[], y=[], label="Inhibitory Spike", parent="y_axis", tag="inh_spikes_series")
                     dpg.add_scatter_series(x=[], y=[], label="Excitatory Spike", parent="y_axis", tag="exc_spikes_series")
                     dpg.add_scatter_series(x=[], y=[], label="Output Spike", parent="y_axis", tag="out_spikes_series")
-                    # dpg.bind_item_theme("inh_spikes_series", orange)
-                    # dpg.bind_item_theme("out_spikes_series", orange)
+                    dpg.bind_item_theme("inh_spikes_series", orange)
+                    dpg.bind_item_theme("out_spikes_series", orange)
                     dpg.bind_item_theme("exc_spikes_series", green)
 
                 
                 # Current Plot
-                with dpg.plot(label="Synaptic Currents", height=VIEWPORT_HEIGHT // 2 - 40, width=-1):
-                    dpg.add_plot_legend()
-                    dpg.add_plot_axis(dpg.mvXAxis, label="Time (ms)", tag="x_axis2")
-                    dpg.add_plot_axis(dpg.mvYAxis, label="Displacement", tag="y_axis2")
-                    dpg.set_axis_limits("y_axis2", -5, 5)
-                    dpg.add_line_series(list(time_data), list(y_data), label="Excitatory Current", parent="y_axis2", tag="series_tag")
-                    dpg.bind_item_theme("series_tag", plot_theme)
+                # with dpg.plot(label="Synaptic Currents", height=VIEWPORT_HEIGHT // 2 - 40, width=-1):
+                #     dpg.add_plot_legend()
+                #     dpg.add_plot_axis(dpg.mvXAxis, label="Time (ms)", tag="x_axis2")
+                #     dpg.add_plot_axis(dpg.mvYAxis, label="Displacement", tag="y_axis2")
+                #     dpg.set_axis_limits("y_axis2", -5, 5)
+                #     dpg.add_line_series(list(time_data), list(y_data), label="Excitatory Current", parent="y_axis2", tag="series_tag")
+                #     dpg.bind_item_theme("series_tag", plot_theme)
 
             with dpg.child_window(width=-1):
                 dpg.add_text("Neuron Controls")
