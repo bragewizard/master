@@ -2,8 +2,7 @@
 #import "@preview/wordometer:0.1.5": word-count, total-words
 #import "@preview/lovelace:0.3.0": pseudocode-list
 #import "@preview/glossarium:0.5.9": make-glossary, register-glossary, print-glossary, gls, glspl
-#import "uiomasterfp/frontpage.typ": cover
-#import "uiomasterfp/frontpage.typ": colors
+#import "frontpage/frontpage.typ": cover, colors
 #import "glossary.typ": entry-list
 #import "style.typ": style, serif-text, mono-text, box-text, mini-header
 
