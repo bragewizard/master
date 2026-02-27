@@ -1,10 +1,10 @@
 import pyglet
 import numpy as np
-from videogen import LineVideoGenerator
+from _data import LineVideoGenerator
 
 # --- CONFIG ---
-WINDOW_WIDTH = 600
-WINDOW_HEIGHT = 600
+WINDOW_WIDTH = 1000
+WINDOW_HEIGHT = 1000
 GEN_WIDTH = 28
 GEN_HEIGHT = 28
 

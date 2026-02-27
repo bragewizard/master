@@ -1,7 +1,7 @@
 import pyglet
 from pyglet import shapes
 import numpy as np
-from snn import (
+from _snn import (
     SpikingNet,
     INPUT_WIDTH,
     INPUT_HEIGHT,
@@ -9,7 +9,7 @@ from snn import (
     MAP_WIDTH,
     MAP_HEIGHT,
 )
-from videogen import LineVideoGenerator
+from _data import LineVideoGenerator
 
 # --- CONFIG ---
 WINDOW_WIDTH = 1200

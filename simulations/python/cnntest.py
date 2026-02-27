@@ -2,44 +2,23 @@ import pyglet
 from pyglet import shapes
 import numpy as np
 import torch
-import torch.nn as nn
-from videogen import LineVideoGenerator
+from _cnn import SimpleLineCNN, FRAME_HEIGHT, FRAME_WIDTH
+from _data import LineVideoGenerator
 import os
 
 # --- CONFIGURATION ---
 WINDOW_WIDTH = 1200
 WINDOW_HEIGHT = 800
 
-# Input Dimensions
-INPUT_WIDTH = 28
-INPUT_HEIGHT = 28
-
 # Visual Config (Dot Matrix)
 GRID_SPACING = 20  # Pixels between dots
 DOT_RADIUS = 5
-GRID_START_X = (WINDOW_WIDTH - (INPUT_WIDTH * GRID_SPACING)) // 2
+GRID_START_X = (WINDOW_WIDTH - (FRAME_WIDTH * GRID_SPACING)) // 2
 GRID_START_Y = (
-    WINDOW_HEIGHT + (INPUT_HEIGHT * GRID_SPACING)
+    WINDOW_HEIGHT + (FRAME_HEIGHT * GRID_SPACING)
 ) // 2 - 50  # Start from top
 
 WEIGHTS_FILE = "cnn_weights.pth"
-
-
-# --- THE CNN MODEL ---
-class SimpleTrackerCNN(nn.Module):
-    def __init__(self):
-        super(SimpleTrackerCNN, self).__init__()
-        # EXACT architecture used in training
-        self.conv1 = nn.Conv2d(in_channels=1, out_channels=4, kernel_size=3, stride=2)
-        self.relu = nn.ReLU()
-        self.fc = nn.Linear(4 * 13 * 13, 2)
-
-    def forward(self, x):
-        x = self.conv1(x)
-        x = self.relu(x)
-        x = x.flatten(start_dim=1)
-        x = self.fc(x)
-        return x
 
 
 # --- SETUP ---
@@ -53,8 +32,8 @@ background_group = pyglet.graphics.Group(order=0)
 foreground_group = pyglet.graphics.Group(order=1)
 
 # 1. World & Brain
-gen = LineVideoGenerator(INPUT_WIDTH, INPUT_HEIGHT)
-model = SimpleTrackerCNN()
+gen = LineVideoGenerator(FRAME_WIDTH, FRAME_HEIGHT)
+model = SimpleLineCNN()
 
 # 2. Load Weights
 if os.path.exists(WEIGHTS_FILE):
@@ -71,8 +50,8 @@ else:
 # We store the circle objects in a list so we can update their color later
 pixel_dots = []
 
-for y in range(INPUT_HEIGHT):
-    for x in range(INPUT_WIDTH):
+for y in range(FRAME_HEIGHT):
+    for x in range(FRAME_WIDTH):
         # Calculate screen position
         # Note: Grid Y goes Top->Down, Pyglet Y goes Bottom->Up
         screen_x = GRID_START_X + (x * GRID_SPACING)
@@ -161,8 +140,8 @@ def update(dt):
     pred_x_norm = prediction[0][0].item()
     pred_y_norm = prediction[0][1].item()
 
-    pred_x = ((pred_x_norm + 1) / 2) * INPUT_WIDTH
-    pred_y = ((pred_y_norm + 1) / 2) * INPUT_HEIGHT
+    pred_x = ((pred_x_norm + 1) / 2) * FRAME_WIDTH
+    pred_y = ((pred_y_norm + 1) / 2) * FRAME_HEIGHT
 
     # Move the dots
     t_sx, t_sy = logical_to_screen(true_x, true_y)

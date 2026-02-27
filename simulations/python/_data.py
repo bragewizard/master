@@ -1,7 +1,96 @@
 import numpy as np
+from PIL import Image, ImageDraw
+import random
 
 MNIST_train_images_path = "data/train-images.idx3-ubyte"
 MNIST_test_images_path = "data/t10k-images.idx3-ubyte"
+
+
+class LineVideoGenerator:
+    def __init__(self, width, height):
+        self.width = width
+        self.height = height
+        self.t = 0
+
+        # Line State
+        self.x_pos = width // 2
+        self.y_pos = height // 2
+        self.length = 8  # Short line segment (about 1/3 of the 28px screen)
+        self.is_erratic = False
+
+    def get_next_frame(self):
+        # 1. Create dark background
+        img = Image.new("L", (self.width, self.height), color=0)
+        draw = ImageDraw.Draw(img)
+
+        # 2. Update Physics
+        self.t += 1
+
+        if self.is_erratic:
+            # Teleport randomly
+            if random.random() < 0.1:
+                self.x_pos = random.randint(2, self.width - 2)
+                self.y_pos = random.randint(
+                    self.length // 2, self.height - self.length // 2
+                )
+        else:
+            # Margins so it doesn't hit the absolute edge
+            w_amp = (self.width * 0.8) / 2
+            h_amp = (self.height * 0.8) / 2
+
+            self.x_pos = (self.width / 2) + np.sin(self.t * 0.05) * w_amp
+            # Use Cosine and different speed (0.07) for Y to decouple axes
+            self.y_pos = (self.height / 2) + np.cos(self.t * 0.07) * h_amp
+
+        # 3. Draw Line Segment (Vertical) centered at (x, y)
+        x = int(self.x_pos)
+        y = int(self.y_pos)
+
+        # Calculate start and end Y coordinates based on length
+        y_start = max(0, y - self.length // 2)
+        y_end = min(self.height, y + self.length // 2)
+
+        draw.line([(x, y_start), (x, y_end)], fill=255, width=3)
+
+        # 4. Return Numpy array and tuple of coordinates
+        return np.array(img), (x, y)
+
+
+def intensity_to_delay_linear(image, T_max=100, T_min=0):
+    normalized_image = image.astype(float) / 255.0
+    spike_times = T_max - (T_max - T_min) * normalized_image
+    return spike_times
+
+
+def intensity_to_delay_log(image, T_max=100, T_min=0):
+    normalized_image = image.astype(float) / 255.0
+    spike_times = T_max - (T_max - T_min) * normalized_image
+    return spike_times
+
+
+def intensity_to_inverse_delay_linear(image, T_max=100, T_min=0):
+    negative_image = 255 - image
+    return intensity_to_delay_linear(negative_image, T_max=T_max, T_min=T_min)
+
+
+def intensity_to_inverse_delay_log(image, T_max=100, T_min=0):
+    negative_image = 255 - image
+    return intensity_to_delay_log(negative_image, T_max=T_max, T_min=T_min)
+
+
+def luminance_to_vector_2d(luminance_image: np.ndarray) -> np.ndarray:
+    luminance_image = luminance_image.flatten()
+    angles = (luminance_image / 255.0) * 2 * np.pi
+    vectors = np.zeros(luminance_image.shape + (2,), dtype=np.float32)
+    vectors[..., 0] = np.cos(angles)  # x component
+    vectors[..., 1] = np.sin(angles)  # y component
+    return vectors
+
+
+def average_images(image_list):
+    stacked_images = np.stack(image_list, axis=0).astype(np.float32)
+    averaged_image = np.mean(stacked_images, axis=0)
+    return averaged_image.astype(np.uint8)
 
 
 def parse_MNIST(filename):

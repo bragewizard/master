@@ -1257,6 +1257,8 @@ FLOPS
 
 = Results <results>
 
+
+== Inference
 #serif-text()[
 #lorem(100)
 
@@ -1270,6 +1272,8 @@ FLOPS
 
 #lorem(100)
 ]
+
+== Training
 
 #figure(table(columns: 4,
   [0], [0], [1], [1],
@@ -1294,6 +1298,8 @@ FLOPS
 
 #serif-text()[
 In this section we discuss the
+
+In the engineered test enviroment we used pixel intensity directly and for this toy example it works quite well since the feeatures we are interesting in are eesy to read in a low resoluton simple enviroment. However for real world vision tasks pixel intensity is not the best features to feed into the algorithm, it is better to use local contrast since that is what determines object outlines and other interesting elements of an image. It is possible to use an SNN to compute local contrast from pixel intsity, in fact that was part of the development of the algorithm. For a @ttfs aproach it gets very difficult to do this effeciently since to get the normalized contrast (true contrast indepenendt of luminance) you have to wait for all signals to arrive even the complete absense of light completly wasting the potential of @ttfs. To fix this a dedicated chip that outputs @ttfs contrast directly can be used. A normal difference of lumince gives you a absolute measure of contrast where differences of brighter pixels gives a larger contrast where differences between two darker pixels gives a lower contrast. Contrast should be relative (a ratio) so by converting luminace to log-space first and then taking difference will give a true contrast independent of luminance intensity
 
 We see a trade-off between the ability to learn and speed of learing and forgetting. Synaptic plasticitiy must be tuned in order for the right learing enviroment to form
 

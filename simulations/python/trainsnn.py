@@ -1,6 +1,5 @@
-from PIL import Image
 import numpy as np
-from data import (
+from _data import (
     scale_image,
     create_random_image_one_channel,
     inject_pattern,
@@ -13,14 +12,19 @@ import pyglet
 from pyglet.window import key
 from pyglet.window import mouse
 from pyglet.shapes import Circle, Rectangle, Line
-from config import NETWORK_SHAPE, WINDOW_HEIGHT, WINDOW_WIDTH, X_MARGIN, LAYER_SPACING
+
+from _snn import SpikingNet
 
 NODE_C = 64
 EDGE_C = 128
 
+NETWORK_SHAPE = (64, 32)
+WINDOW_WIDTH = 1920
+WINDOW_HEIGHT = 1080
+LAYER_SPACING = 400
+X_MARGIN = 32
+
 # --- Import the simulation code ---
-import threading
-from sim import Simulation
 
 
 def np_to_pyglet_image(np_array):
@@ -121,7 +125,7 @@ inject_pattern(random_image3, rows3, cols3, 255)
 data = np.array([random_image1, random_image2, random_image3])
 window = pyglet.window.Window(WINDOW_WIDTH, WINDOW_HEIGHT)
 
-sim = Simulation(data)
+snn = SpikingNet()
 # pyglet.resource.path = ['../data']
 # pyglet.resource.reindex()
 image = np_to_pyglet_image(data[0])
@@ -132,7 +136,7 @@ foreground_group = pyglet.graphics.Group(order=1)
 neurons = draw_neurons(batch, foreground_group)
 connections = {}
 label = pyglet.text.Label(
-    "SPIKING NEURAL NETWORK SIMULATOR V1",
+    "SPIKING NEURAL NETWORK snnULATOR V1",
     font_name="GeistMono NF Medium",
     font_size=11,
     x=window.width // 2,
@@ -166,10 +170,10 @@ def update(dt):
     if time_slice <= 0:
         return
 
-    spiked_indices, grown_synapses, pruned_synapses, is_empty = sim.advance(time_slice)
+    spiked_indices, current_ops = snn.advance(time_slice)
     if is_empty:
-        sim.next_data(data)
-        update_image(data[sim.iteration], image)
+        snn.next_data(data)
+        update_image(data[snn.iteration], image)
 
     for neuron in neurons:
         if neuron.color != (NODE_C, NODE_C, NODE_C):
@@ -211,7 +215,7 @@ def update(dt):
 
             # Remove the key from our tracking dictionary
             del connections[(pre_idx, post_idx)]
-    time_label.text = f"{sim.now_time:.2f}ms"
+    time_label.text = f"{snn.now_time:.2f}ms"
 
 
 @window.event
