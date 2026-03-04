@@ -1014,52 +1014,40 @@ This thesis proposes a method to bridge this gap by... (...for example: "...deve
 
 = Method <method>
 
-#serif-text()[ This chapter details the computational framework developed to address the fundamental limitations of standard deep learning described in @background. The approach presented here aligns with the constraints of biological substrates: sparsity, asynchrony, and locality. We propose a neuromorphic architecture designed to maximize energy efficiency and computational robustness through three core mechanisms: Temporal Information Representation: A coding scheme that translates static data into asynchronous spike latencies, replacing energy-intensive rate coding with sparse time-to-first-spike (TTFS) interactions.
+#serif-text()[ This chapter details implementations of neuromorphic methods to address the fundamental limitations of standard deep learning described in @biologicalprinciples. The approach presented here aligns with the constraints of biological substrates: sparsity, asynchrony, and locality. We propose a neuromorphic architecture designed to maximize energy efficiency and computational robustness ]
 
-Simple well established highly parallazable integrate and fire neurons.
+#v(2em)
+== Data
 
-Local Plasticity Algorithms: A two-stage learning process combining structural synaptogenesis for dynamic connectivity and a localized, prediction-based weight update rule for pattern recognition. Finally, we describe the custom event-driven simulation environment constructed to validate these principles, bridging the gap between theoretical biological models and practical execution on standard digital hardware.
+#serif-text()[]
 
-The methods in this thesis will be tested on visual number reckognition ]
+#pagebreak()
 
 #v(2em)
 == Information Representation
 
-#serif-text()[ The choise of a coding shceme puts key constraints on the design any processing system as it lays the founation for the flow of information. In @neuralcoding and @appliedneuralcodes we dicussed several candidate neural codes that are both biologically plausible and have been used in previous neuromorphic systems. The neural code plays a large role in determening the effecieny of the system. Many neuromorphic systems use rate code as it is easy to translate values it is straight forward. any float value can be encoded as a rate code and integrate and fire neurons work well with this encoding. An IF neuron using rate code can reduce the multiply and add operations with just add operations. each spike arriving at a synapse adds its weight to the total. It is easy to see that for a rate code a higher rate input means more of that input contributing to the total sum. The main reason for why this thesis will not use a rate code is that it is relativly ineficient and slow compared to a temporal code. In a temporal code only one spike is required to establish its value in relation to other synapses, making a single event much more information dense. This is especially important for systems that do not have the connection density of a biological brain and must use shared buses that can be congested if too many spikes are present on the bus. Secondly to determine the value of a rate code you have to take an average of multiple spikes, imposing a delay. Using a TTFS encoding requires more sophisticated neuron models than a simple integrate and fire, it need more bookkeeping to keep track of the relative arival of incoming spikes.
-
-That beeing said and as discussed in @neuralcoding combining neural codes and using the right one for the job is also an important aspect to consider, there is not a clear consenus on which code is better it is a matter of the task at hand. As we also have talked about, Combining differnt codes toghether can make for a powerful representation of information. This thesis focuses on visaul recognition and a TTFS combined with population code is the representation of choise. The popultion code will represent a distinct pattern in an image. This can be set up to detect lines and primitve shapes, deeper layers will use populations of primitve shapes to detect more complex features like circles and boxes and so on. ]
-
+#serif-text()[ The choise of a coding shceme puts key constraints on the design any processing system as it lays the founation for the flow of information. In @neuralcoding and @appliedneuralcodes we dicussed several candidate neural codes that are both biologically plausible and have been used in previous neuromorphic systems. The neural code plays a large role in determening the effecieny of the system. Many neuromorphic systems use rate code as it is easy to translate values it is straight forward. any float value can be encoded as a rate code and integrate and fire neurons work well with this encoding. An IF neuron using rate code can reduce the multiply and add operations with just add operations. each spike arriving at a synapse adds its weight to the total. It is easy to see that for a rate code a higher rate input means more of that input contributing to the total sum. Using a rate code we can convert multiply and accumulate operations to just a series of accumulate operations by discretetizing the input values. The main reason for why this thesis will not use a rate code is that it is relativly ineficient and slow compared to a temporal code. In a temporal code only one spike is required to establish its value in relation to other synapses, making a single event much more dense in information. This is especially important for systems that do not have the connection density of a biological brain and must use shared buses that can be congested if too many spikes are present on the bus. Secondly to determine the value of a rate code you have to take an average of multiple spikes, imposing a delay. Using a @ttfs encoding requires more sophisticated neuron models than a simple integrate and fire, it need more bookkeeping to keep track of the relative arival of incoming spikes and as mentioned in @neuralcoding and as we will explain by using a temporal encoding we need to handle the phase abmiguity problem.
+A neural code should have the following characteristics: ]
 
 #box-text()[
-This thesis will use TTFS combined with population coding for visual tasks, This combination is biologically plausibe as it is fast and can be set up as filters similar to how the human visual cortex is structured. 
+  - Fast
+  - Effecient in terms of neurons used
+  - Able to encode a wide range of stimuli
+  - Robust to noise
 ]
 
-#serif-text()[ A neuron should have the following charecteristcs: ]
-
+#serif-text()[ Visual tasks which is what the application this thesis focuses on ]
 #box-text()[
-  - Acuumulate spikes in some form (integrate)
-  - Fire when some treshold has been reached
-  - Leak the potential over time
-]
-#serif-text()[ A neural code should ]
-
-#box-text()[
-  - be fast
-  - be effecient in terms of neurons used
-  - able to encode a wide range of stimuli
-  - robust to noise
+  1. a population code is used in conjunction with a temporal code
+  2. Population code is used alone (eg individual order within a population does not matter)
 ]
 
-
-
-Explain in detail how we encode information using neural codes using pseudo code
-
-Code
-Rate code is simple will not use it
-Temporal codes
+#serif-text()[ That beeing said and as discussed in @neuralcoding combining neural codes and using the right one for the job is also an important aspect to consider, there is not a clear consenus on which code is better it is a matter of the task at hand. As we also have talked about, Combining differnt codes toghether can make for a powerful representation of information. This thesis focuses on visaul recognition and a TTFS combined with population code is the representation of choise. The popultion code will represent a distinct pattern in an image. This can be set up to detect lines and primitve shapes, deeper layers will use populations of primitve shapes to detect more complex features like circles and boxes and so on. ]
 
 #v(1em)
-=== Converting sensory input
+=== Encoding <encoding>
+
+#serif-text()[ To convert a float value (like a pixel value from an image to a @ttfs encoding we first need to find the range of the pixels from minimum to maximum value. Then we need to decide on what featere of interest we wish to represent, a natural choise is pixel luminance but others such as contrast or hue or other features using other color spaces could be used. For our purposes we will not be using contrast but since our image is engineered for this task we can skip the contrast extraction that needs to be in place for real world images and poduce images that has clear distinct lines present in the raw pixel data (since the dimensions are small a line in the image will typically only be a few pixels wide so there would be no difference if we took the contrast of pixels or the luminance direclty).. If the image is black and white it is straight forward to extract the luminance as most often the pixel luminace is stored directly. Once we have ound the range say minimum is 0 and max is 255 we can construct an event queue where the pixel intensity determines its place in the queue and its assoiated delay. The conversion mapping can be linar where each pixel gets its luminace multiplied by a scalar other usefull mappings can be logarithmic or exponential. ]
 
 #figure(
 kind:"algo",
@@ -1083,70 +1071,60 @@ procedure intensity_to_delay_encoding(image, T_max=100, T_min=0): #h(1fr)
   + return spike_times
 ]))
 
-#v(1em)
-=== Representing Contrast
-
-#serif-text()[ easy with rate code
-
-need global information to normalize
-
-using ttf is difficult
-
-using negative image - still problem with absolute contrast
-
-can be done locally with speial sensors and using logarithmic intensity to delay ]
+#serif-text()[ In deeper layers the meaning of the information may be obscured as is common with deep neural networks, however temporal encoding should if the neuron model is designed with this sceme in mind should produce shorter delays for greater values if a deeper layer neuron reacts to a box and its neigbour in the same layer reacts to a circle and the image is a rounded box (but more box than circle) then the neuron responind to a box should emit a spike faster than the neuron responding to a circle. ]
 
 #v(1em)
 === Decoding
 
-#serif-text()[ Decoding is done in the neurons and thus the neurons need to be designed to work with the chosen encoding either at individual neuron level or population level ]
+#serif-text()[ Decoding the neural code requres an adequate neuron model that uses the neural code to run useful computations. As discussed in @biologicalprinciples a neuron should have the following charecteristcs: ]
+
+#box-text()[
+  - Acuumulate spikes in some form (integrate)
+  - Fire when some treshold has been reached
+  - Leak the potential over time
+]
 
 
-```python
-def integrate_and_fire(excitatory, inhibitory, threshold=1.0):
-    excitatory_spikes = [(t, 1) for t in excitatory.flatten() if not np.isnan(t)]
-    if inhibitory is None:
-        inhibitory_spikes = []
-    else:
-        inhibitory_spikes = [(t, -1) for t in inhibitory.flatten() if not np.isnan(t)]
-    all_spikes = excitatory_spikes + inhibitory_spikes
-    if not all_spikes:
-        return None
-    all_spikes.sort(key=lambda x: x[0])
-    integrated_potential = 0.0
-    firing_time = None
-    for time, spike_type in all_spikes:
-        integrated_potential += spike_type
-        integrated_potential = max(0, integrated_potential)
-        if integrated_potential >= threshold:
-            firing_time = time
-            break
-    return firing_time
-```
-
-#serif-text()[ How neurons use coding
-
-We have seen that glif neuron is bio plausible and such a neuron is simple and can be realized easily on hardware the way. Using a temporal code the neuron has to differentiate between inputs in the time domain otherwise it cannot decode the information and cannot do useful work. Earlier inputs are encoded with larger values and should have a greater portion of summation going on inside the neuron.
+#serif-text()[ We have seen that glif neuron is bio plausible and such a neuron is simple and can be realized easily on hardware the way. Using a temporal code the neuron has to differentiate between inputs in the time domain otherwise it cannot decode the information and cannot do useful work. Earlier inputs are encoded with larger values and should have a greater portion of summation going on inside the neuron. The neurons need to be desigend to work with the chosen encoding either at individual neuron level or population level
 
 -If order matters (temporal code) the neuron must handle it
 Evidence for bio-plauibility can be found from eq 1 where the R(u) is dependent on the membrane potential 
 
-For visual tasks which is what the application this thesis focuses on 
-1. a population code is used in conjunction with a temporal code
-2. Population code is used alone (eg individual order within a population does not matter)
+make the input exponentially weaker in proportion to the threshold. If the treshold is zero then the incoming spike does not get suppressed if the therhold is very close to max then the incoming spike gets more suppressed. ] 
 
-A counter starts when the first spike arrives
+
+#figure( include("figures/thresholdsensitive.typ"), caption: [In-memory])
+
+#serif-text()[ A counter starts when the first spike arrives
 
 Needs a global reset or local like we talked about in the biological section about phase ambiguity ]
 
-#v(1em)
-=== Perceptron equivalence
+#figure(
+kind:"algo",
+caption: [Logarithmic intensity to dely encoding],
+supplement: [Algorithm],
+mono-text(pseudocode-list(hooks:.5em, indentation:1em, booktabs:true)[
+integrate_and_fire(excitatory, inhibitory, threshold) -> integer:
+  + excitatory_spikes = [] #h(1fr)
+  + if inhibitory is None:
+    + inhibitory_spikes = []
+  + else:
+    + inhibitory_spikes = []
+  + all_spikes = excitatory_spikes + inhibitory_spikes
+  + if not all_spikes:
+    + return None
+  + all_spikes.sort(key=lambda x: x[0])
+  + integrated_potential = 0.0
+  + firing_time = None
+  + for time, spike_type in all_spikes:
+    + integrated_potential += spike_type
+    + integrated_potential = max(0, integrated_potential)
+    + if integrated_potential >= threshold:
+      + firing_time = time
+      + break
+  + return firing_time
+]))
 
-#serif-text()[ The perceptron equation can be obtained with a ttfs using the inverse of firing times ]
-
-#figure( kind: "eq", supplement: [Equation], caption: [Weigthed sum], [
-$ T = sum w/t $
-])
 
 #serif-text()[ In a time to first spike scheme of we care about the order (the relative values since information is stored in time and order) we have to use weights and a neuron model that distinguish between inputs arriving earlier than others. I present a scheme where the first neuron that arrives starts a linear count where the slope of the counter is the weight additional inputs will increase or decrease the slope according to their weight. We can see that neurons arriving earlier will get more time to increase the counter and thus will carry a higher value. If the counter reaches a threshold the neuron will fire. The astute will notice that in this scheme the neuron will fire even for the smallest stimulus since the counter will count up a non zero value and eventually reach the threshold, to mitigate this we can simply say that if the counter is too slow the neuron will not fire we will see later that this scheme satisfies the criteria above.
 
@@ -1162,15 +1140,27 @@ $ I_i(t) = sum_j w_(i j) dot S_j(t) $
 
 Another way which is also based on relative firing order of single spikes could be a passcode encoding. Such an encoding could work by having neurons only react to a sequence. It has an internal state machine of sorts and will only advance to the next state if recives the correct input in the correct order. This encoding does only care about relative order not relative timings. ]
 
+#pagebreak()
+
+== Network Architechture
+
+#serif-text()[ As the methods will be fitted to visual stimuli. Network topologies for these tasks are widely studdied and proved to be effective the topolygy we will be using is similar to @cnn topology whiich is also inspired by the visual cortex in mamals. The idea is that early layers will pick up on very simple features like lines and curves that form eg around an object. The next layer might use the representation of lines and curves from the layer before to represent more complex shaped like boxes and circles. Furhter down the network more complex and abstract features can be represented this way. We will focus on fairly shallow networks with three layers to capture the simple shapes like boxes and circles present in the data. Both the @cnn and the @snn will have the same architechture and number of parameters so that weights can be shared and the idea is that comparisons should be more fair. ] 
+
+#figure( include("figures/visualhierarcy.typ"), caption: [In-memory])
+
+#serif-text()[ Using the same architechtire for @cnn and @snn and sharing weights is not mathemathically eqiuvalent but sharing weights is still usefull. The key distinction is that the @snn uses lateral inhibition the cnn does nececarly do, altough max pooling works in the same way.
+
+The input layers match the input dimension
+
+use 3x3 filters since features are not that big
+
+use 3 channels, each channel is used for a spesicic local feature, use wta/max pooling to choose the most prominent feature in a local region (lateral inhibition. A local feature like vertical diagonal or horisontal line is "chosen" in that region) ]
 
 #pagebreak()
 
 == Proposed Learning Algorithms
 
-#serif-text()[
-
-
-start with fully connected and then run strengthen connections that have "statistical significance" (not random / patterns) or is correlated to something (reward signal) at the end of an epoch prune connectionn making the network more effecient. This is similar to how the brain does it when sleeping
+#serif-text()[ start with fully connected and then run strengthen connections that have "statistical significance" (not random / patterns) or is correlated to something (reward signal) at the end of an epoch prune connectionn making the network more effecient. This is similar to how the brain does it when sleeping
 
 Do some math with references to the optimasation section
 
@@ -1214,44 +1204,30 @@ mono-text(pseudocode-list(hooks:.5em, indentation:1em, booktabs:true)[
   inhibitory action
 ]))
 
-#v(2em)
-== Simulation <simulation>
+#pagebreak()
 
-#serif-text()[
+== Simulation
 
-
-
-We have discussed the benefits of co algorithm design and designing new specialed computer hardware that run neuromorphic algorithms directly on the substrate via gates or analaog elements and exotic new materials. However developing biologically inspired computers and algorithms on cheap and avaliable CPU and GPU hardware is a great way to quicly iterate and test
+#serif-text()[ We have discussed the benefits of co algorithm design and designing new specialed computer hardware that run neuromorphic algorithms directly on the substrate via gates or analaog elements and exotic new materials. However developing biologically inspired computers and algorithms on cheap and avaliable CPU and GPU hardware is a great way to quicly iterate and test
 
 Altough many simulation and software packages exists as outlines in @simulationandsoftwareframeworks. The methods in this thesis has been tested using custom simulaton software for full control ]
 
+
 #figure(include("figures/simulatorarch.typ"),caption:[Simulator architechture block diagram])
 
-#serif-text()[ The simulator runs an event loop
+#serif-text()[ The simulator runs an event loop Spikes are pushed to a heap The simulator can run both on CPU and GPU, When running on CPU the spikes are pushed to a heap, when running on GPU spikes are pushed to a adress event bus the algorithms presented in this thesis are highly paralizable It is built from the ground up using the Vulkan API ]
 
-Spikes are pushed to a heap
-
-The simulator can run both on CPU and GPU,
-
-When running on CPU the spikes are pushed to a heap, when running on GPU spikes are pushed to a adress event bus
-
-the algorithms presented in this thesis are highly paralizable
-
-
-It is built from the ground up using the Vulkan API
-
-
-]
+#figure( include("figures/eventloop.typ"), caption: [In-memory])
 
 #pagebreak()
 
 == Metrics
 
-score - classification
+#serif-text()[ To test and verify the methods we need a way to measure the performance for classification tasks accuracy recall and . is often used. This works great for supervised learning. For unsupervised learing ... ]
 
-power
+#figure(include("figures/confusionmatrix.typ"),caption:[Simulator architechture block diagram])
 
-FLOPS
+#serif-text()[ Accuracy and recall measures effectivness but as the goal of this thesis is to improve efficiency we need a way to mesaure the resource usage. There are direct ways to do this like measure power draw and data usage however we do not have the resources to set up such a test rig. Another way is the measure and theroize about number of operations as an indirect measure of resoource usage. This has several accuracy issues but can give an estimate. The first issue is that this is not an apples to apples comparison ]
 
 #pagebreak()
 
@@ -1305,6 +1281,36 @@ We see a trade-off between the ability to learn and speed of learing and forgett
 
 representing contrast is difficult with a ttfs scheme, better to use special sensors and pass the encoded contrast in ttfs to a neuromophic processor
 
+#v(1em)
+=== Perceptron equivalence
+
+#serif-text()[ The perceptron equation can be obtained with a ttfs using the inverse of firing times ]
+
+#figure( kind: "eq", supplement: [Equation], caption: [Weigthed sum], [
+$ T = sum w/t $
+])
+
+#serif-text()[ In a time to first spike scheme of we care about the order (the relative values since information is stored in time and order) we have to use weights and a neuron model that distinguish between inputs arriving earlier than others. I present a scheme where the first neuron that arrives starts a linear count where the slope of the counter is the weight additional inputs will increase or decrease the slope according to their weight. We can see that neurons arriving earlier will get more time to increase the counter and thus will carry a higher value. If the counter reaches a threshold the neuron will fire. The astute will notice that in this scheme the neuron will fire even for the smallest stimulus since the counter will count up a non zero value and eventually reach the threshold, to mitigate this we can simply say that if the counter is too slow the neuron will not fire we will see later that this scheme satisfies the criteria above.
+
+The problem with this decoding is for strong stimuli we would ideally make the neuron respond immediately and fire, but it has to wait until the counter has reached the threshold to fix this we can also add the weight of the input directly to the potential while also starting a counter. Now if early strong inputs arrive they will fill up the potential and make the neuron fire almost immediately. Small inputs wil take some time  ]
+
+recall this equation. @ttfs model should mathematically behave the same
+$ I_i(t) = sum_j w_(i j) dot S_j(t) $
+
+#serif-text()[ Leaky integrate and fire models seem the best bet, however complex dynamics like exponential decay and analog weights and potentials seem excessive, we might do without. Binary weights 1 for excitatory and and 0 for inhibitory. Stronger weights can be modeled with multiple parallel synapses
+
+Another way which is also based on relative firing order of single spikes could be a passcode encoding. Such an encoding could work by having neurons only react to a sequence. It has an internal state machine of sorts and will only advance to the next state if recives the correct input in the correct order. This encoding does only care about relative order not relative timings. ]
+
+easy with rate code
+
+need global information to normalize
+
+using ttf is difficult
+
+using negative image - still problem with absolute contrast
+
+can be done locally with speial sensors and using logarithmic intensity to delay ]
+
 #lorem(150)
 
 #lorem(150)
@@ -1321,7 +1327,7 @@ representing contrast is difficult with a ttfs scheme, better to use special sen
 
 #lorem(150)
 #lorem(100)
-]
+
 
 #pagebreak()
 
