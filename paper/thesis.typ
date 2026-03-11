@@ -1021,6 +1021,10 @@ This thesis proposes a method to bridge this gap by... (...for example: "...deve
 
 #serif-text()[]
 
+#figure( include("figures/dataexample.typ"), caption: [In-memory])
+#figure( include("figures/dataexamplenoise.typ"), caption: [In-memory])
+
+
 #pagebreak()
 
 #v(2em)
