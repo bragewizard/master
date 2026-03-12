@@ -1,128 +1,70 @@
 #import "@preview/cetz:0.4.2"
-#import "@preview/cetz-plot:0.1.3": plot, chart
+#import "@preview/cetz-plot:0.1.3": plot
 
-#let data = (
-  (1, 7), (2, 1), (3, 6), (4, 7),
-  (2, 5), (6, 4), (5, 1), (4, 3), (10, 2), (2, 4),
-)
+// 1. Load the data
+#let raw-data = csv("actionpotentialfiltered.csv")
 
 #cetz.canvas(length: 1cm, {
   import cetz.draw: *
 
-    let common-x = 1
-    set-style(axes: (
-      stroke: (thickness: 1pt, paint: black),
-      x: (mark: (end: ">", fill:black, size:1pt)),
-      y: (mark: (end: ">", fill:black, size:1pt)),
-      tick: (stroke: black + 1pt),
-    ))
+  // Shared Parameters
+  let plot-w = 14
+  let t-min = 0.114
+  let t-max = 0.133
+
+set-style(axes: (
+  stroke: (thickness: 1pt, paint: black),
+  x: (mark: (end: ">", fill:black, size:1pt)),
+  y: (mark: (end: ">", fill:black, size:1pt)),
+  tick: (stroke: black + 1pt),
+))
+  // --- TOP PLOT: THE TRACE ---
+  group(name: "trace-group", {
     plot.plot(
-    size: (10, 2), 
-    x-tick-step: 1, 
-    y-tick-step: 1, 
-    x-min: -1,
-    // x-max: 10,
-    y-min: 0,
-    // y-max: 10,
-    x-format: v => text(8pt, str(v)),
-    y-format: v => text(8pt, str(v)),
-    axis-style: "left", 
-    name: "phase", 
-    {    
-    plot.add(
-      data,
-      mark: "|",
-      mark-style: (stroke:2pt + black),
-      line:"linear",
-      style: (stroke: none),
+      size: (plot-w, 4),
+      x-min: t-min, x-max: t-max,
+      y-label: [Amplitude],
+      axis-style: "left",
+      x-format: v => text(8pt, str(v)),
+      y-format: v => text(8pt, str(v)),
+      {
+        plot.add(
+          raw-data.slice(1).map(row => (float(row.at(0)), float(row.at(1)))),
+          style: (stroke: black + 0.5pt)
+        )
+      }
     )
   })
 
-  group(
-    name: "g2",
-    {
-      set-origin((0, 4))
-      plot.plot(
-        axis-style: "left", 
-        name: "plot",
-        x-tick-step: 1, 
-        y-tick-step: 1, 
-        x-min: -1,
-        y-min: 0,
-        size: (10, 2),
-        {
+  // --- BOTTOM PLOT: THE SPIKE TRAIN ---
+  group(name: "raster-group", {
+    // Offset the second plot vertically by 5cm
+    set-origin((0, -3)) 
+    set-style(axes: (y: (stroke: 0pt, mark:none)))   
+    plot.plot(
+      size: (plot-w, 1),
+      x-min: t-min, x-max: t-max,
+      y-min: 0.5, y-max: 1.5,
+      x-label: "Time (s)",
+      x-format: v => text(8pt, str(v)),
+      y-label: none,
+      y-tick-step: none,
+      axis-style: "left",
+      {
+        // Extract spike times (filtering for "1") 
+        // Index 6 should be your Ch1_Spike column
+        let spike-data = raw-data.slice(1)
+          .filter(row => row.at(6) == "1")
+          .map(row => (float(row.at(0)), 1)) 
 
-          let f(x) = -(calc.pow(calc.e, 2 * x) - 1) / (calc.pow(calc.e, 2 * x) + 1)
-          plot.add(
-            domain: (-3, 3),
-            f,
-          )
-          plot.add-anchor("p", (common-x, f(common-x)))
-        },
-      )
-    },
-  )
+        plot.add(
+          spike-data,
+          mark: "|",
+          mark-style: (stroke: 1.5pt + blue),
+          mark-size: 0.4,
+          style: (stroke: none)
+        )
+      }
+    )
+  })
 })
-
-
-
-// #cetz.canvas(
-//   length: 72pt,
-//   {
-//     import cetz.draw: *
-//     import cetz-plot: *
-
-//     let common-x = 1
-
-//     plot.plot(
-//       name: "p1",
-//       x: 4,
-//       y: 4,
-//       size: (4, 2),
-//       asix-style: "scientific",
-//       {
-//         let f(x) = {
-//           if (x < -1.8) {
-//             40
-//           } else {
-//             -0.2 * calc.pow(x + 1.8, 2) + 40
-//           }
-//         }
-
-//         plot.add(
-//           domain: (-3, 3),
-//           f,
-//         )
-
-//         plot.add-anchor("p", (common-x, f(common-x)))
-//       },
-//     )
-
-//     group(
-//       name: "g2",
-//       {
-//         set-origin((0, -2.5))
-//         plot.plot(
-//           name: "plot",
-//           x: 4,
-//           y: 4,
-//           size: (4, 2),
-//           asix-style: "scientific",
-//           {
-
-//             let f(x) = -(calc.pow(calc.e, 2 * x) - 1) / (calc.pow(calc.e, 2 * x) + 1)
-
-//             plot.add(
-//               domain: (-3, 3),
-//               f,
-//             )
-
-//             plot.add-anchor("p", (common-x, f(common-x)))
-//           },
-//         )
-//       },
-//     )
-
-//     line("p1.p", "g2.plot.p", stroke: (dash: "dashed"))
-//   },
-// )
