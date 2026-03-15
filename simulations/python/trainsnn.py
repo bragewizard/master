@@ -171,9 +171,9 @@ def update(dt):
         return
 
     spiked_indices, current_ops = snn.advance(time_slice)
-    if is_empty:
-        snn.next_data(data)
-        update_image(data[snn.iteration], image)
+    # if is_empty:
+    #     snn.next_data(data)
+    #     update_image(data[snn.iteration], image)
 
     for neuron in neurons:
         if neuron.color != (NODE_C, NODE_C, NODE_C):

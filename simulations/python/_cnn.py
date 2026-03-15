@@ -1,27 +1,18 @@
 import torch.nn as nn
 
-# --- CONFIG ---
-FRAME_WIDTH, FRAME_HEIGHT = 28, 28
-BATCH_SIZE = 32
-TRAIN_STEPS = 1000
-LEARNING_RATE = 0.001
 
-
-# --- THE NETWORK ---
-class SimpleLineCNN(nn.Module):
+class SimpleCNN(nn.Module):
     def __init__(self):
-        super(SimpleLineCNN, self).__init__()
-
-        # Layer 1: Convolution
-        # We use a large stride (2) to reduce dimensionality quickly,
-        # simulating a "strided" receptive field in an SNN.
-        # Input: 1x28x28 -> Output: 1x13x13
-        self.conv1 = nn.Conv2d(in_channels=1, out_channels=1, kernel_size=3, stride=2)
+        super(SimpleCNN, self).__init__()
+        # Input: 1 channel, 64x64
+        # Kernel 3, Stride 2 -> Output: floor((64-3)/2 + 1) = 31x31
+        self.conv1 = nn.Conv2d(in_channels=1, out_channels=8, kernel_size=3, stride=2)
         self.relu = nn.ReLU()
 
-        # Layer 2: Fully Connected (Readout)
-        # 4 filters * 13 * 13 = 676 inputs
-        self.fc = nn.Linear(1 * 13 * 13, 2)  # Output: X, Y
+        # Output Layer (Readout)
+        # 8 filters * 31 * 31 = 7,688 inputs
+        # Output 4: [x_sq, y_sq, x_tri, y_tri]
+        self.fc = nn.Linear(8 * 31 * 31, 4)
 
     def forward(self, x):
         x = self.conv1(x)
@@ -31,18 +22,15 @@ class SimpleLineCNN(nn.Module):
         return x
 
     def count_ops(self):
-        # 1. Conv Ops: 2 * (Kin * Kout * Kh * Kw) * H_out * W_out
-        # Input 28x28, Kernel 3x3, Stride 2 -> Output 13x13
-        h_out, w_out = 13, 13
-        conv_ops = 2 * (1 * 1 * 3 * 3) * h_out * w_out
-
-        # 2. Linear Ops: 2 * Input * Output
-        fc_input = 1 * 13 * 13
-        fc_ops = 2 * fc_input * 2
+        # Calculation for 64x64 input
+        h_out, w_out = 31, 31
+        conv_ops = 2 * (1 * 8 * 3 * 3) * h_out * w_out
+        fc_input = 8 * 31 * 31
+        fc_ops = 2 * fc_input * 4
 
         total = conv_ops + fc_ops
-        print("--- CNN EFFICIENCY METRIC ---")
-        print(f"Conv Layer Ops: {conv_ops:,}")
-        print(f"FC Layer Ops:   {fc_ops:,}")
-        print(f"Total Ops/Frame: {total:,} (Constant)")
+        print("--- CNN EFFICIENCY METRIC (64x64) ---")
+        print(f"Conv Layer Ops:  {conv_ops:,}")
+        print(f"FC Layer Ops:    {fc_ops:,}")
+        print(f"Total Ops/Frame: {total:,}")
         return total

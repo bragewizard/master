@@ -603,7 +603,7 @@ In this "Three-Factor Rule," the synaptic update depends on:
 
 #pagebreak()
 
-== Inteligent Systems Engineering <mltechnicalities>
+== Technical Details Of Machine Learning <mltechnicalities>
 
 #serif-text()[ This chapter delineates the technical foundations of modern artificial intelligence, contrasting the established paradigms of @dl with the emerging principles of Neuromorphic Engineering. We begin by analyzing the algorithmic architecture of standard Deep Learning, identifying the computational bottlenecks and energy inefficiencies inherent in its reliance on dense matrix multiplication and backpropagation. Subsequently, we introduce the technical framework of neuromorphic engineering, demonstrating how the translation of the biological principles discussed in the previous section—such as sparsity, event-driven processing, and local learning—can yield systems that vastly outperform conventional models in terms of energy efficiency and latency. ]
 
@@ -866,8 +866,11 @@ Surrogate Gradients: A popular approach involves using a "surrogate" function du
 #serif-text()[ In contrast to deep learing hardware. neuromorphic hardware is not constrained to the von neuman architechture and thus the bottleneck
 adress event representation make reference to macro-motif section ]
 
-#figure( include("figures/inmemory.typ"), caption: [In-memory])
-#figure(include("figures/architecture.typ"), caption:[Architectural Comparison. (Left) The Von Neumann architecture separates memory and compute, creating a bottleneck. (Right) The Neuromorphic architecture co-locates them, mimicking the distributed topology of biological neural networks.])
+#figure( include("figures/inmemory.typ"), caption: [In-Memory Computing via a Crossbar Array. Unlike von Neumann architectures, memory and computation are physically co-located. Input voltages (V, representing activations) are applied to the wordlines. The memory elements at the junctions hold programmable conductances (G, representing synaptic weights). Multiplication is naturally performed at each junction by Ohm's Law (I=V×G), and the resulting currents are summed along the bitlines via Kirchhoff's Current Law (∑I). This allows dense matrix-vector multiplications to occur in a single analog time step with zero data transport cost.])
+
+#serif-text()[ crossbar array looks like a neural network! ]
+
+#figure(include("figures/inmemoryhierarcy.typ"), caption:[Architectural Comparison. (Left) The Von Neumann architecture separates memory and compute, creating a bottleneck. (Right) The Neuromorphic architecture co-locates them, mimicking the distributed topology of biological neural networks.])
 #pagebreak()
 == Neuromorphic State Of The Art
 
@@ -1096,7 +1099,7 @@ Evidence for bio-plauibility can be found from eq 1 where the R(u) is dependent 
 make the input exponentially weaker in proportion to the threshold. If the treshold is zero then the incoming spike does not get suppressed if the therhold is very close to max then the incoming spike gets more suppressed. ] 
 
 
-#figure( include("figures/thresholdsensitive.typ"), caption: [In-memory])
+#figure( include("figures/thresholdsensitive.typ"), caption: [Neuron model where new incomming spikes have an exponential decaying influence on the potential])
 
 #serif-text()[ A counter starts when the first spike arrives
 
@@ -1149,7 +1152,7 @@ Another way which is also based on relative firing order of single spikes could 
 
 #serif-text()[ As the methods will be fitted to visual stimuli. Network topologies for these tasks are widely studdied and proved to be effective the topolygy we will be using is similar to @cnn topology whiich is also inspired by the visual cortex in mamals. The idea is that early layers will pick up on very simple features like lines and curves that form eg around an object. The next layer might use the representation of lines and curves from the layer before to represent more complex shaped like boxes and circles. Furhter down the network more complex and abstract features can be represented this way. We will focus on fairly shallow networks with three layers to capture the simple shapes like boxes and circles present in the data. Both the @cnn and the @snn will have the same architechture and number of parameters so that weights can be shared and the idea is that comparisons should be more fair. ] 
 
-#figure( include("figures/visualhierarcy.typ"), caption: [In-memory])
+#figure( include("figures/architechture.typ"), caption: [Network arhcitechture for the task at hand])
 
 #serif-text()[ Using the same architechtire for @cnn and @snn and sharing weights is not mathemathically eqiuvalent but sharing weights is still usefull. The key distinction is that the @snn uses lateral inhibition the cnn does nececarly do, altough max pooling works in the same way.
 
@@ -1222,13 +1225,15 @@ Altough many simulation and software packages exists as outlines in @simulationa
 
 #figure( include("figures/eventloop.typ"), caption: [In-memory])
 
+// #figure(image("figures/screenshot.png"), caption: [Neuron model where new incomming spikes have an exponential decaying influence on the potential])
+
 #pagebreak()
 
 == Metrics
 
 #serif-text()[ To test and verify the methods we need a way to measure the performance for classification tasks accuracy recall and . is often used. This works great for supervised learning. For unsupervised learing ... ]
 
-#figure(include("figures/confusionmatrix.typ"),caption:[Simulator architechture block diagram])
+// #figure(include("figures/confusionmatrix.typ"),caption:[Simulator architechture block diagram])
 
 #serif-text()[ Accuracy and recall measures effectivness but as the goal of this thesis is to improve efficiency we need a way to mesaure the resource usage. There are direct ways to do this like measure power draw and data usage however we do not have the resources to set up such a test rig. Another way is the measure and theroize about number of operations as an indirect measure of resoource usage. This has several accuracy issues but can give an estimate. The first issue is that this is not an apples to apples comparison ]
 

@@ -1,173 +1,100 @@
 import pyglet
-from pyglet import shapes
-import numpy as np
 import torch
-from _cnn import SimpleLineCNN, FRAME_HEIGHT, FRAME_WIDTH
-from _data import LineVideoGenerator
-import os
+import torch.nn as nn
+import torch.optim as optim
+import numpy as np
+from _data import ShapeVideoGenerator
+from _cnn import SimpleCNN
 
-# --- CONFIGURATION ---
-WINDOW_WIDTH = 1200
-WINDOW_HEIGHT = 800
-
-# Visual Config (Dot Matrix)
-GRID_SPACING = 20  # Pixels between dots
-DOT_RADIUS = 5
-GRID_START_X = (WINDOW_WIDTH - (FRAME_WIDTH * GRID_SPACING)) // 2
-GRID_START_Y = (
-    WINDOW_HEIGHT + (FRAME_HEIGHT * GRID_SPACING)
-) // 2 - 50  # Start from top
-
-WEIGHTS_FILE = "cnn_weights.pth"
-
+# --- CONFIG ---
+GEN_WIDTH, GEN_HEIGHT = 64, 64
+WINDOW_WIDTH, WINDOW_HEIGHT = 800, 800
 
 # --- SETUP ---
 window = pyglet.window.Window(
-    WINDOW_WIDTH, WINDOW_HEIGHT, caption="Experiment 3: CNN Inference (Dot Matrix View)"
+    WINDOW_WIDTH, WINDOW_HEIGHT, caption="CNN Tracking Diagnostic"
 )
-batch = pyglet.graphics.Batch()
+video_gen = ShapeVideoGenerator(GEN_WIDTH, GEN_HEIGHT)
+video_batch = pyglet.graphics.Batch()
+foreground_batch = pyglet.graphics.Batch()  # Dedicated batch for markers
 
-# Groups to ensure order (Background dots first, Indicators on top)
-background_group = pyglet.graphics.Group(order=0)
-foreground_group = pyglet.graphics.Group(order=1)
+# 1. Model & Training Setup
+model = SimpleCNN()
+optimizer = optim.Adam(model.parameters(), lr=0.002)
+criterion = nn.MSELoss()
 
-# 1. World & Brain
-gen = LineVideoGenerator(FRAME_WIDTH, FRAME_HEIGHT)
-model = SimpleLineCNN()
+# 2. Video Feed Sprite (Background)
+empty_data = np.zeros((GEN_HEIGHT, GEN_WIDTH, 3), dtype=np.uint8).tobytes()
+initial_image = pyglet.image.ImageData(GEN_WIDTH, GEN_HEIGHT, "RGB", empty_data)
+sprite = pyglet.sprite.Sprite(initial_image, batch=video_batch)
+sprite.scale = WINDOW_WIDTH / GEN_WIDTH
 
-# 2. Load Weights
-if os.path.exists(WEIGHTS_FILE):
-    try:
-        model.load_state_dict(torch.load(WEIGHTS_FILE))
-        model.eval()
-        print(f"SUCCESS: Loaded {WEIGHTS_FILE}")
-    except Exception as e:
-        print(f"ERROR: Architecture mismatch. {e}")
-else:
-    print(f"WARNING: {WEIGHTS_FILE} not found. Using random weights.")
-
-# 3. Create the Dot Matrix (Retina)
-# We store the circle objects in a list so we can update their color later
-pixel_dots = []
-
-for y in range(FRAME_HEIGHT):
-    for x in range(FRAME_WIDTH):
-        # Calculate screen position
-        # Note: Grid Y goes Top->Down, Pyglet Y goes Bottom->Up
-        screen_x = GRID_START_X + (x * GRID_SPACING)
-        screen_y = GRID_START_Y - (y * GRID_SPACING)
-
-        dot = shapes.Circle(
-            x=screen_x,
-            y=screen_y,
-            radius=DOT_RADIUS,
-            color=(50, 50, 50),  # Start Dark Gray
-            batch=batch,
-            group=background_group,
-        )
-        pixel_dots.append(dot)
-
-# 4. Create Indicators (Red/Green Dots)
-# We make them larger and translucent so they don't fully obscure the pixels
-target_dot = shapes.Circle(
-    x=0,
-    y=0,
-    radius=DOT_RADIUS * 2.5,
-    color=(0, 255, 0, 150),  # Green, Semi-transparent
-    batch=batch,
-    group=foreground_group,
+# 3. VISUAL MARKERS (Foreground)
+# CNN PREDICTIONS - Solid Bright Colors
+pred_sq = pyglet.shapes.Rectangle(
+    0, 0, 30, 30, color=(255, 0, 0), batch=foreground_batch
 )
+pred_sq.opacity = 180
+pred_sq.anchor_x, pred_sq.anchor_y = 15, 15
 
-pred_dot = shapes.Circle(
-    x=0,
-    y=0,
-    radius=DOT_RADIUS * 2.0,
-    color=(255, 50, 50, 180),  # Red, Semi-transparent
-    batch=batch,
-    group=foreground_group,
+pred_tri = pyglet.shapes.Circle(0, 0, 15, color=(0, 255, 0), batch=foreground_batch)
+pred_tri.opacity = 180
+
+label = pyglet.text.Label(
+    "Initializing...", x=10, y=20, font_size=14, batch=foreground_batch
 )
-
-# Labels
-label_info = pyglet.text.Label(
-    "CNN TRACKER", font_size=16, x=GRID_START_X, y=WINDOW_HEIGHT - 40, batch=batch
-)
-label_legend = pyglet.text.Label(
-    "GREEN: Ground Truth | RED: CNN Prediction",
-    font_size=12,
-    x=GRID_START_X,
-    y=WINDOW_HEIGHT - 65,
-    batch=batch,
-)
-label_coords = pyglet.text.Label("", font_size=12, x=GRID_START_X, y=50, batch=batch)
-
-
-def logical_to_screen(lx, ly):
-    """
-    Converts logical 28x28 coordinates (0,0 top-left)
-    to screen pixel coordinates (based on our grid).
-    """
-    sx = GRID_START_X + (lx * GRID_SPACING)
-    sy = GRID_START_Y - (ly * GRID_SPACING)
-    return sx, sy
 
 
 def update(dt):
-    # 1. Get Data
-    raw_frame, (true_x, true_y) = gen.get_next_frame()
+    # --- 1. GET DATA ---
+    raw_frame, (sq_tx, sq_ty) = video_gen.get_next_frame()
+    tri_tx, tri_ty = int(video_gen.x_tri), int(video_gen.y_tri)
 
-    # 2. Run Inference
-    input_tensor = torch.tensor(
-        raw_frame[np.newaxis, np.newaxis, :, :] / 255.0, dtype=torch.float32
+    target = torch.tensor(
+        [[sq_tx / 64.0, sq_ty / 64.0, tri_tx / 64.0, tri_ty / 64.0]],
+        dtype=torch.float32,
     )
-    with torch.no_grad():
-        prediction = model(input_tensor)
-
-    # 3. Update Retina (The Grid)
-    # Flatten frame to match our flat list of dots
-    flat_pixels = raw_frame.flatten()
-
-    for i, intensity in enumerate(flat_pixels):
-        # Update color: Black (0) -> Dark Gray (50), White (255) -> White (255)
-        val = int(intensity)
-        if val > 50:
-            pixel_dots[i].color = (val, val, val)
-        else:
-            pixel_dots[i].color = (30, 30, 30)  # Background dim color
-
-    # 4. Update Indicators
-
-    # Prediction: [-1, 1] -> [0, 28]
-    pred_x_norm = prediction[0][0].item()
-    pred_y_norm = prediction[0][1].item()
-
-    pred_x = ((pred_x_norm + 1) / 2) * FRAME_WIDTH
-    pred_y = ((pred_y_norm + 1) / 2) * FRAME_HEIGHT
-
-    # Move the dots
-    t_sx, t_sy = logical_to_screen(true_x, true_y)
-    p_sx, p_sy = logical_to_screen(pred_x, pred_y)
-
-    target_dot.x, target_dot.y = t_sx, t_sy
-    pred_dot.x, pred_dot.y = p_sx, p_sy
-
-    label_coords.text = (
-        f"Target: ({int(true_x)}, {int(true_y)}) | Pred: ({int(pred_x)}, {int(pred_y)})"
+    input_tensor = (
+        torch.tensor(raw_frame, dtype=torch.float32).unsqueeze(0).unsqueeze(0) / 255.0
     )
+
+    # --- 2. TRAIN ---
+    model.train()
+    optimizer.zero_grad()
+    output = model(input_tensor)
+    loss = criterion(output, target)
+    loss.backward()
+    optimizer.step()
+
+    # --- 3. UPDATE VISUALS ---
+    rgb_frame = np.dstack((raw_frame, raw_frame, raw_frame))
+    sprite.image = pyglet.image.ImageData(64, 64, "RGB", rgb_frame.tobytes())
+
+    # Update CNN Prediction Markers
+    preds = output.detach().numpy()[0]
+    # Note: Pyglet Y starts at bottom. If video looks inverted, use: (1.0 - preds[1])
+    pred_sq.x, pred_sq.y = preds[0] * WINDOW_WIDTH, preds[1] * WINDOW_HEIGHT
+    pred_tri.x, pred_tri.y = preds[2] * WINDOW_WIDTH, preds[3] * WINDOW_HEIGHT
+
+    label.text = f"Loss: {loss.item():.6f} | Red=Square, Green=Triangle"
 
 
 @window.event
 def on_draw():
     window.clear()
-    batch.draw()
+
+    # Order matters:
+    # 1. Draw Video Batch first
+    video_batch.draw()
+
+    # 2. Draw Foreground Batch (Markers/Labels) second
+    foreground_batch.draw()
+
+    # Ensure pixelated scaling
+    pyglet.gl.glTexParameteri(
+        pyglet.gl.GL_TEXTURE_2D, pyglet.gl.GL_TEXTURE_MAG_FILTER, pyglet.gl.GL_NEAREST
+    )
 
 
-@window.event
-def on_key_press(symbol, modifiers):
-    if symbol == pyglet.window.key.E:
-        gen.is_erratic = not gen.is_erratic
-        print(f"Erratic Mode: {gen.is_erratic}")
-
-
-# Run
 pyglet.clock.schedule_interval(update, 1 / 60.0)
 pyglet.app.run()

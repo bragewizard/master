@@ -6,6 +6,59 @@ MNIST_train_images_path = "data/train-images.idx3-ubyte"
 MNIST_test_images_path = "data/t10k-images.idx3-ubyte"
 
 
+class ShapeVideoGenerator:
+    def __init__(self, width=64, height=64):
+        self.width = width
+        self.height = height
+        self.t = 0
+
+        # State for Square
+        self.x_sq, self.y_sq = width // 3, height // 2
+
+        # State for Triangle
+        self.x_tri, self.y_tri = (2 * width) // 3, height // 2
+
+        self.noise_level = 15
+
+    def get_next_frame(self):
+        # 1. Background with Gaussian noise
+        noise = np.random.normal(0, self.noise_level, (self.height, self.width))
+        img_array = np.clip(noise, 0, 255).astype(np.uint8)
+        img = Image.fromarray(img_array, mode="L")
+        draw = ImageDraw.Draw(img)
+
+        # 2. Update Physics
+        self.t += 1
+        w_amp = self.width * 0.35
+        h_amp = self.height * 0.35
+
+        # Square movement (Circular)
+        self.x_sq = (self.width / 2) + np.sin(self.t * 0.04) * w_amp
+        self.y_sq = (self.height / 2) + np.cos(self.t * 0.04) * h_amp
+
+        # Triangle movement (Figure-8 / Lissajous)
+        self.x_tri = (self.width / 2) + np.sin(self.t * 0.06) * w_amp
+        self.y_tri = (self.height / 2) + np.sin(self.t * 0.03) * h_amp
+
+        size = 4
+
+        # 3. Draw Square
+        sq_x, sq_y = int(self.x_sq), int(self.y_sq)
+        draw.rectangle([sq_x - size, sq_y - size, sq_x + size, sq_y + size], fill=255)
+
+        # 4. Draw Triangle
+        tri_x, tri_y = int(self.x_tri), int(self.y_tri)
+        points = [
+            (tri_x, tri_y - size),  # Top
+            (tri_x - size, tri_y + size),  # Bottom Left
+            (tri_x + size, tri_y + size),  # Bottom Right
+        ]
+        draw.polygon(points, fill=255)
+
+        # Return frame and primary target coords (square)
+        return np.array(img), (sq_x, sq_y)
+
+
 class LineVideoGenerator:
     def __init__(self, width, height):
         self.width = width

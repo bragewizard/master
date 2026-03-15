@@ -1,16 +1,17 @@
 import pyglet
 import numpy as np
-from _data import LineVideoGenerator
+from _data import LineVideoGenerator, ShapeVideoGenerator
 
 # --- CONFIG ---
 WINDOW_WIDTH = 1000
 WINDOW_HEIGHT = 1000
-GEN_WIDTH = 28
-GEN_HEIGHT = 28
+GEN_WIDTH = 64
+GEN_HEIGHT = 64
 
 # --- SETUP ---
 window = pyglet.window.Window(WINDOW_WIDTH, WINDOW_HEIGHT, caption="Video Feed Test")
-video_gen = LineVideoGenerator(GEN_WIDTH, GEN_HEIGHT)
+# video_gen = LineVideoGenerator(GEN_WIDTH, GEN_HEIGHT)
+video_gen = ShapeVideoGenerator(GEN_WIDTH, GEN_HEIGHT)
 batch = pyglet.graphics.Batch()
 
 # Create a placeholder sprite (we will replace its image every frame)
