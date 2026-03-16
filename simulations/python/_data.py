@@ -40,7 +40,7 @@ class ShapeVideoGenerator:
         self.x_tri = (self.width / 2) + np.sin(self.t * 0.06) * w_amp
         self.y_tri = (self.height / 2) + np.sin(self.t * 0.03) * h_amp
 
-        size = 4
+        size = 2
 
         # 3. Draw Square
         sq_x, sq_y = int(self.x_sq), int(self.y_sq)

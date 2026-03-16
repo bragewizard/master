@@ -4,8 +4,8 @@ from _snn import SpikingNet
 from _data import LineVideoGenerator, ShapeVideoGenerator
 
 # 1. Setup Simulation
-snn = SpikingNet()
-gen = ShapeVideoGenerator()
+snn = SpikingNet(input_shape=(32, 32))
+gen = ShapeVideoGenerator(32, 32)
 
 # 2. Setup Diagnostic Dashboard
 viz = SNNVisualizer(snn)

@@ -2,23 +2,24 @@ import numpy as np
 
 
 class SpikingNet:
-    def __init__(self, input_shape=(64, 64), output_dim=169):
+    def __init__(self, input_shape=(32, 32), output_dim=(2, 8, 8)):
         """
         Simple 2-Layer SNN: Input (64x64) -> Output (e.g., 13x13)
         """
         self.time = 0.0
         self.input_w, self.input_h = input_shape
         self.input_size = self.input_w * self.input_h
-        self.output_size = output_dim  # Hidden/Output layer
+        self.hidden1_size = (2, 30, 30)  # two filters stride 2
+        self.output_c, self.output_w, self.output_h = output_dim  # Hidden/Output layer
 
-        self.num_neurons = self.input_size + self.output_size
+        self.num_neurons = self.input_size + self.output_w
         self.v = np.zeros(self.num_neurons)
         self.synapses = {}  # {pre_idx: [(post_idx, weight), ...]}
 
         # Neuron Constants
         self.v_thresh = 1.0
         self.v_reset = 0.0
-        self.tau = 5.0
+        self.tau = 1
         self.input_currents = np.zeros(self.input_size)
 
         # Basic local-patch connectivity (to prove it works)
@@ -26,10 +27,10 @@ class SpikingNet:
 
     def _initialize_basic_connectivity(self):
         """Connects input patches to output neurons."""
-        stride = 4  # Downsample 64x64 to 16x16 roughly
-        for i in range(self.output_size):
-            out_x = (i % 13) * stride
-            out_y = (i // 13) * stride
+        stride = 1  # Downsample 64x64 to 16x16 roughly
+        for i in range(self.output_w):
+            out_x = (i % 30) * stride
+            out_y = (i // 30) * stride
             hidden_idx = self.input_size + i
 
             # Connect a small 4x4 patch from input to this hidden neuron

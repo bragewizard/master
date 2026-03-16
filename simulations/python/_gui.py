@@ -64,44 +64,42 @@ class SNNVisualizer:
         )
 
     def setup_network(self):
-
+        inputdim = self.snn.input_w
+        gap = 120
+        centerhorizon = (self.window.height / 2) - (32 * 5)
+        numchannels1 = self.snn.hidden1_size[0]
+        hidden_width = self.snn.hidden1_size[1]
+        out_width = self.snn.output_w
+        height_hidden1 = (numchannels1 * hidden_width) + (gap * (numchannels1 - 1))
+        start_hidden1 = centerhorizon - (height_hidden1 / numchannels1)
         self.neurons = []
         # Layer 1: Input (Standing Vertical Plane)
         for i in range(self.snn.input_size):
-            cx, cy = i % 64, i // 64
-            nx = 100 + (cx * 5)
-            ny = 500 + (cy * 5)
-            self.neurons.append(Circle(nx, ny, 2, color=(64, 64, 64), batch=self.batch))
-
-        # Layer 2: Output ch1
-        for i in range(self.snn.output_size):
-            cx, cy = i % 16, i // 16
-            nx = 750 + (cx * 10)
-            ny = 500 + (cy * 10)
-            self.neurons.append(
-                Circle(nx, ny, 4, color=(60, 100, 255), batch=self.batch)
-            )
-        # Layer 2: Output ch2
-        for i in range(self.snn.output_size):
-            cx, cy = i % 13, i // 13
-            nx = 750 + (cx * 8)
-            ny = 800 + (cy * 8)
-            self.neurons.append(
-                Circle(nx, ny, 4, color=(60, 100, 255), batch=self.batch)
-            )
-        # Layer 2: Output ch3
-        for i in range(self.snn.output_size):
-            cx, cy = i % 13, i // 13
-            nx = 750 + (cx * 8)
-            ny = 900 + (cy * 8)
-            self.neurons.append(
-                Circle(nx, ny, 4, color=(60, 100, 255), batch=self.batch)
-            )
+            cx, cy = i % inputdim, i // inputdim
+            nx = 100 + (cx * 10)
+            ny = centerhorizon + (cy * 10)
+            self.neurons.append(Circle(nx, ny, 4, color=(64, 64, 64), batch=self.batch))
+        for j in range(self.snn.hidden1_size[0]):  # channels
+            for i in range(hidden_width * hidden_width):
+                cx, cy = i % hidden_width, i // hidden_width
+                nx = 600 + (cx * 10)
+                ny = start_hidden1 + (j * hidden_width * 12) + (cy * 10)
+                self.neurons.append(
+                    Circle(nx, ny, 4, color=(60, 100, 255), batch=self.batch)
+                )
+        for j in range(self.snn.output_c):  # outchannels
+            for i in range(out_width * out_width):
+                cx, cy = i % out_width, i // out_width
+                nx = 1000 + (cx * 10)
+                ny = start_hidden1 + (j * out_width * 12) + (cy * 10)
+                self.neurons.append(
+                    Circle(nx, ny, 4, color=(60, 100, 255), batch=self.batch)
+                )
 
     def setup_panes(self):
-
-        empty_data = np.zeros((64, 64, 3), dtype=np.uint8).tobytes()
-        initial_img = pyglet.image.ImageData(64, 64, "RGB", empty_data)
+        dim = self.snn.input_w
+        empty_data = np.zeros((dim, dim, 3), dtype=np.uint8).tobytes()
+        initial_img = pyglet.image.ImageData(dim, dim, "RGB", empty_data)
         self.video_sprite = pyglet.sprite.Sprite(
             initial_img, x=self.sidebar_x + 50, y=self.mid_y + 50
         )
@@ -126,8 +124,9 @@ class SNNVisualizer:
 
     def update_frame(self, frame, spikes):
         # Fresh RGB texture update
+        dim = self.snn.input_w
         rgb = np.dstack((frame, frame, frame))
-        self.video_sprite.image = pyglet.image.ImageData(64, 64, "RGB", rgb.tobytes())
+        self.video_sprite.image = pyglet.image.ImageData(dim, dim, "RGB", rgb.tobytes())
 
         for n in self.neurons:
             n.color = (

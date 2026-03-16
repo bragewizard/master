@@ -5,8 +5,8 @@ from _data import LineVideoGenerator, ShapeVideoGenerator
 # --- CONFIG ---
 WINDOW_WIDTH = 1000
 WINDOW_HEIGHT = 1000
-GEN_WIDTH = 64
-GEN_HEIGHT = 64
+GEN_WIDTH = 32
+GEN_HEIGHT = 32
 
 # --- SETUP ---
 window = pyglet.window.Window(WINDOW_WIDTH, WINDOW_HEIGHT, caption="Video Feed Test")

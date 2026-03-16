@@ -1289,6 +1289,10 @@ We see a trade-off between the ability to learn and speed of learing and forgett
 
 representing contrast is difficult with a ttfs scheme, better to use special sensors and pass the encoded contrast in ttfs to a neuromophic processor
 
+representing position in a ttfs scheme proved difficult, presise timings and clever encodings are needed to map a delay to a coordinate. in biology section we brefly discussed population coding in the visual and motor cortex where neurons are orthogonal and encode a direction, however these schemes seem to work best with rate encoding as the intensity of a direction is more straight forward to encode, simply increase firing rate for that neuron, with ttfs we need a reference signal and have to wait for the slowest neuron. for numerical values rate encoding seems best for categorical and decicion making ttfs is good.
+
+Another way may be to have a hierarcy of "space cells" say each in a grid of 8x8 followed by another 8x8 that way we have 8x8 + 8x8 rather than 32x32 ofc we still have limited resoulution at the borders
+
 #v(1em)
 === Perceptron equivalence
 
