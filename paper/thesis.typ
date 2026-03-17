@@ -1033,6 +1033,9 @@ This thesis proposes a method to bridge this gap by... (...for example: "...deve
 == Information Representation
 
 #serif-text()[ The choise of a coding shceme puts key constraints on the design any processing system as it lays the founation for the flow of information. In @neuralcoding and @appliedneuralcodes we dicussed several candidate neural codes that are both biologically plausible and have been used in previous neuromorphic systems. The neural code plays a large role in determening the effecieny of the system. Many neuromorphic systems use rate code as it is easy to translate values it is straight forward. any float value can be encoded as a rate code and integrate and fire neurons work well with this encoding. An IF neuron using rate code can reduce the multiply and add operations with just add operations. each spike arriving at a synapse adds its weight to the total. It is easy to see that for a rate code a higher rate input means more of that input contributing to the total sum. Using a rate code we can convert multiply and accumulate operations to just a series of accumulate operations by discretetizing the input values. The main reason for why this thesis will not use a rate code is that it is relativly ineficient and slow compared to a temporal code. In a temporal code only one spike is required to establish its value in relation to other synapses, making a single event much more dense in information. This is especially important for systems that do not have the connection density of a biological brain and must use shared buses that can be congested if too many spikes are present on the bus. Secondly to determine the value of a rate code you have to take an average of multiple spikes, imposing a delay. Using a @ttfs encoding requires more sophisticated neuron models than a simple integrate and fire, it need more bookkeeping to keep track of the relative arival of incoming spikes and as mentioned in @neuralcoding and as we will explain by using a temporal encoding we need to handle the phase abmiguity problem.
+
+t fire. the problem with this is that if we have a short one spike first that does not make the neuron fire but just before the timer runs out we get a large burst that would make the neuron fire but since the first isolated one triggered the counter we do not get a out spike. However i think this is fixed with the "clock" beeing a saccade to sync and fix the phase ambiguity
+
 A neural code should have the following characteristics: ]
 
 #box-text()[
@@ -1150,7 +1153,10 @@ Another way which is also based on relative firing order of single spikes could 
 
 == Network Architechture
 
-#serif-text()[ As the methods will be fitted to visual stimuli. Network topologies for these tasks are widely studdied and proved to be effective the topolygy we will be using is similar to @cnn topology whiich is also inspired by the visual cortex in mamals. The idea is that early layers will pick up on very simple features like lines and curves that form eg around an object. The next layer might use the representation of lines and curves from the layer before to represent more complex shaped like boxes and circles. Furhter down the network more complex and abstract features can be represented this way. We will focus on fairly shallow networks with three layers to capture the simple shapes like boxes and circles present in the data. Both the @cnn and the @snn will have the same architechture and number of parameters so that weights can be shared and the idea is that comparisons should be more fair. ] 
+#serif-text()[ As the methods will be fitted to visual stimuli. Network topologies for these tasks are widely studdied and proved to be effective the topolygy we will be using is similar to @cnn topology whiich is also inspired by the visual cortex in mamals. The idea is that early layers will pick up on very simple features like lines and curves that form eg around an object. The next layer might use the representation of lines and curves from the layer before to represent more complex shaped like boxes and circles. Furhter down the network more complex and abstract features can be represented this way. We will focus on fairly shallow networks with three layers to capture the simple shapes like boxes and circles present in the data. Both the @cnn and the @snn will have the same architechture and number of parameters so that weights can be shared and the idea is that comparisons should be more fair.
+
+Hard Sigmoid or a very sharp Leaky ReLU to simulate "all-or-nothing" neuron firing.
+] 
 
 #figure( include("figures/architechture.typ"), caption: [Network arhcitechture for the task at hand])
 
@@ -1292,6 +1298,8 @@ representing contrast is difficult with a ttfs scheme, better to use special sen
 representing position in a ttfs scheme proved difficult, presise timings and clever encodings are needed to map a delay to a coordinate. in biology section we brefly discussed population coding in the visual and motor cortex where neurons are orthogonal and encode a direction, however these schemes seem to work best with rate encoding as the intensity of a direction is more straight forward to encode, simply increase firing rate for that neuron, with ttfs we need a reference signal and have to wait for the slowest neuron. for numerical values rate encoding seems best for categorical and decicion making ttfs is good.
 
 Another way may be to have a hierarcy of "space cells" say each in a grid of 8x8 followed by another 8x8 that way we have 8x8 + 8x8 rather than 32x32 ofc we still have limited resoulution at the borders
+
+translating cnn to snn is not straight forward, cnn have negative weigets snn does not, cnn can use pooling kernels etc snn does not use the same things. things like lateral inhibition is not directly translatable
 
 #v(1em)
 === Perceptron equivalence

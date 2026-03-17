@@ -1,0 +1,18 @@
+import torch.nn as nn
+
+
+class SimpleFCN(nn.Module):
+    def __init__(self):
+        super(SimpleFCN, self).__init__()
+        # 784 pixels -> 128 hidden spiking neurons
+        self.fc1 = nn.Linear(28 * 28, 128)
+        self.relu = nn.ReLU()
+        # 128 hidden -> 10 output class neurons
+        self.fc2 = nn.Linear(128, 10)
+        self.log_softmax = nn.LogSoftmax(dim=1)
+
+    def forward(self, x):
+        x = x.view(x.size(0), -1)
+        x = self.relu(self.fc1(x))
+        x = self.fc2(x)
+        return self.log_softmax(x)

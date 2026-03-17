@@ -1,62 +1,54 @@
 import numpy as np
+import torch
 from PIL import Image, ImageDraw
 import random
-
-MNIST_train_images_path = "data/train-images.idx3-ubyte"
-MNIST_test_images_path = "data/t10k-images.idx3-ubyte"
+from datasets import load_dataset
 
 
 class ShapeVideoGenerator:
-    def __init__(self, width=64, height=64):
-        self.width = width
-        self.height = height
+    def __init__(self, width=32, height=32):
+        self.width, self.height = width, height
         self.t = 0
+        self.x_donut, self.y_donut = width // 3, height // 2
+        self.x_tshape, self.y_tshape = (2 * width) // 3, height // 2
 
-        # State for Square
-        self.x_sq, self.y_sq = width // 3, height // 2
-
-        # State for Triangle
-        self.x_tri, self.y_tri = (2 * width) // 3, height // 2
-
-        self.noise_level = 15
+        self.bg_noise = 15
+        self.shape_noise = 50
 
     def get_next_frame(self):
-        # 1. Background with Gaussian noise
-        noise = np.random.normal(0, self.noise_level, (self.height, self.width))
+        # 1. Background Noise
+        noise = np.random.normal(0, self.bg_noise, (self.height, self.width))
         img_array = np.clip(noise, 0, 255).astype(np.uint8)
         img = Image.fromarray(img_array, mode="L")
         draw = ImageDraw.Draw(img)
 
-        # 2. Update Physics
         self.t += 1
-        w_amp = self.width * 0.35
-        h_amp = self.height * 0.35
+        # Physics (Lissajous curves for movement)
+        self.x_donut = (self.width / 2) + np.sin(self.t * 0.04) * (self.width * 0.35)
+        self.y_donut = (self.height / 2) + np.cos(self.t * 0.04) * (self.height * 0.35)
+        self.x_tshape = (self.width / 2) + np.sin(self.t * 0.06) * (self.width * 0.35)
+        self.y_tshape = (self.height / 2) + np.sin(self.t * 0.03) * (self.height * 0.35)
 
-        # Square movement (Circular)
-        self.x_sq = (self.width / 2) + np.sin(self.t * 0.04) * w_amp
-        self.y_sq = (self.height / 2) + np.cos(self.t * 0.04) * h_amp
+        # 2. Draw Noisy Donut
+        dx, dy = int(self.x_donut), int(self.y_donut)
+        ring = [(-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, 1)]
+        for ox, oy in ring:
+            px, py = dx + ox, dy + oy
+            if 0 <= px < self.width and 0 <= py < self.height:
+                # WRAP IN int() to fix the TypeError
+                val = int(np.clip(255 - random.randint(0, self.shape_noise), 160, 255))
+                draw.point((px, py), fill=val)
 
-        # Triangle movement (Figure-8 / Lissajous)
-        self.x_tri = (self.width / 2) + np.sin(self.t * 0.06) * w_amp
-        self.y_tri = (self.height / 2) + np.sin(self.t * 0.03) * h_amp
-
-        size = 2
-
-        # 3. Draw Square
-        sq_x, sq_y = int(self.x_sq), int(self.y_sq)
-        draw.rectangle([sq_x - size, sq_y - size, sq_x + size, sq_y + size], fill=255)
-
-        # 4. Draw Triangle
-        tri_x, tri_y = int(self.x_tri), int(self.y_tri)
-        points = [
-            (tri_x, tri_y - size),  # Top
-            (tri_x - size, tri_y + size),  # Bottom Left
-            (tri_x + size, tri_y + size),  # Bottom Right
-        ]
-        draw.polygon(points, fill=255)
-
-        # Return frame and primary target coords (square)
-        return np.array(img), (sq_x, sq_y)
+        # 3. Draw Noisy T-Shape
+        tx, ty = int(self.x_tshape), int(self.y_tshape)
+        t_pts = [(-1, -1), (0, -1), (1, -1), (0, 0), (0, 1)]
+        for ox, oy in t_pts:
+            px, py = tx + ox, ty + oy
+            if 0 <= px < self.width and 0 <= py < self.height:
+                # WRAP IN int() to fix the TypeError
+                val = int(np.clip(255 - random.randint(0, self.shape_noise), 160, 255))
+                draw.point((px, py), fill=val)
+        return np.array(img), (dx, dy, tx, ty)
 
 
 class LineVideoGenerator:
@@ -146,20 +138,34 @@ def average_images(image_list):
     return averaged_image.astype(np.uint8)
 
 
-def parse_MNIST(filename):
-    """Read uncompressed MNIST .idx files."""
-    with open(filename, "rb") as f:
-        magic, size = int.from_bytes(f.read(4), "big"), int.from_bytes(f.read(4), "big")
-        if magic == 2049:  # Labels file
-            return np.frombuffer(f.read(), dtype=np.uint8)
-        elif magic == 2051:  # Images file
-            rows, cols = (
-                int.from_bytes(f.read(4), "big"),
-                int.from_bytes(f.read(4), "big"),
-            )
-            return np.frombuffer(f.read(), dtype=np.uint8).reshape(size, rows, cols)
-        else:
-            raise ValueError(f"Unknown magic number {magic} in file {filename}")
+class MNISTProvider:
+    def __init__(self):
+        # Load the standard MNIST dataset from Hugging Face
+        print("Loading MNIST from Hugging Face...")
+        dataset = load_dataset("mnist", split="train")
+
+        # Convert to numpy for easier manipulation
+        self.images = np.array([np.array(x) for x in dataset["image"]])
+        self.labels = np.array(dataset["label"])
+        self.num_samples = len(self.images)
+        print(f"Loaded {self.num_samples} samples.")
+
+    def get_batch(self, batch_size=32):
+        indices = np.random.choice(self.num_samples, batch_size)
+
+        # Normalize 0-255 to 0.0-1.0
+        imgs = self.images[indices].astype(np.float32) / 255.0
+
+        # Reshape for CNN/FC: [Batch, 1, 28, 28]
+        imgs_tensor = torch.from_numpy(imgs).unsqueeze(1)
+        lbls_tensor = torch.from_numpy(self.labels[indices]).long()
+
+        return imgs_tensor, lbls_tensor
+
+    def get_single_visualization_frame(self):
+        """Returns a single image and label for the Pyglet display."""
+        idx = np.random.randint(0, self.num_samples)
+        return self.images[idx], self.labels[idx]
 
 
 def generate_checkerboard(size=32, block_size=4):

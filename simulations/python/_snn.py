@@ -9,7 +9,7 @@ class SpikingNet:
         self.time = 0.0
         self.input_w, self.input_h = input_shape
         self.input_size = self.input_w * self.input_h
-        self.hidden1_size = (2, 30, 30)  # two filters stride 2
+        self.hidden1_size = (8, 28, 28)  # two filters stride 2
         self.output_c, self.output_w, self.output_h = output_dim  # Hidden/Output layer
 
         self.num_neurons = self.input_size + self.output_w

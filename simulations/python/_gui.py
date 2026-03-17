@@ -70,7 +70,7 @@ class SNNVisualizer:
         numchannels1 = self.snn.hidden1_size[0]
         hidden_width = self.snn.hidden1_size[1]
         out_width = self.snn.output_w
-        height_hidden1 = (numchannels1 * hidden_width) + (gap * (numchannels1 - 1))
+        height_hidden1 = numchannels1 * hidden_width + (gap * (numchannels1 - 1)) + 100
         start_hidden1 = centerhorizon - (height_hidden1 / numchannels1)
         self.neurons = []
         # Layer 1: Input (Standing Vertical Plane)
@@ -90,7 +90,7 @@ class SNNVisualizer:
         for j in range(self.snn.output_c):  # outchannels
             for i in range(out_width * out_width):
                 cx, cy = i % out_width, i // out_width
-                nx = 1000 + (cx * 10)
+                nx = 1100 + (cx * 10)
                 ny = start_hidden1 + (j * out_width * 12) + (cy * 10)
                 self.neurons.append(
                     Circle(nx, ny, 4, color=(60, 100, 255), batch=self.batch)
