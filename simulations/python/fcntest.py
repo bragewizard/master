@@ -106,8 +106,9 @@ def update(dt):
     loss.backward()
     optimizer.step()
 
-    # 2. Update Sprite
     raw_img = (images[0, 0].detach().numpy() * 255).astype(np.uint8)
+    raw_img = np.flipud(raw_img)  # Corrects for the Pyglet/OpenGL bottom-up origin
+
     sprite.image = pyglet.image.ImageData(
         28, 28, "RGB", np.dstack([raw_img] * 3).tobytes()
     )

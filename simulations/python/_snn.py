@@ -1,79 +1,102 @@
-import numpy as np
+import torch
 
 
-class SpikingNet:
-    def __init__(self, input_shape=(32, 32), output_dim=(2, 8, 8)):
+class SimpleSNN:
+    def __init__(self, cnn_model, device="cuda"):
+        self.device = torch.device(device if torch.cuda.is_available() else "cpu")
+
+        # Hyperparameters
+        self.time_limit = 64  # Total ticks per saccade
+        self.dt = 1  # Time step
+        self.num_hidden = 128
+        self.num_output = 10
+
+        # The Window Integrator Thresholds
+        # Since we scale weights by 64, these need to be high enough
+        # to require "coincident" spikes.
+        self.threshold_h = 200.0
+        self.threshold_o = 100.0
+        # Initialize weights
+        self.update_weights(cnn_model)
+
+    def update_weights(self, cnn_model):
         """
-        Simple 2-Layer SNN: Input (64x64) -> Output (e.g., 13x13)
+        Pull weights from the CNN, scale them to a pseudo-i8 range,
+        and move them to the GPU.
         """
-        self.time = 0.0
-        self.input_w, self.input_h = input_shape
-        self.input_size = self.input_w * self.input_h
-        self.hidden1_size = (8, 28, 28)  # two filters stride 2
-        self.output_c, self.output_w, self.output_h = output_dim  # Hidden/Output layer
+        with torch.no_grad():
+            # Scaling by 64 maps a 2.0 weight to 128.
+            self.w1 = (
+                (cnn_model.fc1.weight.data * 64)
+                .round()
+                .clamp(-128, 127)
+                .to(self.device)
+            )
+            self.w2 = (
+                (cnn_model.fc2.weight.data * 64)
+                .round()
+                .clamp(-128, 127)
+                .to(self.device)
+            )
 
-        self.num_neurons = self.input_size + self.output_w
-        self.v = np.zeros(self.num_neurons)
-        self.synapses = {}  # {pre_idx: [(post_idx, weight), ...]}
+    def encode_to_delays(self, image_tensor):
+        """
+        Translates intensity (0.0 - 1.0) into temporal delays.
+        1.0 (Bright) -> t=0 (Early spike)
+        0.0 (Dark)   -> t=32 (Late spike/Silence)
+        """
+        # Ensure image is a flat 784 tensor on the correct device
+        flat_img = image_tensor.view(-1).to(self.device)
 
-        # Neuron Constants
-        self.v_thresh = 1.0
-        self.v_reset = 0.0
-        self.tau = 1
-        self.input_currents = np.zeros(self.input_size)
+        # Linear Delay Encoding
+        # We cap the delays at 32 so the integration has time to finish before 64
+        delays = ((1.0 - flat_img) * 32).long()
+        return delays
 
-        # Basic local-patch connectivity (to prove it works)
-        self._initialize_basic_connectivity()
+    def run_saccade(self, image_tensor):
+        """
+        Simulates one saccade: Reset -> Integrate -> Spike.
+        Every neuron is independent and processed in parallel via GPU.
+        """
+        # 1. Reset Phase (Phase Ambiguity Fixed by Saccade Start)
+        input_delays = self.encode_to_delays(image_tensor)
 
-    def _initialize_basic_connectivity(self):
-        """Connects input patches to output neurons."""
-        stride = 1  # Downsample 64x64 to 16x16 roughly
-        for i in range(self.output_w):
-            out_x = (i % 30) * stride
-            out_y = (i // 30) * stride
-            hidden_idx = self.input_size + i
+        v_hidden = torch.zeros(self.num_hidden, device=self.device)
+        v_output = torch.zeros(self.num_output, device=self.device)
 
-            # Connect a small 4x4 patch from input to this hidden neuron
-            for dx in range(4):
-                for dy in range(4):
-                    ix, iy = out_x + dx, out_y + dy
-                    if ix < self.input_w and iy < self.input_h:
-                        pre_idx = iy * self.input_w + ix
-                        self._add_connection(pre_idx, hidden_idx, 0.5)
-
-    def _add_connection(self, pre, post, w):
-        if pre not in self.synapses:
-            self.synapses[pre] = []
-        self.synapses[pre].append((post, w))
-
-    def set_input_currents(self, pixel_grid):
-        # Flattened single-channel input
-        flat = pixel_grid.flatten() / 255.0
-        self.input_currents = flat * (self.v_thresh + 0.2)
-
-    def advance(self, dt):
-        spiked_indices = []
-        # 1. Update Input Layer
-        self.v[: self.input_size] += (dt / self.tau) * (
-            -self.v[: self.input_size] + self.input_currents
+        # Track when each neuron fires (-1 = has not fired)
+        spikes_h = torch.full(
+            (self.num_hidden,), -1, device=self.device, dtype=torch.long
         )
-        in_spikes = np.where(self.v[: self.input_size] >= self.v_thresh)[0]
+        spikes_o = torch.full(
+            (self.num_output,), -1, device=self.device, dtype=torch.long
+        )
 
-        for pre_idx in in_spikes:
-            spiked_indices.append(pre_idx)
-            self.v[pre_idx] = self.v_reset
-            if pre_idx in self.synapses:
-                for post_idx, w in self.synapses[pre_idx]:
-                    self.v[post_idx] += w
+        # 2. Temporal Loop (The "Clock")
+        for t in range(self.time_limit):
+            # --- HIDDEN LAYER INTEGRATION ---
+            # Find input pixels spiking at THIS tick
+            input_mask = (input_delays == t).float()
 
-        # 2. Update Output Layer
-        out_start = self.input_size
-        self.v[out_start:] += (dt / self.tau) * (-self.v[out_start:])
-        out_spikes = np.where(self.v[out_start:] >= self.v_thresh)[0]
+            if input_mask.any():
+                # Parallel Synaptic Summation (Matrix-Vector Multiply)
+                v_hidden += torch.mv(self.w1, input_mask)
 
-        for idx in out_spikes:
-            real_idx = idx + out_start
-            spiked_indices.append(real_idx)
-            self.v[real_idx] = self.v_reset
+            # Check for Hidden Spikes (Window Integrator Logic)
+            # A neuron fires if potential > threshold AND it hasn't fired yet this saccade
+            fired_h = (v_hidden >= self.threshold_h) & (spikes_h == -1)
+            spikes_h[fired_h] = t
 
-        return spiked_indices, len(in_spikes)
+            # --- OUTPUT LAYER INTEGRATION ---
+            # Hidden neurons that just fired now send their "spikes" to the output
+            hidden_mask = (spikes_h == t).float()
+
+            if hidden_mask.any():
+                v_output += torch.mv(self.w2, hidden_mask)
+
+            # Check for Output Spikes
+            fired_o = (v_output >= self.threshold_o) & (spikes_o == -1)
+            spikes_o[fired_o] = t
+
+        # Returns the tick time for each of the 10 output neurons
+        return spikes_o
