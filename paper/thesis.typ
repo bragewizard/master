@@ -663,13 +663,25 @@ In a practical conditioning context—such as training a canine to perform a mot
 #v(1em)
 === Optimization
 
-#serif-text()[ To rigorously analyze intelligent systems, we must first abstract the learning process from its biological roots into a formal mathematical optimization problem. In this framework, "learning" is not treated as an emergent property of organic tissue, but as a search problem within a high-dimensional vector space.
+#serif-text()[ Optimazation is the selection of a "best or good candiate(s)" with regard to some defined criteria. Biological learing fits well within that descripton where the best candidate is the configuration of synaptic connections and synaptic weights that performs well for a certain task like controling muscles in a presise manner or playing chess. Therefore, it is very usefull to build up a mathematical framework for optimazation.
 
-Mathematical optimazation is the selection of a "best candiate" with regard to some defined criteria. A simple optimasation problem is finding the minimum of a one-dimentional function $f : RR -> RR$ here the "best canditade" is the lowest real number in the domain of the function. The criteria is "the lowest posible number $x in RR$". If the function is convex it has a and smooth it has a well defiend "global minimum" and the function can be differentiated to find the global minimum. Any quantity that can be mesasured by a criteria can be optimized even functions themselves can be optimised.
+A simple optimazation problem is finding the minimum of a one-dimentional function $f : RR -> RR$ here the "best canditade" is the lowest real number in the domain of the function. The criteria is "the lowest posible number $x in RR$". If the function is convex and smooth the function can be differentiated to find the global minimum. Any quantity that can be messured by a criteria can be optimized even functions themselves can be optimised.
 
-Fundamentally, an artificial intelligence model operates as a function approximator. We assume the existence of an unknown underlying function $f: X -> Y$ that perfectly maps inputs to their target outputs, for example such a function could be one that perfectly describes the earth's wether pattern taking into account known (and unkown) physics as well as all the particles with their mass and velocity in the atmosphere. This function may be fully deterministic or stocastic, in any case such a function is yet to be discoverd and the best we can do is to take guess at a much simpler function that still makes usefull predictions even if they are wrong to some degree. By adding tunable parameters to this function we can construct a family of hypothesis functions $f_bold(theta) (bold(x))$ Here, $bold(theta) in RR^d$ represents the state of the system—a vector containing all tunable parameters, such as synaptic weights, biases, or time constants. The dimensionality $d$ of this space corresponds to the degrees of freedom of the model, and the precise configuration of $bold(theta)$ determines the system's behavior.
+Fundamentally, a deep learing model operates as a function approximator. We assume the existence of an unknown underlying function $f: X -> Y$ that perfectly maps inputs to their target outputs, for example such a function could be one that perfectly describes the earth's wether pattern taking into account physical laws as well as all the particles with their mass and velocity in the atmosphere. This function may be fully deterministic or stocastic, in any case such a function is yet to be discoverd and the best we can do is to take guess at a much simpler function that still makes usefull predictions even if they are wrong to some degree. By adding tunable parameters to this function we can construct a family of hypothesis functions $f_bold(theta) (bold(x))$ Here, $bold(theta) in RR^d$ represents the state of the system—a vector containing all tunable parameters, such as synaptic weights, biases, or time constants. The dimensionality $d$ of this space corresponds to the degrees of freedom of the model, and the precise configuration of $bold(theta)$ determines the system's behavior. ]
 
-To guide the search for the optimal parameters $hat(bold(theta))$, one must quantify the divergence between the model's predictions and the ground truth. We define a scalar Loss Function $cal(L)(hat(bold(y)), bold(y))$ that evaluates the error on a single data point, such as the Squared Error for regression or Cross-Entropy for classification. However, optimizing for a single example is insufficient for generalization. Instead, we seek to minimize the Empirical Risk (or Cost Function) $J(bold(theta))$, defined as the average loss over a dataset of size $N$:
+#serif-text()[ The key problems in optimasation is ]
+
+#box-text()[
+- Finding the goal to minimize or maximize
+- Finding the parameters that reaches that goal
+]
+
+#serif-text()[ Many algorithms exist such as brute force, where you test every single parameter configuration to see wich is best, or simulated evolution ... or gradient based methods such as supervised learing ]
+
+#v(1em)
+#mini-header[Supervised Learning]
+
+#serif-text()[ To guide the search for the optimal parameters $hat(bold(theta))$, one must quantify the divergence between the model's predictions and the ground truth. We define a scalar Loss Function $cal(L)(hat(bold(y)), bold(y))$ that evaluates the error on a single data point, such as the Squared Error for regression or Cross-Entropy for classification. However, optimizing for a single example is insufficient for generalization. Instead, we seek to minimize the Empirical Risk (or Cost Function) $J(bold(theta))$, defined as the average loss over a dataset of size $N$:
 
 $ J(bold(theta)) = 1/N sum_(i=1)^N cal(L)lr(( f(bold(x)_i, bold(theta)), bold(y)_i),size: #200%) $
 
@@ -687,10 +699,18 @@ In this equation, $eta$ (eta) represents the Learning Rate, a hyperparameter tha
 
 #figure(include("figures/gradientdecent.typ"), caption:[The Optimization Landscape. The system seeks to traverse the high-dimensional surface defined by $J(bold(theta))$ to find the global minimum $bold(theta)^*$, using the gradient $nabla J$ as a navigational compass.])
 
-#serif-text()[ Altoguh gradient decent works remarkably well for its simplicity it has limitations. As already mentioned the method can get stuck in local minium. Furthermore the speed and effeciency may at times be slow. especcially for loss landscaped that appear flat. Perhaps the most crucial limitation is that the loss function must be differentialble, otherwise we cannot obtain a gradient. This becomes very important for optimasation of neuromorhpic systems. ]
+#serif-text()[ Altoguh gradient decent works remarkably well for its simplicity it has limitations. As already mentioned the method can get stuck in local minium. Furthermore the speed and effeciency may at times be slow. especcially for loss landscaped that appear flat. Perhaps the most crucial limitation is that the loss function must be differentialble, otherwise we cannot obtain a gradient. This becomes very important for optimasation of neuromorhpic systems.
+
+The formulation above describes Batch Gradient Descent, where the gradient is computed over the entire dataset $N$ before a single update is made. For modern high-dimensional datasets, this is computationally prohibitive. Furthermore, biological learning does not wait to experience "all of life" before adapting; it learns online.
+
+To address this, modern AI employs Stochastic Gradient Descent (SGD) or Mini-Batch Gradient Descent. Instead of computing the exact gradient over $N$, the gradient is approximated using a small random subset (a batch) of data $B << N$:
+
+$ bold(theta)_(t+1) arrow.l bold(theta)_t - eta 1/(|B|) sum_((x,y) in B) nabla_(bold(theta)) cal(L)(f(bold(x)), bold(y)) $
+
+This introduces noise into the optimization trajectory. Paradoxically, this noise is beneficial: it prevents the system from getting stuck in shallow local minima and saddle points, allowing the optimization process to "jitter" its way toward more robust solutions. This mimics the noisy, event-driven updates seen in biological synaptic plasticity. ]
 
 #v(1em)
-#mini-header[Unsupervised Optimization]
+#mini-header[Unsupervised Learning]
 
 #serif-text()[ The optimization framework defined previously describes Supervised Learning, where the system is guided by explicit target labels $bold(y)$. However, relying solely on labeled data is biologically implausible and engineering-wise inefficient. The vast majority of sensory data received by an intelligent agent is unlabeled; the retina receives photons, not pixel-wise classifications.
 
@@ -702,19 +722,15 @@ $ J(bold(theta)) = 1/N sum_(i=1)^N || bold(x)_i - f_"decode"(f_"encode"(bold(x)_
 
 Alternatively, in energy-based models (which closely resemble physical thermodynamic systems), the optimization seeks to find a configuration of parameters that minimizes the "energy" of plausible data configurations while maximizing the energy of implausible ones.
 
-This distinction is critical for Neuromorphic Engineering. Biological plasticity rules, such as those discussed in the following sections, are predominantly unsupervised. They function by detecting statistical correlations in the input stream (e.g., "edges generally occur in continuous lines") to build internal representations of the world without external supervision. ]
+This distinction is critical for Neuromorphic Engineering. Biological plasticity rules, such as those discussed in the following sections, are predominantly unsupervised. They function by detecting statistical correlations in the input stream (e.g., "edges generally occur in continuous lines") to build internal representations of the world without external supervision.
+
+Biological systems fall into the unsupervised group, a baby can learn the difference between shapes and colors without knowing their lables, the same is true for many animals that dont have agreed upon lables for anything as they may now be able to communicate them.
+
+Unsupervised learing is the most interesting to get right but key challanges have to be overcome. The first is what quantity are we optimizing for. One idea is to map features into a n-dimensional space and have a measure of clustering within that space, such a quantity could be density, centroids and distance to other centroids, distance in this n-dimensioanal space becomes a very natural aspect to measure.
+
+]
 
 
-#v(1em)
-#mini-header()[Stochastic vs. Batch Optimization]
-
-#serif-text()[ The formulation above describes Batch Gradient Descent, where the gradient is computed over the entire dataset $N$ before a single update is made. For modern high-dimensional datasets, this is computationally prohibitive. Furthermore, biological learning does not wait to experience "all of life" before adapting; it learns online.
-
-To address this, modern AI employs Stochastic Gradient Descent (SGD) or Mini-Batch Gradient Descent. Instead of computing the exact gradient over $N$, the gradient is approximated using a small random subset (a batch) of data $B << N$:
-
-$ bold(theta)_(t+1) arrow.l bold(theta)_t - eta 1/(|B|) sum_((x,y) in B) nabla_(bold(theta)) cal(L)(f(bold(x)), bold(y)) $
-
-This introduces noise into the optimization trajectory. Paradoxically, this noise is beneficial: it prevents the system from getting stuck in shallow local minima and saddle points, allowing the optimization process to "jitter" its way toward more robust solutions. This mimics the noisy, event-driven updates seen in biological synaptic plasticity. ]
 
 #v(1em)
 #mini-header()[Generalization and The Bias-Variance Tradeoff]

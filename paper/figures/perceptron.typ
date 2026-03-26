@@ -21,7 +21,7 @@
   rect((4,6.2),(4.6,7.8), fill:red.lighten(50%), stroke:none, radius:2pt)
 
   for i in range(1,6) {
-    bezier((0,i),(4,3),(2,i),(2,3), stroke: (paint:rgb(0,0,0,128),thickness:3pt))
+    bezier((0,i),(4,3),(2,i),(2,3), stroke: (paint:rgb(0,0,0,128),thickness:2pt))
     circle((0,i),radius:.3,fill:white,stroke:3pt)
   }
   circle((4,3),radius:.3,fill:white,stroke:3pt)
