@@ -21,16 +21,17 @@ set-style(axes: (
   // --- TOP PLOT: THE TRACE ---
   group(name: "trace-group", {
     plot.plot(
-      size: (plot-w, 4),
+      size: (plot-w, 5),
       x-min: t-min, x-max: t-max,
-      y-label: [Amplitude],
+      y-label: [Amplitude (V)],
+      x-label: "Time (s)",
       axis-style: "left",
-      x-format: v => text(8pt, str(v)),
-      y-format: v => text(8pt, str(v)),
+      x-format: v => text(11pt, str(v)),
+      y-format: v => text(11pt, str(v)),
       {
         plot.add(
           raw-data.slice(1).map(row => (float(row.at(0)), float(row.at(1)))),
-          style: (stroke: black + 0.5pt)
+          style: (stroke: blue.darken(40%) + 1.5pt)
         )
       }
     )
@@ -39,28 +40,28 @@ set-style(axes: (
   // --- BOTTOM PLOT: THE SPIKE TRAIN ---
   group(name: "raster-group", {
     // Offset the second plot vertically by 5cm
-    set-origin((0, -3)) 
-    set-style(axes: (y: (stroke: 0pt, mark:none)))   
+    set-origin((0, -4))
+    set-style(axes: (y: (stroke: 0pt, mark:none)))
     plot.plot(
       size: (plot-w, 1),
       x-min: t-min, x-max: t-max,
       y-min: 0.5, y-max: 1.5,
       x-label: "Time (s)",
-      x-format: v => text(8pt, str(v)),
+      x-format: v => text(11pt, str(v)),
       y-label: none,
       y-tick-step: none,
       axis-style: "left",
       {
-        // Extract spike times (filtering for "1") 
+        // Extract spike times (filtering for "1")
         // Index 6 should be your Ch1_Spike column
         let spike-data = raw-data.slice(1)
           .filter(row => row.at(6) == "1")
-          .map(row => (float(row.at(0)), 1)) 
+          .map(row => (float(row.at(0)), 1))
 
         plot.add(
           spike-data,
           mark: "|",
-          mark-style: (stroke: 1.5pt + blue),
+          mark-style: (stroke: 2pt + blue.darken(40%)),
           mark-size: 0.4,
           style: (stroke: none)
         )

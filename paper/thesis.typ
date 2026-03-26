@@ -23,6 +23,10 @@
 - [ ] abstract
 - [ ] siste proof read
 
+#v(.5em)
+#text(size: 9pt, weight: "medium")[
+#h(1fr) Wordcount: #total-words
+]
 
 // FRONTPAGE
 #cover()
@@ -69,10 +73,6 @@ The service GPT UiO, developed by UiO IT department, has been used to improve th
   outline(depth:3, indent: auto)
 }
 
-#v(.5em)
-#text(size: 9pt, weight: "medium")[
-#h(1fr) Wordcount: #total-words
-]
 
 #pagebreak()
 
@@ -162,7 +162,7 @@ However, a critical algorithmic gap remained: the "credit assignment problem". W
 #v(1em)
 === Deep Learning
 
-#serif-text()[ The critique presented by Minsky and Papert precipitated a contraction in funding; despite this, theoretical inquiry persisted. It was widely hypothesized that the limitations of the single perceptron could be overcome by a @mlp. By organizing neurons into hierarchical layers, the network could theoretically perform successive non-linear transformations on the input space, enabling the formation of complex decision boundaries. The primary impediment was not the architecture itself, but the absence of a viable learning algorithm.
+#serif-text()[ The critique presented by Minsky and Papert precipitated a contraction in funding; despite this, theoretical inquiry persisted. It was widely hypothesized that the limitations of the single perceptron could be overcome by a @mlp. By organizing neurons (single perceptrons) into hierarchical layers, the network could theoretically perform successive non-linear transformations on the input space, enabling the formation of complex decision boundaries. The primary impediment was not the architecture itself, but the absence of a viable learning algorithm.
 
 In a single-layer perceptron, error attribution is immediate: if the output deviates from the target, the error is directly derived from the weights of the output layer. However, in a multi-layer architecture, quantifying the contribution of a specific neuron within the "hidden" layers to the final output error presents a significant challenge. This is formally known as the Credit Assignment Problem @Placeholder, and it remained the central theoretical obstacle for over a decade. ]
 
@@ -172,7 +172,6 @@ In a single-layer perceptron, error attribution is immediate: if the output devi
 
 Unlike Hebbian plasticity, which is local and biological, Backpropagation relies on global error signals and precise backward data flow—mechanisms effectively absent in organic tissue. Consequently, the field of @ann effectively decoupled from neuroscience. It transitioned into a branch of engineering and applied mathematics, prioritizing statistical optimization over biological realism. Paradoxically, it was this abandonment of biological fidelity that enabled the rapid scaling and performance breakthroughs that followed. ]
 
-#pagebreak()
 #mini-header()[Achievements]
 
 #serif-text()[ With the training mechanism solved, the field exploded. The combination of Backpropagation, massive datasets, and @gpu hardware led to a "Cambrian Explosion" of neural architectures, each solving domains previously thought impossible for computers.
@@ -218,7 +217,7 @@ To demonstrate this concept, Mead and his doctoral student Misha Mahowald develo
 This event-driven approach solved the redundancy problem inherent in frame-based sampling. If the scene remained static, the system transmitted no data and consumed negligible energy. This demonstrated that by aligning the hardware physics with the computational task, sensory information could be processed with a fraction of the power required by conventional digital systems.
 
 Since the inception of neuromorphic computing, neuroscience has also advanced significantly. While Mead’s early work was based on the physical intuition of the transistor, modern neuromorphic engineering now incorporates a richer understanding of neuronal dynamics, synaptic plasticity, and network architecture. To advance the field, we must combine these foundational hardware insights with the principles of modern mechanistic neuroscience. ]
- 
+
 #pagebreak()
 
 == Biological Principles <biologicalprinciples>
@@ -240,7 +239,8 @@ This section provides a mechanistic overview of the nervous system, translating 
 
 #serif-text()[ The neuron exhibits a distinct morphological polarization that dictates the direction of information flow. The process begins at the "dendritic arbor", a complex branching structure that maximizes the surface area for synaptic connectivity. These dendrites serve as the primary receptor sites, where neurotransmitters binding to post-synaptic terminals induce local conductance changes. These signals propagate passively toward the soma (cell body), the neuron's central processing unit. The soma acts as an integrator, spatially and temporally summing the incoming synaptic currents. Finally, the processed signal is transmitted via the axon, a singular, elongated projection. In many vertebrate neurons, the axon is insulated by a myelin sheath, which facilitates saltatory conduction—a mechanism that allows high-speed signal propagation over long distances with minimal signal degradation. ]
 
-#figure( image("figures/neuron.png", width:40%), caption: [The morphological structure of a biological neuron, illustrating the directional flow of information from dendritic input to axonal output.])
+#figure( image("figures/neuron.png", width:60%), caption: [The morphological structure of a biological neuron, illustrating the directional flow of information from dendritic input to axonal output.
+© Angela Getz, Mathieu Ducros, Daniel Choquet / IINS et BIC / CNRS-Université de Bordeaux-Inserm.])
 
 #serif-text()[ Functionally, the neuron operates as an electrochemical system enclosed by a cell membrane, known as the "lipid bilayer". This membrane is a thin, fatty structure that is impermeable to ions, acting as an electrical insulator. However, the fluids inside and outside the cell are conductive electrolytes. Consequently, the interaction between the insulating membrane and the conductive fluids creates a biological capacitor, capable of storing charge.
 
@@ -267,20 +267,27 @@ It is important to acknowledge that the biological brain exhibits significant ce
 
 The Dirac delta is a generalized distribution defined by the property that it is zero everywhere except at the origin, yet integrates to unity. This represents an idealized pulse of infinite height and zero width, containing a finite unit of effect. ]
 
+#v(1em)
+
 #figure( kind: "eq", supplement: [Equation], caption: [The defining properties of the Dirac delta function.],[
 $ delta(t) = cases(infinity "if" t = 0, 0 "if" t != 0), quad integral_(-infinity)^(+infinity) delta (t) dif t = 1 $
 ])<dirac_def>
 
+#v(1em)
+
 #serif-text()[ Under this formalism, the output of a neuron is modeled not as a continuous signal, but as a "spike train"—a temporal sequence of these Dirac impulses. For a neuron emitting $N$ spikes at times ${t^((1)), t^((2)), ..., t^((N))}$, the output signal $S(t)$ is defined as: ]
+
+#v(1em)
 
 #figure( kind: "eq", supplement: [Equation], caption: [A spike train represented as a sum of Dirac delta functions.], [ $ S(t) = sum_(f=1)^(N) delta(t - t^((f))) $
 ])<spike_train>
 
-#serif-text()[ This abstraction allows the post-synaptic effect to be modeled using linear systems theory. In neuron models that use this framework, the interaction is treated as instantaneous charge deposition: the arrival of a delta function $delta(t-t_f)$ imparts a discrete step-change to the post-synaptic current. This mimics the rapid opening of ion channels without requiring the computational overhead of simulating the complex voltage trajectory. ]
+#v(1em)
+
+#serif-text()[ This abstraction allows the post-synaptic effect to be modeled using linear systems theory. In neuron models that use this framework, the interaction is treated as instantaneous charge deposition: the arrival of a delta function $delta(t-t_f)$ imparts a discrete step-change to the post-synaptic current. This mimics the rapid opening of ion channels without requiring the computational overhead of simulating the complex voltage trajectory. The shift from continuous values to discrete spike trains fundamentally alters the computational paradigm, moving from spatial representations (magnitude-based) to spatio-temporal representations (time-based). ]
 
 #figure(include("figures/spiketrain.typ"),caption:[Transformation of continuous membrane voltage (top) into a discrete spike train (bottom).])
 
-#serif-text()[ The shift from continuous values to discrete spike trains fundamentally alters the computational paradigm, moving from spatial representations (magnitude-based) to spatio-temporal representations (time-based). ]
 
 
 #v(1em)
@@ -297,17 +304,31 @@ To build practical, scalable neuromorphic hardware, we must abstract these bioph
 
 #serif-text()[ The standard approximation used in neuromorphic engineering is the @lif model. This framework aligns perfectly with the "point process" abstraction established in the previous section, as it treats action potentials as instantaneous, discrete events. Its state is defined by a single scalar variable, the membrane potential $u(t)$. The sub-threshold dynamics are governed by a linear differential equation analogous to a simple $R C$ (Resistor-Capacitor) circuit: ]
 
+#figure(include("figures/lifcircuit.typ"), caption:[])
+
+#v(1em)
+
 #figure( kind: "eq", supplement: [Equation], caption: [The Leaky Integrate-and-Fire (LIF) differential equation. The change in voltage is driven by the leak (decay to rest) and the input current.], $ tau_m​(dif u)/(dif t)=−(u−u_"rest")+R I(t) $)<lif_eq>
+
+#v(1em)
 
 #serif-text()[ Where $tau_m$ is the membrane time constant (determining how fast the neuron "forgets"), $u_"rest"$ is the resting potential, $R$ is the membrane resistance, and $I(t)$ is the input current.
 
 Connecting this to the spike train abstraction derived in the previous section, the input current I(t) is not continuous. It is a sequence of discrete events arriving from pre-synaptic neurons $j$ with weight $w_j$. Mathematically, this is modeled as a sum of Dirac delta functions: ]
 
+#v(1em)
+
 #figure( kind: "eq", supplement: [Equation], caption: [Synaptic input modeled as a weighted sum of Dirac delta functions.], $ I(t)=sum j w_j sum f delta(t−t_j(f)) $)<lif_input>
+
+#v(1em)
 
 #serif-text()[ Because the differential equation is linear below the threshold, we can solve it analytically. The membrane potential $u(t)$ becomes a convolution of the input spike train with the system's impulse response (a decaying exponential kernel). This means the potential at any moment is simply the sum of the decaying traces of all past spikes: ]
 
+#v(1em)
+
 #figure( kind: "eq", supplement: [Equation], caption: [The analytical solution for the membrane potential. The current voltage is the superposition of all past inputs, decayed by time constant $tau_m$.], $ u(t)=u_"rest"+sum j w j sum f exp(−(t−t_j(f))/tau_m) $)<lif_sol>
+
+#v(1em)
 
 #serif-text()[ The differential equation above describes the continuous sub-threshold dynamics. To complete the model, we must define the discrete "Fire" mechanism. The @lif neuron operates as a hybrid dynamical system: it integrates continuously until a discontinuity is triggered.
 
@@ -315,13 +336,18 @@ When the membrane potential $u(t)$ exceeds a specific threshold voltage $theta.a
 
 To mimic the biological limit on firing frequency, the model enforces an absolute refractory period, $Delta_"ref"$. After a spike occurs at time $t_f$, the neuron is clamped to the resting potential for a duration of $Delta_"ref"$. During this interval, the differential equation is suspended; the neuron ignores all inputs and cannot fire, regardless of the stimulus intensity. ]
 
+
 #figure(include("figures/lifdynamics.typ"), caption:[The dynamics of an @lif neuron. (A) The membrane potential integrates inputs. (B) Upon crossing the threshold $theta.alt$, a spike is emitted and the voltage is reset. (C) The voltage is clamped during the refractory period.])
 
 #serif-text()[ Mathematically, this firing condition is expressed as: ]
 
+#v(1em)
+
 #figure( kind: "eq", supplement: [Equation], caption: [The discrete firing and reset condition.], [
 $ "If " u(t) > theta.alt arrow cases( "Emit spike: " S(t) arrow S(t) + delta(t), "Reset voltage: " u(t) arrow u_"reset", "Pause integration for " t in (t_f, t_f + Delta_"ref"] ) $
 ])<lif_reset>
+
+#v(1em)
 
 #serif-text()[ This equation represents the engine of most neuromorphic algorithms. It defines a system that integrates information over time and leaks it to ensure temporal relevance. However, once $u(t)$ crosses a threshold $theta.alt$, the linearity breaks and the neuron emits a spike and $u(t)$ is manually reset to $u_"reset"$. ]
 
@@ -332,11 +358,15 @@ $ "If " u(t) > theta.alt arrow cases( "Emit spike: " S(t) arrow S(t) + delta(t),
 
 To capture these dynamics without reverting to the heavy Hodgkin-Huxley equations, we employ the @glif model. This extends the system by introducing a second state variable, $w(t)$, often called the adaptation variable. ]
 
+#v(1em)
+
 #figure( kind: "eq", supplement: [Equation], caption: [The Adaptive GLIF system. The adaptation variable $w$ provides negative feedback, enabling complex dynamics like bursting and adaptation.], [ $ tau_m (dif u)/(dif t) &= -(u - u_"rest") + R I(t) - w
 
 tau_w (dif w)/(dif t) &= a(u - u_"rest") - w $
 
 ])<glif_eq>
+
+#v(1em)
 
 #serif-text()[ In this coupled system, $w$ acts as a negative feedback loop. Every time the neuron spikes, $w$ is incremented by a constant $b$, which acts as a drag or fatigue on the membrane potential. This simple addition allows the model to exhibit sophisticated neuro-computational properties, bridging the gap between silicon efficiency and biological complexity.
 
@@ -351,7 +381,7 @@ From a dynamical systems perspective, the computational repertoire of a neuron i
 
 #serif-text()[ By adjusting the coupling parameters between the membrane potential $u$ and the recovery variable $w$, the @glif model can be tuned to operate in either regime. This flexibility allows a single mathematical model to emulate diverse biological behaviors, from the simple integration of sensory transducers to the complex oscillatory synchronization found in cortical interneurons. ]
 
-#figure(include("figures/bifurcation.typ"), caption:[The two primary firing modes determined by bifurcation dynamics. (Left) Class I Integrators show a smooth frequency response. (Right) Class II Resonators (Hopf) show a discontinuous jump and sub-threshold oscillations.])
+// #figure(include("figures/bifurcation.typ"), caption:[The two primary firing modes determined by bifurcation dynamics. (Left) Class I Integrators show a smooth frequency response. (Right) Class II Resonators (Hopf) show a discontinuous jump and sub-threshold oscillations.])
 
 #serif-text()[ It is natural to question whether such a mathematically reduced model can genuinely capture the behavior of biological neurons. While the @glif model discards the specific ionic mechanisms of the Hodgkin-Huxley equations, empirical validation suggests that it retains the essential computational dynamics.
 
@@ -368,7 +398,7 @@ As demonstrated by Izhikevich (2003), this simple system of two differential equ
 #v(1em)
 === Neural Coding <neuralcoding>
 
-#serif-text()[ In classical digital computing, information is represented by combining bits into richer structures, such as floating-point numbers. For instance, the luminance of a pixel is typically stored as a discrete 8-bit or 32-bit integer. Conversely, analog electronics represent values as continuous currents or voltages, offering infinite resolution within the dynamic range of the hardware.
+#serif-text()[ In classical digital computing, information is represented by combining bits into richer structures, such as floating-point or integer numbers. For instance, the luminance of a pixel is typically stored as a discrete 8-bit or 32-bit integer. Conversely, analog electronics represent values as continuous currents or voltages, offering infinite resolution within the dynamic range of the hardware.
 
 #figure(include("figures/digitalanalogrepresentation.typ"), caption:[ Digital left analog right representation])
 
@@ -418,7 +448,7 @@ Relying on a single neuron introduces ambiguity: a weak response could indicate 
 
 #serif-text()[ Furthermore, the brain optimizes for metabolic efficiency through sparse coding. This theory posits that neural systems minimize the number of active neurons required to represent a stimulus. At any given moment, out of billions of neurons, only a tiny fraction are firing. This stands in contrast to "dense" coding (where many units participate) or "local" coding (the hypothetical "grandmother cell" where one unique unit represents one unique object). Sparse coding strikes a mathematical balance: it creates a representation that has a high capacity for information but consumes minimal energy. ]
 
-#figure(include("figures/populationcoding.typ"), caption:[Comparison of coding densities. Sparse coding (right) activates a minimal subset of neurons to represent a feature, maximizing energy efficiency compared to dense coding.])
+#figure(include("figures/sparsecoding.typ"), caption:[Comparison of coding densities. Sparse coding (right) activates a minimal subset of neurons to represent a feature, maximizing energy efficiency compared to dense coding.])
 
 #v(1em)
 #mini-header()[ Coexistence of Codes ]
@@ -492,6 +522,8 @@ It must be noted, however, that the brain is not a uniform blank slate at creati
 #figure(include("figures/lateralinhibition.typ"), caption:[The mechanism of lateral inhibition. (A) A highly stimulated neuron in the input layer strongly excites its corresponding output neuron while simultaneously sending lateral inhibitory signals to its immediate neighbors. (B) This architectural motif acts as a spatial filter, producing a contrast enhancement effect. A broad input stimulus (dashed blue line) is transformed into a sharper output response (solid purple line) characterized by an amplified center and suppressed surroundings (a "Mexican hat" profile), thereby sharpening signal boundaries.])
 
 #serif-text()[ While lateral inhibition processes information in the spatial domain, Feed-Forward Inhibition (FFI) operates in the temporal domain. Structurally, this motif bifurcates an input signal into two parallel pathways: a direct excitatory route to the target neuron, and a disynaptic inhibitory route that reaches the same target with a slight synaptic delay. This architecture creates a narrow "temporal window of opportunity." Because the excitation triggers the neuron immediately before the delayed inhibition abruptly truncates the response, the neuron is prevented from integrating noise over extended durations. Consequently, FFI forces the neuron to function as a precise Coincidence Detector rather than a sluggish integrator, a dynamic that is fundamental to sound localization in the auditory cortex and fine-grain timing in the somatosensory system. ]
+
+#figure(include("figures/contrastenhancement.typ"), caption:[The mechanism of lateral inhibition. (A) A highly stimulated neuron in the input layer strongly excites its corresponding output neuron while simultaneously sending lateral inhibitory signals to its immediate neighbors. (B) This architectural motif acts as a spatial filter, producing a contrast enhancement effect. A broad input stimulus (dashed blue line) is transformed into a sharper output response (solid purple line) characterized by an amplified center and suppressed surroundings (a "Mexican hat" profile), thereby sharpening signal boundaries.])
 
 #figure(include("figures/feedforwardinhibition.typ"), caption:[Feed-Forward Inhibition (FFI). The input excites the target but also drives an inhibitor that shuts the target down shortly after. This creates a precise temporal window for firing.])
 
@@ -589,21 +621,32 @@ The @stdp rule adjusts the synaptic weight based on the relative timing differen
 To maintain stability, the brain employs Homeostatic Plasticity (or Synaptic Scaling). This is a global regulatory mechanism that operates on a slower timescale (minutes to hours). It functions as a negative feedback loop: if a neuron's average firing rate exceeds a target set-point, the cell chemically downscales the strength of *all* its incoming synapses. This ensures that neurons remain within a sensitive dynamic range, preventing saturation regardless of how strong the inputs become. ]
 
 #v(1em)
-#mini-header()[Three-Factor Learning: The Path to Reinforcement]
+#mini-header()[Reinforcement Learning]
 
-#serif-text()[ While @stdp is excellent for learning correlations, it is agnostic to the *value* of the outcome. A circuit might learn to associate "fire" with "touching," but @stdp alone cannot encode whether this is good or bad. To learn tasks (Reinforcement Learning), the brain utilizes Neuromodulation. ]
+#serif-text()[
+The transition from correlation-based learning to goal-directed behavior requires a mechanism capable of solving the temporal credit assignment problem. While Hebbian mechanisms and @stdp provide a basis for temporal associativity, they lack the inherent polarity required to distinguish between reinforced and punished outcomes. In biological neural networks, this gap is bridged by the integration of a third factor: a global neuromodulatory signal, typically mediated by dopaminergic projections from the ventral tegmental area (VTA) or substantia nigra.
 
-In this "Three-Factor Rule," the synaptic update depends on:
-#box-text()[
-- *The Pre-synaptic activity* (The input).
-- *The Post-synaptic activity* (The action).
-- *A Global Reward Signal*: The presence of neuromodulators like Dopamine. ]
+The Eligibility Trace and Molecular Dynamics
 
-#serif-text()[ Even if the timing is perfect for @stdp, the synapse is only permanently strengthened if a neuromodulator arrives shortly after, signaling a "reward" or "novelty." This bridges the gap between local synaptic events and global behavioral goals. ]
+At the synaptic level, the coincidence of pre-synaptic and post-synaptic activity does not immediately result in a permanent change in synaptic weight (w). Instead, it initiates a transient biochemical state known as an eligibility trace (E). This trace is often characterized by the localized influx of calcium ions (Ca(2+)) and the subsequent activation of intracellular signaling molecules, such as calmodulin-dependent protein kinase II (CaMKII).
+
+The eligibility trace serves as a temporal "bookmark" that decays according to a time constant taue​, typically ranging from hundreds of milliseconds to several seconds. The weight update is only realized if a neuromodulator D(t) arrives while the trace is active. This interaction can be formally expressed as:
+
+$ dot(w)(t)=eta dot E(t) dot D(t) $
+
+where eta denotes the learning rate. This mechanism ensures that only those synapses involved in the recent behavioral sequence are susceptible to modification by the global reward signal.
+
+Reward Prediction Error and Behavioral Extinction
+
+The efficacy of the three-factor rule is intrinsically tied to the Reward Prediction Error (RPE) hypothesis. Under this framework, the neuromodulatory signal D(t) does not represent the absolute value of a reward, but rather the difference between the received reward (R) and the predicted reward (V).
+
+In a practical conditioning context—such as training a canine to perform a motor task—the initial successful execution of the command triggers a phasic burst of dopamine because the reward is unexpected. This positive RPE strengthens the activated synapses. However, once the association is fully learned, the reward becomes predicted (R−V=0), and the dopaminergic response shifts from the reward itself to the preceding conditioned stimulus. If the expected reward is subsequently withheld, a "dopamine dip" occurs $(R−V<0)$, facilitating Long-Term Depression (LTD) at the eligible synapses. This process, known as extinction, allows the circuit to remain flexible and adaptive to changing environmental contingencies. ]
 
 #pagebreak()
 
 == Technical Details Of Machine Learning <mltechnicalities>
+
+// TODO this entire section needs love
 
 #serif-text()[ This chapter delineates the technical foundations of modern artificial intelligence, contrasting the established paradigms of @dl with the emerging principles of Neuromorphic Engineering. We begin by analyzing the algorithmic architecture of standard Deep Learning, identifying the computational bottlenecks and energy inefficiencies inherent in its reliance on dense matrix multiplication and backpropagation. Subsequently, we introduce the technical framework of neuromorphic engineering, demonstrating how the translation of the biological principles discussed in the previous section—such as sparsity, event-driven processing, and local learning—can yield systems that vastly outperform conventional models in terms of energy efficiency and latency. ]
 
@@ -687,26 +730,29 @@ $ "Error" = "Bias"^2 + "Variance" + "Irreducible Error" $
 
 #serif-text()[ In the context of the optimization framework established previously, Artificial Neural Networks (ANNs) constitute a specific class of hypothesis functions formed by the hierarchical composition of simple, non-linear modules.
 
-While the "Perceptron" introduced in the history chapter served as the atomic unit, modern Deep Learning aggregates these units into high-dimensional layers. Mathematically, a Deep Neural Network with $L$ layers is expressed not as a singular equation, but as a composite function $f_bold(theta)(bold(x))$ mapping an input $bold(x)$ to an output $bold(y)$ through a chain of nested operations:
+While the Perceptron introduced in @historyanddevelopments served as the atomic unit, modern Deep Learning aggregates these units into high-dimensional layers. Mathematically, a Deep Neural Network with $L$ layers is expressed not as a singular equation, but as a composite function $f_bold(theta)(bold(x))$ mapping an input $bold(x)$ to an output $bold(y)$ through a chain of nested operations:
 
 $ bold(y) = f_L ( ... f_2 ( f_1 ( bold(x) ) ) ) $
 
 This depth is not arbitrary; it allows the system to learn hierarchical representations. The initial layers might detect simple edges or frequencies, while deeper layers recombine these primitives to recognize complex semantic concepts like "faces" or "syntax." ]
 
-
-
 #v(1em)
 #mini-header()[The Forward Pass: Affine Transformations]
 
-#serif-text()[ The computation of these layers during inference is known as the Forward Pass. For a standard Multi-Layer Perceptron (MLP), each layer $l$ performs two distinct mathematical operations:
+#serif-text()[ The computation of these layers during inference is known as the Forward Pass. For a standard @mlp, each layer $l$ performs two distinct mathematical operations: ]
+
+#box-text()[
 
 1.  Affine Transformation: The input vector $bold(a)^((l-1))$ is multiplied by a weight matrix $bold(W)^((l))$ and shifted by a bias vector $bold(b)^((l))$. This operation is linear and represents a rotation and scaling of the data manifold.
 2.  Non-Linear Activation: The result $bold(z)^((l))$ is passed through a non-linear function $sigma(dot)$.
+]
+
+In contrast to the simple @mlp introduced in @historyanddevelopments modern deep learning uses @mlp:pl with many different activation functions, and crutally they have to be differentiable for backpropagation to work.
 
 $ bold(z)^((l)) = bold(W)^((l)) bold(a)^((l-1)) + bold(b)^((l)) $
 $ bold(a)^((l)) = sigma(bold(z)^((l))) $
 
-This seemingly simple structure contains the "Universal Approximation" capability of neural networks. However, the power of the network is entirely dependent on the choice of the non-linearity $sigma(dot)$. ]
+#serif-text()[ This seemingly simple structure contains the "Universal Approximation" capability of neural networks. However, the power of the network is entirely dependent on the choice of the non-linearity $sigma(dot)$. ]
 
 #v(1em)
 #mini-header()[Activation Dynamics and Gradient Flow]
@@ -863,15 +909,20 @@ Surrogate Gradients: A popular approach involves using a "surrogate" function du
 #v(1em)
 === Neuromorphic Hardware Techniques
 
-#serif-text()[ In contrast to deep learing hardware. neuromorphic hardware is not constrained to the von neuman architechture and thus the bottleneck
-adress event representation make reference to macro-motif section ]
+#serif-text()[ In contrast to deep learning hardware, neuromorphic architectures are not constrained by the von Neumann bottleneck. Rather than separating memory and logic, these systems co-locate computation within the memory fabric itself. Central to this efficiency is Address Event Representation (AER), a communication protocol that mirrors the sparse, event-driven nature of biological spikes. Instead of continuous data streaming, the hardware only transmits the "address" of a firing neuron across a shared digital bus, allowing a single physical wire to represent thousands of virtual axonal projections. ]
 
-#figure( include("figures/inmemory.typ"), caption: [In-Memory Computing via a Crossbar Array. Unlike von Neumann architectures, memory and computation are physically co-located. Input voltages (V, representing activations) are applied to the wordlines. The memory elements at the junctions hold programmable conductances (G, representing synaptic weights). Multiplication is naturally performed at each junction by Ohm's Law (I=V×G), and the resulting currents are summed along the bitlines via Kirchhoff's Current Law (∑I). This allows dense matrix-vector multiplications to occur in a single analog time step with zero data transport cost.])
+#figure( include("figures/inmemory.typ"), caption: [In-Memory Computing via a Crossbar Array. Unlike von Neumann architectures, memory and computation are physically co-located. Input voltages ($V$, representing activations) are applied to the wordlines. The memory elements at the junctions hold programmable conductances ($G$, representing synaptic weights). Multiplication is naturally performed at each junction by Ohm's Law ($I=V times G$), and the resulting currents are summed along the bitlines via Kirchhoff's Current Law ($sum I$). This allows dense matrix-vector multiplications to occur in a single analog time step with zero data transport cost.])
 
-#serif-text()[ crossbar array looks like a neural network! ]
+#serif-text()[ The crossbar array provides a direct structural surrogate for the neural neuropil. Because the architecture handles multiplication and summation natively through physical laws, it is uniquely suited to implement the biological "macro-motifs" discussed in the previous section. By routing bitline currents through local feedback loops, the hardware can instantiate complex dynamics such as Lateral Inhibition and Winner-Take-All circuits without the overhead of high-level software instructions.
 
-#figure(include("figures/inmemoryhierarcy.typ"), caption:[Architectural Comparison. (Left) The Von Neumann architecture separates memory and compute, creating a bottleneck. (Right) The Neuromorphic architecture co-locates them, mimicking the distributed topology of biological neural networks.])
+$ I_j (t) = sum_i V_i (t) G_{i,j} + I_"feedback" $
+
+This synergy between physical topology and functional motifs allows the hardware to inherit the computational efficiency of the neocortex. By utilizing the crossbar for dense local integration and AER for sparse long-range communication, neuromorphic systems replicate the hierarchical organization of cortical columns, effectively making the architecture itself the algorithm. ]
+
+#figure( include("figures/inmemoryhierarcy.typ"), caption:[Architectural Comparison. (Left) The Von Neumann architecture separates memory and compute, creating a bottleneck. (Right) The Neuromorphic architecture co-locates them, mimicking the distributed topology of biological neural networks.] )
+
 #pagebreak()
+
 == Neuromorphic State Of The Art
 
 #serif-text()[ Disentangling core computational mechanisms from biological implementation details is a major ongoing challenge in neuroscience and neuromorphic engineering. Some complex molecular processes might be essential for learning or adaptation, while others might primarily serve metabolic or structural roles not directly involved in the instantaneous computation being modeled. The principles of neuromorphic computing, born from Carver Mead's vision and informed by modern neuroscience, have matured from theoretical concepts into a vibrant field of applied research. This progress is best seen in two key areas: the development of specialized, brain-inspired hardware and the creation of sophisticated software frameworks for simulating and deploying spiking neural networks (SNNs). ]
@@ -977,10 +1028,7 @@ In an SNN, artificial neurons maintain an internal membrane potential that integ
 
 IBM TrueNorth: A prominent early example, TrueNorth is a fully digital, real-time, event-driven chip. It consists of 4,096 "neurosynaptic cores," collectively housing one million digital neurons and 256 million synapses. Its architecture is explicitly non-von Neumann; processing and memory are tightly integrated within each core. TrueNorth's key achievement is its staggering power efficiency: it can perform complex SNN inference tasks (like real-time video object detection) while consuming only tens of milliwatts---orders of magnitude less than a CPU or GPU performing a similar task. However, its architecture is largely fixed, making it a powerful "inference engine" but less flexible for researching novel, on-chip learning rules.
 
-Intel Loihi (and Loihi 2): Intel's line of neuromorphic research chips, starting with Loihi in 2017, represents a significant step towards flexible, on-chip learning. Like TrueNorth, Loihi is an asynchronous, event-driven digital chip, but with a key difference: it features programmable "learning engines" within each of its 128 neuromorphic cores. This allows researchers to implement and test dynamic learning rules, such as @stdp and its variants, directly on the hardware in real-time. The second generation, Loihi 2, further refines this with greater scalability, improved performance, and more advanced, programmable neuron models, positioning it as a leading platform for cutting-edge neuromorphic algorithm research.
-
-Neuromorphic sensors ...] 
-
+Intel Loihi (and Loihi 2): Intel's line of neuromorphic research chips, starting with Loihi in 2017, represents a significant step towards flexible, on-chip learning. Like TrueNorth, Loihi is an asynchronous, event-driven digital chip, but with a key difference: it features programmable "learning engines" within each of its 128 neuromorphic cores. This allows researchers to implement and test dynamic learning rules, such as @stdp and its variants, directly on the hardware in real-time. The second generation, Loihi 2, further refines this with greater scalability, improved performance, and more advanced, programmable neuron models, positioning it as a leading platform for cutting-edge neuromorphic algorithm research. ]
 
 #v(1em)
 === Simulation and Software Frameworks <simulationandsoftwareframeworks>
@@ -1097,9 +1145,9 @@ procedure intensity_to_delay_encoding(image, T_max=100, T_min=0): #h(1fr)
 #serif-text()[ We have seen that glif neuron is bio plausible and such a neuron is simple and can be realized easily on hardware the way. Using a temporal code the neuron has to differentiate between inputs in the time domain otherwise it cannot decode the information and cannot do useful work. Earlier inputs are encoded with larger values and should have a greater portion of summation going on inside the neuron. The neurons need to be desigend to work with the chosen encoding either at individual neuron level or population level
 
 -If order matters (temporal code) the neuron must handle it
-Evidence for bio-plauibility can be found from eq 1 where the R(u) is dependent on the membrane potential 
+Evidence for bio-plauibility can be found from eq 1 where the R(u) is dependent on the membrane potential
 
-make the input exponentially weaker in proportion to the threshold. If the treshold is zero then the incoming spike does not get suppressed if the therhold is very close to max then the incoming spike gets more suppressed. ] 
+make the input exponentially weaker in proportion to the threshold. If the treshold is zero then the incoming spike does not get suppressed if the therhold is very close to max then the incoming spike gets more suppressed. ]
 
 
 #figure( include("figures/thresholdsensitive.typ"), caption: [Neuron model where new incomming spikes have an exponential decaying influence on the potential])
@@ -1156,7 +1204,7 @@ Another way which is also based on relative firing order of single spikes could 
 #serif-text()[ As the methods will be fitted to visual stimuli. Network topologies for these tasks are widely studdied and proved to be effective the topolygy we will be using is similar to @cnn topology whiich is also inspired by the visual cortex in mamals. The idea is that early layers will pick up on very simple features like lines and curves that form eg around an object. The next layer might use the representation of lines and curves from the layer before to represent more complex shaped like boxes and circles. Furhter down the network more complex and abstract features can be represented this way. We will focus on fairly shallow networks with three layers to capture the simple shapes like boxes and circles present in the data. Both the @cnn and the @snn will have the same architechture and number of parameters so that weights can be shared and the idea is that comparisons should be more fair.
 
 Hard Sigmoid or a very sharp Leaky ReLU to simulate "all-or-nothing" neuron firing.
-] 
+]
 
 #figure( include("figures/architechture.typ"), caption: [Network arhcitechture for the task at hand])
 
@@ -1199,7 +1247,7 @@ supplement: [Algorithm],
 mono-text(pseudocode-list(hooks:.5em, indentation:1em, booktabs:true)[
 + start with a collection of neurons with arbitrary connections #h(1fr)
 + *if* a pre-synaptic neuron fires *then*
-  + it has a chance to grow a synapse to a random post-synaptic neuron 
+  + it has a chance to grow a synapse to a random post-synaptic neuron
 + *if* a post-synaptic neuron fires *then*
   + strengthen all connections to pre-synaptic neruons that fired before
   + remove connections to pre-synaptic neurons that did not fire or fired after
@@ -1252,7 +1300,9 @@ Altough many simulation and software packages exists as outlines in @simulationa
 #serif-text()[
 #lorem(100)
 
-#figure(include("figures/network.typ"),caption:[Neural network before learing])
+#figure(image("figures/snnclasification.png"),caption:[Neural network before learing])
+
+#figure(image("figures/snnweights.png"),caption:[Neural network before learing])
 
 #figure(include("figures/network.typ"),caption:[Neural network during learning])
 

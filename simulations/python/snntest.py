@@ -11,7 +11,7 @@ import matplotlib.pyplot as plt  # Added for weight viz
 from matplotlib.colors import TwoSlopeNorm  # Add this to your imports
 
 # --- CONFIG ---
-WINDOW_SIZE = 800
+WINDOW_SIZE = 1400
 BATCH_SIZE = 32
 paused = False
 step_once = False

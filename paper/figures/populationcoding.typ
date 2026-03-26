@@ -1,4 +1,4 @@
-#import "@preview/cetz:0.4.2"  
+#import "@preview/cetz:0.4.2"
 #import "@preview/cetz-plot:0.1.3": plot, chart
 
 #let data = (
@@ -19,19 +19,22 @@
       y: (mark: (end: ">", fill:black, size:1pt)),
       tick: (stroke: black + 1pt),
     ))
+
+  group({
+    translate((0.0, -8.5))
     plot.plot(
-    size: (10, 2), 
-    x-tick-step: 1, 
-    y-tick-step: 1, 
+    size: (10, 2),
+    x-tick-step: 1,
+    y-tick-step: 1,
     x-min: -1,
     // x-max: 10,
     y-min: 0,
     // y-max: 10,
     x-format: v => text(8pt, str(v)),
     y-format: v => text(8pt, str(v)),
-    axis-style: "left", 
-    name: "phase", 
-    {    
+    axis-style: "left",
+    name: "phase",
+    {
     plot.add(
       data,
       mark: "|",
@@ -39,5 +42,6 @@
       line:"linear",
       style: (stroke: none),
     )
+  })
   })
 })
