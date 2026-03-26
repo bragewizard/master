@@ -1,43 +1,39 @@
-#import "@preview/cetz:0.4.2"  
-#import "@preview/cetz-plot:0.1.3": plot, chart
-
-#let data = (
-  (1, 7), (2, 1), (3, 6), (4, 7),
-  (2, 5), (6, 4), (5, 1), (4, 3), (10, 2), (2, 4),
-)
+#import "@preview/cetz:0.4.2"
 
 #cetz.canvas(length: 1cm, {
   import cetz.draw: *
 
-    content((-2,2), [A - 9])
-    content((-2,1.5), [B - 3])
-    content((-2,1), [C - 2])
-    content((-2,0.5), [D - 2])
-    set-style(axes: (
-      stroke: (thickness: 1pt, paint: black),
-      x: (mark: (end: ">", fill:black, size:1pt)),
-      y: (mark: (end: ">", fill:black, size:1pt)),
-      tick: (stroke: black + 1pt),
-    ))
-    plot.plot(
-    size: (10, 2), 
-    x-tick-step: 1, 
-    y-tick-step: 1, 
-    x-min: -1,
-    // x-max: 10,
-    y-min: 0,
-    // y-max: 10,
-    x-format: v => text(8pt, str(v)),
-    y-format: v => text(8pt, str(v)),
-    axis-style: "left", 
-    name: "phase", 
-    {    
-    plot.add(
-      data,
-      mark: "|",
-      mark-style: (stroke:2pt + black),
-      line:"linear",
-      style: (stroke: none),
-    )
-  })
+  set-style(
+    stroke: (thickness: 1.4pt, cap: "butt", join: "miter"),
+    mark: (fill: black, scale: 1)
+  )
+
+  let setup-axes(x-label, y-label) = {
+    line((-0.2, 0), (10, 0), mark: (end: ">"), stroke: (thickness: 1.4pt))
+    line((0, -0.2), (0, 5.2), mark: (end: ">"), stroke: (thickness: 1.4pt))
+    content((10.2, 0), x-label)
+    content((0, 5.5), y-label)
+  }
+
+  let spike-data = (
+    // Row 4: High Value (9) -> High firing rate (10 spikes)
+    (0.5, 4), (1.5, 4), (2.5, 4), (3.5, 4), (4.5, 4),
+    (5.5, 4), (6.5, 4), (7.5, 4), (8.5, 4), (9.5, 4),
+
+    // Row 3: Medium Value (6) -> Medium firing rate (6 spikes)
+    (1.2, 3), (2.8, 3), (4.4, 3), (6.0, 3), (7.6, 3), (9.2, 3),
+
+    // Row 2: Low Value (3) -> Low firing rate (3 spikes)
+    (2.0, 2), (5.0, 2), (8.0, 2),
+
+    // Row 1: Very Low Value (1) -> Minimal firing rate (1 spike)
+    (4.5, 1)
+  )
+
+  setup-axes($t$, "neuron")
+  for (i) in range(spike-data.len()) {
+    let data = spike-data.at(i)
+    line(data, (data.at(0), data.at(1)+.2), stroke:3pt)
+  }
+
 })

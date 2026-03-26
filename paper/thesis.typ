@@ -398,11 +398,11 @@ As demonstrated by Izhikevich (2003), this simple system of two differential equ
 #v(1em)
 === Neural Coding <neuralcoding>
 
-#serif-text()[ In classical digital computing, information is represented by combining bits into richer structures, such as floating-point or integer numbers. For instance, the luminance of a pixel is typically stored as a discrete 8-bit or 32-bit integer. Conversely, analog electronics represent values as continuous currents or voltages, offering infinite resolution within the dynamic range of the hardware.
+#serif-text()[ In classical digital computing, information is represented by combining bits into richer structures, such as floating-point or integer numbers. For instance, the luminance of a pixel is typically stored as a discrete 8-bit or 32-bit integer. Conversely, analog electronics represent values as continuous currents or voltages, offering infinite resolution within the dynamic range of the hardware. ]
 
 #figure(include("figures/digitalanalogrepresentation.typ"), caption:[ Digital left analog right representation])
 
-The biological brain occupies a unique middle ground. While neurons operate using analog membrane potentials, their communication output—the action potential—is discrete and binary. As established in @actionpotentialandspiketrains, the waveform of a spike is stereotypical; it looks like a "digital bit" in amplitude. However, unlike a digital computer which is synchronized to a rigid clock, these spikes occur in continuous time. Therefore, the information in the nervous system is not stored in the shape of the signal, but in the structure of the spike train itself.
+#serif-text()[ The biological brain occupies a unique middle ground. While neurons operate using analog membrane potentials, their communication output—the action potential—is discrete and binary. As established in @actionpotentialandspiketrains, the waveform of a spike is stereotypical; it looks like a "digital bit" in amplitude. However, unlike a digital computer which is synchronized to a rigid clock, these spikes occur in continuous time. Therefore, the information in the nervous system is not stored in the shape of the signal, but in the structure of the spike train itself.
 
 Deciphering the "Neural Code"—the set of rules by which sensory stimuli are translated into these spike sequences—remains one of the central challenges in neuroscience. Currently, several coding schemes are hypothesized to coexist, each offering different trade-offs between latency, information density, and robustness. ]
 
@@ -473,9 +473,13 @@ The efficiency of this transmission—determined by factors such as the amount o
 
 In the @snn formalism, the weight represents a scaling factor for the incoming spike. When a pre-synaptic neuron $j$ fires a spike at time $t_j$, it induces a @psc in neuron $i$ scaled by the weight $w_(i j)$. Mathematically, the total synaptic input $I(t)$ is the weighted sum of all incoming spike trains: ]
 
+#v(1em)
+
 #figure( kind: "eq", supplement: [Equation], caption: [The synaptic input current as a weighted sum of incoming impulses.], [
 $ I_i(t) = sum_j w_(i j) dot S_j(t) $
 ])<synaptic_input>
+
+#v(1em)
 
 #serif-text()[ Synaptic weights determine not just the magnitude but also if the synapse is excitatory or inhibitory. ]
 #box-text()[
@@ -632,7 +636,11 @@ At the synaptic level, the coincidence of pre-synaptic and post-synaptic activit
 
 The eligibility trace serves as a temporal "bookmark" that decays according to a time constant taue​, typically ranging from hundreds of milliseconds to several seconds. The weight update is only realized if a neuromodulator D(t) arrives while the trace is active. This interaction can be formally expressed as:
 
+#v(1em)
+
 $ dot(w)(t)=eta dot E(t) dot D(t) $
+
+#v(1em)
 
 where eta denotes the learning rate. This mechanism ensures that only those synapses involved in the recent behavioral sequence are susceptible to modification by the global reward signal.
 
@@ -941,7 +949,7 @@ This synergy between physical topology and functional motifs allows the hardware
 #serif-text()[ This approach transforms time into a priority queue. A downstream neuron does not wait for a "frame" to finish; it begins computing as soon as the earliest, most salient spikes arrive. ]
 
 #v(1em)
-=== Learing
+=== Learning
 
 #serif-text()[ The most biologically plausible learning algorithm is @stdp. Unlike Deep Learning, which updates weights based on a global error calculated at the output, @stdp updates weights based on local causality between two connected neurons.
 
@@ -1069,7 +1077,7 @@ This thesis proposes a method to bridge this gap by... (...for example: "...deve
 #v(2em)
 == Data
 
-#serif-text()[]
+#serif-text()[ To test and experiment with the algorithms and techniques we need data, Any type of data could be used, the most interesting are where the the model tries to predict and learn patterns in the data that would be hard to do with handcrafted techniques. Very typical examples of these tasks are computer vision tasks where a hand crafted algrotihms is hard to construct. These tasks are a great way to test a machines ability to pick up on complex patterns. As we are limited by resources we must use a simple computer vision task, MNIST @Placeholder is a verry common dataset used to test. Good models score over 90% and this is largly a solved problem but that makes it a good dataset for experimental algorithms and architectures ]
 
 #figure( include("figures/dataexample.typ"), caption: [In-memory])
 #figure( include("figures/dataexamplenoise.typ"), caption: [In-memory])
