@@ -748,13 +748,16 @@ $ "Error" = "Bias"^2 + "Variance" + "Irreducible Error" $
 #serif-text()[ To manage this tradeoff, optimization often includes Regularization terms (such as $L_1$ or $L_2$ penalties) that artificially constrain the complexity of the hypothesis space. In biological systems, this regularization is naturally enforced by metabolic constraints—the brain aggressively prunes weak connections to maintain a sparse, energy-efficient topology, effectively reducing variance by limiting the hardware available to overfit noise. ]
 
 #v(1em)
-=== Deep Learning Constituents
+=== Deep Learning Framework
 
-#serif-text()[ In the context of the optimization framework established previously, Artificial Neural Networks (ANNs) constitute a specific class of hypothesis functions formed by the hierarchical composition of simple, non-linear modules.
+#serif-text()[ In the context of the optimization framework established previously, @ann:pl constitute a specific class of hypothesis functions formed by the hierarchical composition of simple, non-linear modules.
 
 While the Perceptron introduced in @historyanddevelopments served as the atomic unit, modern Deep Learning aggregates these units into high-dimensional layers. Mathematically, a Deep Neural Network with $L$ layers is expressed not as a singular equation, but as a composite function $f_bold(theta)(bold(x))$ mapping an input $bold(x)$ to an output $bold(y)$ through a chain of nested operations:
 
-$ bold(y) = f_L ( ... f_2 ( f_1 ( bold(x) ) ) ) $
+#v(1em)
+#figure( kind: "eq", supplement: [Equation], caption: [], [
+$ bold(y) = f_L ( ... f_2 ( f_1 ( bold(x) ) ) ) $ ])
+#v(1em)
 
 This depth is not arbitrary; it allows the system to learn hierarchical representations. The initial layers might detect simple edges or frequencies, while deeper layers recombine these primitives to recognize complex semantic concepts like "faces" or "syntax." ]
 
@@ -765,8 +768,8 @@ This depth is not arbitrary; it allows the system to learn hierarchical represen
 
 #box-text()[
 
-1.  Affine Transformation: The input vector $bold(a)^((l-1))$ is multiplied by a weight matrix $bold(W)^((l))$ and shifted by a bias vector $bold(b)^((l))$. This operation is linear and represents a rotation and scaling of the data manifold.
-2.  Non-Linear Activation: The result $bold(z)^((l))$ is passed through a non-linear function $sigma(dot)$.
+- Affine Transformation: The input vector $bold(a)^((l-1))$ is multiplied by a weight matrix $bold(W)^((l))$ and shifted by a bias vector $bold(b)^((l))$. This operation is linear and represents a rotation and scaling of the data manifold.
+- Non-Linear Activation: The result $bold(z)^((l))$ is passed through a non-linear function $sigma(dot)$.
 ]
 
 In contrast to the simple @mlp introduced in @historyanddevelopments modern deep learning uses @mlp:pl with many different activation functions, and crutally they have to be differentiable for backpropagation to work.
@@ -822,6 +825,12 @@ This mathematical reality is the defining characteristic of modern AI hardware u
 This structural reliance on moving massive dense matrices provides the context for the primary bottleneck of modern AI, discussed in the following section. ]
 
 #figure(include("figures/matrixmath.typ"), caption:[Deep Learning as Matrix Multiplication. Both forward and backward passes rely on dense matrix-vector products, necessitating high-bandwidth memory access.])
+
+
+#v(1em)
+#mini-header()[Convolutional Neural Networks]
+
+#serif-text()[ talk a bit about cnns since we talk about network choise in the method section ]
 
 #v(1em)
 === Why Is Deep Learning Inefficient?
@@ -1093,18 +1102,50 @@ This thesis proposes a method to bridge this gap by... (...for example: "...deve
 
 = Method <method>
 
-#serif-text()[ This chapter details implementations of neuromorphic methods to address the fundamental limitations of standard deep learning described in @biologicalprinciples. The approach presented here aligns with the constraints of biological substrates: sparsity, asynchrony, and locality. We propose a neuromorphic architecture designed to maximize energy efficiency and computational robustness ]
+#serif-text()[ This chapter details implementations of neuromorphic methods to address the fundamental limitations of standard deep learning described in @biologicalprinciples. The approach presented here aligns with the constraints of biological substrates: sparsity, asynchrony, and locality. We propose a neuromorphic architecture designed to maximize energy efficiency and computational robustness. The method presented details how to implement an @snn with the goal of improved effeciency over a more classic @ann.
+
+The algorithms used and developed will be tested againt a classifictaion task. The exeriment should be hard enough for handcrafted techniques to fail and showcase that we have an algorithm that generalises and learns patterns and appies them to solve a task. Any such task could be used to test the algorithms but we will use an image classification task. We will use the MNIST dataset visual features that make up. We will use a classic @ann trained on this dataset and use this as a baseline. The experiment is spilt up in inference and training where inference will be atempting to use the weights and biases from the @ann copied over to the @snn the second part will train the snn from scratch using unsupervised learing. ]
+
 
 #v(2em)
 == Data
 
-#serif-text()[ To test and experiment with the algorithms and techniques we need data, Any type of data could be used, the most interesting are where the the model tries to predict and learn patterns in the data that would be hard to do with handcrafted techniques. Very typical examples of these tasks are computer vision tasks where a hand crafted algrotihms is hard to construct. These tasks are a great way to test a machines ability to pick up on complex patterns. As we are limited by resources we must use a simple computer vision task, MNIST @Placeholder is a verry common dataset used to test. Good models score over 90% and this is largly a solved problem but that makes it a good dataset for experimental algorithms and architectures ]
+#serif-text()[ To test and experiment with the algorithms and techniques we need data, Any type of data could be used, the most interesting are where the the model tries to predict and learn patterns in the data that would be hard to do with handcrafted techniques. Very typical examples of these tasks are computer vision tasks where a hand crafted algrotihms is hard to construct. These tasks are a great way to test a machines ability to pick up on complex patterns. As we are limited by resources we must use a simple computer vision task, MNIST @Placeholder is a verry common dataset used to test. Good models score over 90% and this is largly a solved problem but that makes it a good dataset for experimental algorithms and architectures
+
+The MNSIT dataset consists of 10000 handdrawn digits 0 - 9 a sngle image is 28x28 pixels. The dataset contains the correct lables so supervised learing can be used to train a model. ]
 
 #figure( include("figures/dataexample.typ"), caption: [In-memory])
-#figure( include("figures/dataexamplenoise.typ"), caption: [In-memory])
-
 
 #pagebreak()
+
+== Network Architechture
+
+#serif-text()[ The network topology for the @ann and the @snn will be as similar as posible. They are identical in terms of number of neuron and synapse connection however a @ann neuron and a @snn neuron are widely different and synapses cannot be mapped one to one.
+
+The network topolgy will be a @fcn a @cnn whould perhaps be more suitable for a vision task however concolution kernels is not trivial to copy over to an @snn. The convoltion kernels cannot be reused arcoss a layer in a @snn they have to be "rolled out" as duplicated. For such a simple task the network might take advandtage of certain featers (is this called data leakege?) that is only part of this dataset but the core elements still stands
+
+As the methods will be fitted to visual stimuli. Network topologies for these tasks are widely studdied and proved to be effective the topolygy we will be using is similar to @cnn topology whiich is also inspired by the visual cortex in mamals. The idea is that early layers will pick up on very simple features like lines and curves that form eg around an object. The next layer might use the representation of lines and curves from the layer before to represent more complex shaped like boxes and circles. Furhter down the network more complex and abstract features can be represented this way. We will focus on fairly shallow networks with three layers to capture the simple shapes like boxes and circles present in the data. Both the @cnn and the @snn will have the same architechture and number of parameters so that weights can be shared and the idea is that comparisons should be more fair.
+
+Hard Sigmoid or a very sharp Leaky ReLU to simulate "all-or-nothing" neuron firing.
+]
+
+#figure( include("figures/architechture.typ"), caption: [Network arhcitechture for the task at hand])
+
+#serif-text()[ Using the same architechtire for @cnn and @snn and sharing weights is not mathemathically eqiuvalent but sharing weights is still usefull. The key distinction is that the @snn uses lateral inhibition the cnn does nececarly do, altough max pooling works in the same way.
+
+The input layers match the input dimension
+
+use 3x3 filters since features are not that big
+
+use 3 channels, each channel is used for a spesicic local feature, use wta/max pooling to choose the most prominent feature in a local region (lateral inhibition. A local feature like vertical diagonal or horisontal line is "chosen" in that region) ]
+
+#pagebreak()
+
+
+#v(2em)
+== Implementing A Spiking Neural Network
+
+
 
 #v(2em)
 == Information Representation
@@ -1228,24 +1269,6 @@ Another way which is also based on relative firing order of single spikes could 
 
 #pagebreak()
 
-== Network Architechture
-
-#serif-text()[ As the methods will be fitted to visual stimuli. Network topologies for these tasks are widely studdied and proved to be effective the topolygy we will be using is similar to @cnn topology whiich is also inspired by the visual cortex in mamals. The idea is that early layers will pick up on very simple features like lines and curves that form eg around an object. The next layer might use the representation of lines and curves from the layer before to represent more complex shaped like boxes and circles. Furhter down the network more complex and abstract features can be represented this way. We will focus on fairly shallow networks with three layers to capture the simple shapes like boxes and circles present in the data. Both the @cnn and the @snn will have the same architechture and number of parameters so that weights can be shared and the idea is that comparisons should be more fair.
-
-Hard Sigmoid or a very sharp Leaky ReLU to simulate "all-or-nothing" neuron firing.
-]
-
-#figure( include("figures/architechture.typ"), caption: [Network arhcitechture for the task at hand])
-
-#serif-text()[ Using the same architechtire for @cnn and @snn and sharing weights is not mathemathically eqiuvalent but sharing weights is still usefull. The key distinction is that the @snn uses lateral inhibition the cnn does nececarly do, altough max pooling works in the same way.
-
-The input layers match the input dimension
-
-use 3x3 filters since features are not that big
-
-use 3 channels, each channel is used for a spesicic local feature, use wta/max pooling to choose the most prominent feature in a local region (lateral inhibition. A local feature like vertical diagonal or horisontal line is "chosen" in that region) ]
-
-#pagebreak()
 
 == Proposed Learning Algorithms
 

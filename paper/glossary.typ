@@ -12,6 +12,12 @@
     description: "",
   ),
   (
+    key: "fcn",
+    short: "FCN",
+    long: "Fully Connected Network",
+    description: "",
+  ),
+  (
     key: "dl",
     short: "DL",
     long: "Deep Learning",
