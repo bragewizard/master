@@ -6,8 +6,8 @@
 
   // Global styles
   set-style(
-    stroke: (thickness: 1.2pt, cap: "round", join: "round"),
-    mark: (fill: black, scale: 0.8)
+    stroke: (thickness: 1.4pt, cap: "round", join: "miter"),
+    mark: (fill: black, scale: 1)
   )
 
   // Helper function to draw exact node-to-node connections
@@ -27,12 +27,9 @@
          stroke: (paint: color, thickness: line-thickness))
   }
 
-  // ------------------------------------------------------------------
-  // TOP PANEL: (A) Neural Circuit
-  // ------------------------------------------------------------------
   group({
     // Increased title height for stacked layout
-    content((3, 5.2), text(weight: "bold", size: 10pt, "(A) Neural Circuit"))
+    content((3, 4.8), text(weight: "bold", size: 10pt, "(A) Neural Circuit"))
 
     let xs = (0, 1.5, 3, 4.5, 6)
     let y_in = 0
@@ -58,8 +55,6 @@
       circle((x, y_out), radius: 0.3, fill: out_fill, stroke: black)
     }
 
-    // 3. Draw Stimulus Inputs
-    // Center (Strong)
     line((3, -1.2), (3, -0.4), mark: (end: ">"), stroke: (thickness: 2.5pt, paint: blue.darken(20%)))
     content((3, -1.6), text(size: 8pt, weight: "bold", fill: blue.darken(20%), "Strong\nStimulus"))
 
@@ -77,4 +72,42 @@
     content((-1, y_out), text(size: 9pt, "Output\nLayer"))
     content((-1, y_in), text(size: 9pt, "Input\nLayer"))
   })
+  group({
+    // FIXED: Translated -8.5cm on the y-axis to move it below Panel A
+    translate((7.5, 0))
+    content((2.5, 4.8), text(weight: "bold", size: 10pt, "(B) Contrast Enhancement"))
+
+    // 1. Draw Axes
+    line((-0.2, 0), (5.5, 0), mark: (end: ">"))
+    line((0, -0.8), (0, 3.8), mark: (end: ">"))
+    content((6.2, 0), "Space")
+    content((0, 4.1), "Activity")
+
+    // 2. Input Stimulus Curve (Broad Gaussian)
+    let input-pts = range(0, 51).map(i => {
+       let x = i * 0.1
+       let y = 2.0 * calc.exp(- calc.pow(x - 2.5, 2) / 1.5)
+       (x, y)
+    })
+    line(..input-pts, stroke: (paint: blue.darken(20%), thickness: 1.5pt, dash: "dashed"))
+
+    // 3. Output Response Curve (Difference of Gaussians / Mexican Hat)
+    let output-pts = range(0, 51).map(i => {
+       let x = i * 0.1
+       // Excitatory center minus broad inhibitory surround
+       let y = 3.2 * calc.exp(-calc.pow(x - 2.5, 2) / 0.4) - 1.2 * calc.exp(-calc.pow(x - 2.5, 2) / 2.5)
+       (x, y)
+    })
+    line(..output-pts, stroke: (paint: green.darken(10%), thickness: 1.4pt))
+
+    // 4. Labels and Callouts
+    content((4.4, 2.2), text(fill: blue.darken(20%), size: 8pt, "Input\nStimulus"))
+
+    content((4.4, 3.4), text(fill: green.darken(10%), size: 8pt, "Output\nResponse"))
+
+    // Highlight the suppression zones (negative values)
+    content((2.5, -1.6), text(fill: red.darken(10%), size: 8pt, "Suppressed by lateral inhibition"))
+    line((2.5, -1.3), (1.5, -0.8), mark: (end: ">", fill:red),stroke: (paint: red.darken(10%), thickness: 0.8pt))
+    line((2.5, -1.3), (3.5, -0.8), mark: (end: ">", fill:red),stroke: (paint: red.darken(10%), thickness: 0.8pt))
+    })
 })

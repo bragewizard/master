@@ -527,8 +527,6 @@ It must be noted, however, that the brain is not a uniform blank slate at creati
 
 #serif-text()[ While lateral inhibition processes information in the spatial domain, Feed-Forward Inhibition (FFI) operates in the temporal domain. Structurally, this motif bifurcates an input signal into two parallel pathways: a direct excitatory route to the target neuron, and a disynaptic inhibitory route that reaches the same target with a slight synaptic delay. This architecture creates a narrow "temporal window of opportunity." Because the excitation triggers the neuron immediately before the delayed inhibition abruptly truncates the response, the neuron is prevented from integrating noise over extended durations. Consequently, FFI forces the neuron to function as a precise Coincidence Detector rather than a sluggish integrator, a dynamic that is fundamental to sound localization in the auditory cortex and fine-grain timing in the somatosensory system. ]
 
-#figure(include("figures/contrastenhancement.typ"), caption:[The mechanism of lateral inhibition. (A) A highly stimulated neuron in the input layer strongly excites its corresponding output neuron while simultaneously sending lateral inhibitory signals to its immediate neighbors. (B) This architectural motif acts as a spatial filter, producing a contrast enhancement effect. A broad input stimulus (dashed blue line) is transformed into a sharper output response (solid purple line) characterized by an amplified center and suppressed surroundings (a "Mexican hat" profile), thereby sharpening signal boundaries.])
-
 #figure(include("figures/feedforwardinhibition.typ"), caption:[Feed-Forward Inhibition (FFI). The input excites the target but also drives an inhibitor that shuts the target down shortly after. This creates a precise temporal window for firing.])
 
 #serif-text()[ Distinct from the competitive nature of lateral inhibition, Feedback Inhibition functions as a local regulatory loop. In this circuit, an active excitatory neuron recruits an inhibitory interneuron, which subsequently projects back to suppress the original sender. This negative feedback loop serves two critical engineering functions. First, it provides homeostatic Gain Control, dynamically compressing the signal range to prevent neuronal saturation during high-intensity input. Second, the inherent conduction delays within the loop induce rhythmic firing in the population. This mechanism is the primary driver of Gamma frequency (30−80 Hz) oscillations, which are hypothesized to facilitate the synchronization of communication between distant cortical regions. ]
@@ -797,11 +795,18 @@ ReLU (The Modern Standard): To enable deep learning, modern networks employ the 
 
 #serif-text()[ To update the parameters $bold(W)$ and $bold(b)$, the system must attribute the total error $J(bold(theta))$ to specific weights. This is achieved via Backpropagation.
 
-Conceptually, Backpropagation is simply the recursive application of the Chain Rule of calculus. If we view the network as a computational graph, the gradient for a weight $w$ in layer $l$ is computed by propagating the error $delta$ from the layer above:
+Conceptually, Backpropagation is simply the recursive application of the Chain Rule of calculus. If we view the network as a computational graph, the gradient for a weight $w$ in layer $l$ is computed by propagating the error $delta$ from the layer above: ]
 
-$ (partial cal(L)) / (partial w) = underbrace((partial cal(L)) / (partial a), "Error from above") dot underbrace((partial a) / (partial z), "Activation derivative") dot underbrace((partial z) / (partial w), "Input value") $
 
-In modern frameworks (like PyTorch or TensorFlow), this is implemented via Automatic Differentiation (AutoDiff). The system builds a dynamic graph of operations during the forward pass and traverses it in reverse to compute exact gradients. ]
+#v(1em)
+
+#figure( kind: "eq", supplement: [Equation], caption: [], [
+$ (partial cal(L)) / (partial w) = (partial cal(L)) / (partial a) dot (partial a) / (partial z) dot (partial z) / (partial w) $
+])
+
+#v(1em)
+
+#serif-text()[ In modern frameworks (like PyTorch or TensorFlow), this is implemented via Automatic Differentiation (AutoDiff). The system builds a dynamic graph of operations during the forward pass and traverses it in reverse to compute exact gradients. ]
 
 #v(1em)
 #mini-header()[Deep Learining Computations: Dense Matrix Operations]
