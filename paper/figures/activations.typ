@@ -1,6 +1,6 @@
 #import "@preview/cetz:0.4.2"
 
-#cetz.canvas(length: 1cm, {
+#cetz.canvas(length: .7cm, {
   import cetz.draw: *
 
   // Global styles
@@ -33,8 +33,8 @@
 
     let sat_col = red.darken(10%)
 
-    content((-5, .7), text(fill: sat_col, size: 8pt, weight: "bold", "Saturates\n(kills gradients)"))
-    content((5.2, 3.2), text(fill: sat_col, size: 8pt, weight: "bold", "Saturates\n(kills gradients)"))
+    content((-5, .7), text(fill: sat_col, size: 9pt, weight: "bold", "Saturates\n(kills gradients)"))
+    content((5.2, 3.2), text(fill: sat_col, size: 9pt, weight: "bold", "Saturates\n(kills gradients)"))
     line((-6, 0.2),(-4, 0.2), stroke: (paint: sat_col, thickness: 1.5pt, dash: "dotted"))
     line((4, 3.8),(6, 3.8), stroke: (paint: sat_col, thickness: 1.5pt, dash: "dotted"))
 
