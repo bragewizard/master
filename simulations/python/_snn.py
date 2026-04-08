@@ -19,24 +19,18 @@ class SimpleSNN:
         # Initialize weights
         self.update_weights(cnn_model)
 
-    def update_weights(self, cnn_model):
+    def copy_weights_from_fcn(self, fcn):
         """
-        Pull weights from the CNN, scale them to a pseudo-i8 range,
+        Pull weights from the FCN, scale them to a pseudo-i8 range,
         and move them to the GPU.
         """
         with torch.no_grad():
             # Scaling by 64 maps a 2.0 weight to 128.
             self.w1 = (
-                (cnn_model.fc1.weight.data * 64)
-                .round()
-                .clamp(-128, 127)
-                .to(self.device)
+                (fcn.fc1.weight.data * 64).round().clamp(-128, 127).to(self.device)
             )
             self.w2 = (
-                (cnn_model.fc2.weight.data * 64)
-                .round()
-                .clamp(-128, 127)
-                .to(self.device)
+                (fcn.fc2.weight.data * 64).round().clamp(-128, 127).to(self.device)
             )
 
     def encode_to_delays(self, image_tensor):

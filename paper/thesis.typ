@@ -11,21 +11,21 @@
 #show: word-count
 
 
-*TODO*
+// *TODO*
 
-- [ ] proof read, stavefeil, flow, struktur, ordlegging akademisk tone. formler, gjenta til fornøyd
-- [ ] figurer
-- [ ] referanser
-- [ ] metode og resultater handcrafted/kopierte vekter
-- [ ] metode og resultater neuromorfisk læring
-- [ ] discusion
-- [ ] conclusion
-- [ ] abstract
-- [ ] siste proof read
+// - [ ] proof read, stavefeil, flow, struktur, ordlegging akademisk tone. formler, gjenta til fornøyd
+// - [ ] figurer
+// - [ ] referanser
+// - [ ] metode og resultater handcrafted/kopierte vekter
+// - [ ] metode og resultater neuromorfisk læring
+// - [ ] discusion
+// - [ ] conclusion
+// - [ ] abstract
+// - [ ] siste proof read
 
 #v(.5em)
 #text(size: 9pt, weight: "medium")[
-#h(1fr) Wordcount: #total-words
+#h(1fr) Wordcount = #total-words / 25000
 ]
 
 // FRONTPAGE
@@ -87,10 +87,6 @@ print-glossary(
 
 #pagebreak()
 
-#word-count(total => [
-  The number of words in this block is #total.words
-  and there are #total.characters letters.
-
 = Introduction <intro>
 
 #serif-text()[ The development of intelligent machines is a significant objective in modern science and engineering. While the concept has historical roots in philosophy and early automata, the field has transitioned from speculative theory to practical application. Currently, artificial intelligence is central to technological and economic development. Understanding the mechanisms of intelligence and reproducing them in synthetic systems offers the potential for improved analysis of biological minds and the creation of tools for applications ranging from personalized medicine to automated scientific discovery.
@@ -145,7 +141,7 @@ In 1949, Donald Hebb addressed the critical issue of plasticity in his work The 
 
 #serif-text()[ This principle is colloquially summarized as "neurons that fire together, wire together" @Placeholder. Crucially, this describes a local and decentralized learning rule; a synapse does not require a global error signal or external supervision to adjust. It requires only the correlation between the pre-synaptic input and the post-synaptic output. The convergence of the M-P architectural model and the Hebbian plasticity framework established the prerequisite conditions for the development of modern neural networks. ]
 
-#v(1em)
+#v(2em)
 == The Perceptron
 
 #serif-text()[ In 1957, Frank Rosenblatt advanced these theoretical concepts by engineering the Perceptron. The "Mark I Perceptron" was a hardware implementation of the neural model, distinguished by a crucial innovation: a weight-adjustment mechanism based on Hebbian principles. Rosenblatt introduced the perceptron learning rule, an iterative algorithm capable of minimizing error automatically. The system processed an input pattern (e.g., a pixelated character) and produced a binary classification. When the output deviated from the target, the algorithm adjusted the weights proportional to the error: strengthening connections that should have contributed to a correct firing and weakening those that led to false positives. ]
@@ -162,7 +158,7 @@ These expectations were abruptly tempered by theoretical limitations. In 1969, M
 
 However, a critical algorithmic gap remained: the "credit assignment problem". While researchers knew that hidden layers could represent complex features, there was no known method to propagate error signals back through the layers to adjust the weights of hidden neurons effectively. Rosenblatt’s rule was mathematically valid only for the output layer. The field remained stagnant until a method for training multi-layer networks could be formalized. ]
 
-#v(1em)
+#v(2em)
 == Deep Learning
 
 #serif-text()[ The critique presented by Minsky and Papert precipitated a contraction in funding; despite this, theoretical inquiry persisted. It was widely hypothesized that the limitations of the single perceptron could be overcome by a @mlp. By organizing neurons (single perceptrons) into hierarchical layers, the network could theoretically perform successive non-linear transformations on the input space, enabling the formation of complex decision boundaries. The primary impediment was not the architecture itself, but the absence of a viable learning algorithm.
@@ -199,7 +195,7 @@ Furthermore, the optimization algorithms driving this scale are fundamentally in
 
 While a detailed technical analysis of these inefficiencies is presented in @mltechnicalities, the central issue is clear: modern AI prioritizes statistical optimization over physical realism. Overcoming the limitations of the Von Neumann bottleneck and backpropagation requires a paradigm shift toward architectures that inherently co-locate memory and computation. ]
 
-#v(1em)
+#v(2em)
 == Birth Of Neuromorphic
 
 #serif-text()[ While the artificial intelligence community debated symbolic logic versus connectionism during the "AI Winter," significant developments were occurring in hardware physics. In the late 1980s at Caltech, physicist Carver Mead—a pioneer of @vlsi design—began to question the trajectory of digital computing.
@@ -214,9 +210,12 @@ This realization implied that a single transistor could physically compute the n
 
 To demonstrate this concept, Mead and his doctoral student Misha Mahowald developed the _Silicon Retina_ in 1991 @Placeholder. Unlike a standard camera, which captures full frames at fixed intervals (generating redundant data), the Silicon Retina operated asynchronously. It utilized analog circuits to compute spatial and temporal derivatives directly on-chip, outputting discrete "events" only when local light intensity changed.
 
-This event-driven approach solved the redundancy problem inherent in frame-based sampling. If the scene remained static, the system transmitted no data and consumed negligible energy. This demonstrated that by aligning the hardware physics with the computational task, sensory information could be processed with a fraction of the power required by conventional digital systems.
+This event-driven approach solved the redundancy problem inherent in frame-based sampling. If the scene remained static, the system transmitted no data and consumed negligible energy. This demonstrated that by aligning the hardware physics with the computational task, sensory information could be processed with a fraction of the power required by conventional digital systems. ]
 
-Since the inception of neuromorphic computing, neuroscience has also advanced significantly. While Mead’s early work was based on the physical intuition of the transistor, modern neuromorphic engineering now incorporates a richer understanding of neuronal dynamics, synaptic plasticity, and network architecture. To advance the field, we must combine these foundational hardware insights with the principles of modern mechanistic neuroscience. ]
+#v(3em)
+#line(length:100%)
+#v(3em)
+#serif-text()[ Since the inception of neuromorphic computing, neuroscience has also advanced significantly. While Mead’s early work was based on the physical intuition of the transistor, modern neuromorphic engineering now incorporates a richer understanding of neuronal dynamics, synaptic plasticity, and network architecture. To advance the field, we must combine these foundational hardware insights with the principles of modern mechanistic neuroscience. ]
 
 #pagebreak()
 
@@ -226,7 +225,7 @@ Since the inception of neuromorphic computing, neuroscience has also advanced si
 
 This section provides a mechanistic overview of the nervous system, translating biological observations into the computational primitives required for neuromorphic engineering. It explores the structural hierarchy of the neuron, the physics of the action potential, and the mathematical models used to capture these dynamics in silicon. ]
 
-#v(1em)
+#v(2em)
 == Neuron Structure & Function
 
 #serif-text()[ In @historyanddevelopments we established the neuron as the fundamental computational unit of the brain. While it shares standard cellular machinery like mitochondria and a nucleus with other cells, it is morphologically specialized for information transmission. A neuron consists of three functional zones: ]
@@ -252,7 +251,7 @@ Computation occurs through the modulation of this voltage by competing synaptic 
 
 It is important to acknowledge that the biological brain exhibits significant cellular diversity beyond this idealized model. The nervous system contains non-neuronal cells known as "glia", which provide structural support and manage energy delivery, though they are generally not considered direct participants in fast information transmission. Additionally, while the vast majority of cortical neurons communicate via uniform action potentials (spikes), certain sensory neurons utilize "graded potentials", where the signal amplitude varies continuously. However, as spiking neurons represent the dominant computational paradigm for information processing in the cortex, this thesis focuses exclusively on the spiking model as the basis for neuromorphic emulation. ]
 
-#v(1em)
+#v(2em)
 == Action Potential & Spike Trains <actionpotentialandspiketrains>
 
 #serif-text()[ As established in the previous section, the action potential is an "all-or-nothing" event. It serves as the fundamental mechanism by which neurons transmit information. Crucially, the waveform of this event is stereotypical: for a given neuron, every spike exhibits a nearly identical amplitude and duration (typically 1–2 ms), independent of the input intensity that triggered it. ]
@@ -290,7 +289,7 @@ $ delta(t) = cases(infinity "if" t = 0, 0 "if" t != 0), quad integral_(-infinity
 
 
 
-#v(1em)
+#v(2em)
 == Neuron Models <neuronmodels>
 
 #serif-text()[ In the quest to simulate the brain, there exists a fundamental trade-off between biological realism and computational efficiency. At the high end of the spectrum lie conductance-based models, most notably the Hodgkin-Huxley model. This formalism describes the neuron not as a simple computational unit, but as an electrical circuit with variable resistors representing the precise, non-linear opening and closing dynamics of specific ion channels (sodium, potassium, leak) @Placeholder.
@@ -379,7 +378,7 @@ This counter-intuitive success is due to parameter sensitivity. Complex conducta
 
 #serif-text()[ Consequently, for the purpose of neuromorphic engineering, the GLIF model represents the optimal trade-off between biological fidelity and computational efficiency. ]
 
-#v(1em)
+#v(2em)
 == Neural Coding <neuralcoding>
 
 #serif-text()[ In classical digital computing, information is represented by combining bits into richer structures, such as floating-point or integer numbers. For instance, the luminance of a pixel is typically stored as a discrete 8-bit or 32-bit integer. Conversely, analog electronics represent values as continuous currents or voltages, offering infinite resolution within the dynamic range of the hardware. ]
@@ -431,7 +430,7 @@ The brain further optimizes for metabolic efficiency through sparse coding, wher
 
 #serif-text()[ These schemes are not mutually exclusive but complementary. A circuit may use TTFS for a rapid initial response — alerting the system to a salient change — before transitioning to rate-based activity for sustained processing. Neuromorphic systems often adopt this hybrid approach, using temporal codes for energy-efficient sparse event transmission and rate-based readouts for interfacing with downstream control systems. This thesis follows the same principle, using TTFS encoding for the transmission of visual features combined with a population-level representation at the hidden layer. ]
 
-#v(1em)
+#v(2em)
 == Neural Networks <networks>
 
 #serif-text()[ Having established the mathematical description of the individual neuron, we now turn to the collective behavior of these units. A single neuron, regardless of its dynamical complexity, is of limited computational utility in isolation. Functional intelligence emerges only when these units are organized into specific structural topologies.
@@ -495,7 +494,7 @@ This paradigm, known as the Synaptic Hypothesis, posits that the physical config
 
 #serif-text()[ While lateral inhibition processes information in the spatial domain, Feed-Forward Inhibition (FFI) operates in the temporal domain. Structurally, this motif bifurcates an input signal into two parallel pathways: a direct excitatory route to the target neuron, and a disynaptic inhibitory route that reaches the same target with a slight synaptic delay. This architecture creates a narrow "temporal window of opportunity." Because the excitation triggers the neuron immediately before the delayed inhibition abruptly truncates the response, the neuron is prevented from integrating noise over extended durations. Consequently, FFI forces the neuron to function as a precise Coincidence Detector rather than a sluggish integrator, a dynamic that is fundamental to sound localization in the auditory cortex and fine-grain timing in the somatosensory system. ]
 
-#v(1em)
+#v(2em)
 == Biological Learning <bio_learning>
 
 #serif-text()[ As previously established, the functional identity of a neural circuit is not defined by a transient software state, but by its physical hardware configuration. Consequently, "learning" in a biological substrate cannot be viewed as a simple parameter optimization; it is a fundamental morphological process. If structure dictates function, then the acquisition of new skills or memories necessitates the physical restructuring of the connectome itself.
@@ -548,6 +547,11 @@ The @stdp rule adjusts the synaptic weight based on the relative timing differen
 
 To maintain stability, the brain employs Homeostatic Plasticity (or Synaptic Scaling). This is a global regulatory mechanism that operates on a slower timescale (minutes to hours). It functions as a negative feedback loop: if a neuron's average firing rate exceeds a target set-point, the cell chemically downscales the strength of all its incoming synapses. This ensures that neurons remain within a sensitive dynamic range, preventing saturation regardless of how strong the inputs become. ]
 
+#v(3em)
+#line(length:100%)
+#v(3em)
+#serif-text()[ The following chapter shifts perspective---from biology to engineering. We examine the mathematical framework of modern Deep Learning, to identify where its abstractions diverge from biological reality and what computational cost those divergences impose. This analysis will make explicit the bottlenecks that neuromorphic architectures are designed to resolve, grounding the methodological choices of this thesis in a concrete technical rationale. ]
+
 #pagebreak()
 
 = Technical Details Of Machine Learning <mltechnicalities>
@@ -556,7 +560,7 @@ To maintain stability, the brain employs Homeostatic Plasticity (or Synaptic Sca
 
 A critical distinction must be drawn between biological plausibility and bio-inspired engineering. From an engineering perspective, the primary objective is functional utility. An engineer may treat the brain merely as a source of heuristic inspiration rather than a blueprint to be copied dogmatically. However, the pursuit of biologically plausible systems remains vital; it offers potential advantages in robustness and energy efficiency while serving as a verification tool for neuroscience. ]
 
-#v(1em)
+#v(2em)
 == Optimization
 
 #serif-text()[ Optimization is the selection of a "best candidate" with regard to defined criteria. Biological learning fits this description, where the optimal candidate is the configuration of synaptic weights that performs well for a specific task. Therefore, it is useful to establish a mathematical framework for this process.
@@ -595,7 +599,7 @@ $ J(bold(theta)) = 1/N sum_(i=1)^N || bold(x)_i - f_"decode"(f_"encode"(bold(x)_
 
 Alternatively, the system may optimize for clustering density or distances between feature centroids. This distinction is critical for Neuromorphic Engineering, as biological plasticity rules (like STDP) are unsupervised, functioning by detecting statistical correlations in the input stream to build internal representations without external labels. ]
 
-#v(1em)
+#v(2em)
 == Deep Learning Framework
 
 #serif-text()[ Modern Deep Learning aggregates simple units into high-dimensional layers. A deep network with $L$ layers is expressed as a composite function mapping input $bold(x)$ to output $bold(y)$ through nested operations:
@@ -631,7 +635,7 @@ CNNs apply small, learnable weight matrices known as "kernels" or "filters" that
 
 While CNNs are the standard baseline for spatial processing, they remain fundamentally synchronous and frame-based, evaluating the entire image structure in dense mathematical passes regardless of local activity. ]
 
-#v(1em)
+#v(2em)
 == Why Is Deep Learning Inefficient?
 
 #serif-text()[ While the matrix-centric formulation of Deep Learning enables high-throughput parallelization on GPUs, it fundamentally conflicts with the physical constraints of modern computing hardware. As models scale to billions of parameters, the primary bottleneck shifts from algorithmic capability to physical realizability. This inefficiency manifests in four distinct engineering dimensions: ]
@@ -664,7 +668,7 @@ Real-world sensory data is often highly sparse, and the ReLU activation function
 
 This creates a "Locking Problem." The activations of every intermediate layer must be stored in high-speed memory (VRAM) for the duration of the entire pass, preventing that memory from being reused. Additionally, a local synapse cannot adapt to local changes instantly; it is shackled to the global error loop. ]
 
-#v(1em)
+#v(2em)
 == Principles of Neuromorphic Engineering
 
 #serif-text()[ As established in the _History & Developments_ chapter, Neuromorphic Engineering is the translation of biological dynamics into silicon hardware. It replaces the rigid, clock-driven logic of standard computing with the adaptive, event-driven dynamics of neural tissue. This approach rests on three architectural pillars that directly address the bottlenecks of Deep Learning: ]
@@ -674,8 +678,8 @@ This creates a "Locking Problem." The activations of every intermediate layer mu
 - *Event-Driven Asynchrony (The Action Potential Principle):* Neuromorphic systems abandon the global clock. They operate asynchronously, driven strictly by the arrival of data. If a part of the network is not processing information, it consumes negligible power, ensuring energy scales linearly with task complexity rather than network size.
 - *Sparse Communication (The Spike Principle):* Neuromorphic systems utilize binary Spikes for communication. Information is encoded in the precise timing of events rather than complex magnitudes, drastically reducing the bandwidth required to transmit information between neurons. ]
 
-#v(1em)
-== Training Spiking Networks:\ The Non-Differentiability Problem
+#v(2em)
+== Training Spiking Networks
 
 #serif-text()[ While the physical architecture of neuromorphic systems is highly efficient, training these networks presents a fundamental mathematical challenge. Standard deep learning relies on gradient descent, but backpropagation cannot be directly applied to native @snn:pl.
 
@@ -715,36 +719,13 @@ This synergy between physical topology and functional motifs allows the hardware
 
 #figure( include("figures/inmemoryhierarcy.typ"), caption:[Architectural Comparison. (Left) The Von Neumann architecture separates memory and compute, creating a bottleneck. (Right) The Neuromorphic architecture co-locates them, mimicking the distributed topology of biological neural networks.] )
 
-#v(2em)
-== State of the Art: Sensors and Simulation <sota>
-
-#serif-text()[ The principles of neuromorphic computing have matured from theoretical biophysics into a vibrant field of applied engineering. While the fundamental architecture relies on the co-location of memory and compute, interacting with the real world requires a paradigm shift in how data is acquired and how these networks are prototyped. ]
-
-#v(1em)
-#mini-header()[Event-Based Sensing: The Dynamic Vision Sensor (DVS)]
-
-#serif-text()[ Traditional computer vision relies on Active Pixel Sensors (APS) that capture the state of the entire environment at fixed temporal intervals (frames). While effective for static analysis, this generates highly redundant data streams that impose significant latency and power penalties.
-
-Neuromorphic sensors abandon the global shutter in favor of asynchronous, event-driven acquisition. The most mature realization of this paradigm is the Dynamic Vision Sensor (DVS), or event camera. Each pixel in a DVS operates independently, monitoring the log-intensity of incident light. An event $e$ is generated at time $t$ only when the brightness change exceeds a preset threshold $theta$:
-
-$ Delta ln(I) = ln(I(t)) - ln(I(t-Delta t)) >= plus.minus theta $
-
-This mechanism yields a sparse stream of events characterized by the tuple $(x, y, t, p)$, representing the pixel coordinates, the microsecond-resolution timestamp, and the polarity of the change (ON or OFF). Because data is only generated when the scene changes, DVS cameras achieve kilohertz-equivalent frame rates, massive dynamic range ($>120$ dB), and extreme energy efficiency. Consequently, event streams serve as the natural input data for Spiking Neural Networks. ]
-
-#v(1em)
-#mini-header()[Hardware vs. Software Simulation]
-
-#serif-text()[ Deploying SNNs to process these event streams is currently achieved through two distinct avenues: dedicated physical hardware and software simulation.
-
-At the hardware level, systems like IBM’s TrueNorth and Intel’s Loihi physically instantiate the neuromorphic principles discussed previously. TrueNorth functions as a highly efficient digital inference engine, utilizing over a million neurons to process data at milliwatt power budgets. Loihi expands upon this by including programmable learning engines within its cores, allowing for the real-time, on-chip execution of local plasticity rules like STDP.
-
-However, before algorithms can be deployed to specialized silicon, they must be rigorously validated. This is achieved through SNN software frameworks that simulate event-driven dynamics on standard Von Neumann hardware (CPUs/GPUs). Frameworks such as Brian2 provide deep biophysical realism for computational neuroscience, while libraries like Nengo, snnTorch, and BindsNET bridge the gap to machine learning, allowing spiking dynamics to be integrated with standard deep learning data pipelines. ]
-
-#serif-text()[ _Having established the theoretical limitations of traditional deep learning and the physical principles of neuromorphic engineering, the following chapter details the specific methodologies, network architectures, and software frameworks utilized in this thesis to evaluate ANN-to-SNN weight conversion and native STDP learning on visual event data._ ]
+#v(3em)
+#line(length:100%)
+#v(3em)
+#serif-text()[ Having established the theoretical limitations of traditional deep learning and the physical principles of neuromorphic engineering, the following chapter details the specific methodologies, network architectures, and software frameworks utilized in this thesis to evaluate ANN-to-SNN weight conversion and native STDP learning on visual event data. ]
 
 #pagebreak()
 
-])
 = Method <method>
 
 #serif-text()[ This chapter details the specific implementations of the neuromorphic architectures proposed to address the limitations of standard deep learning. Aligning with the biological constraints of sparsity, asynchrony, and locality established in previous chapters, we outline the construction and evaluation of a Spiking Neural Network (SNN).
@@ -752,175 +733,164 @@ However, before algorithms can be deployed to specialized silicon, they must be 
 To empirically validate the theoretical advantages of neuromorphic algorithms, we evaluate the system on a benchmark image classification task. The experiment is bifurcated into two distinct phases to compare offline engineering with native biological learning: ]
 
 #box-text()[
-1. *Inference via Weight Transfer:* Evaluating the zero-shot performance of an SNN initialized with weights directly mapped from a classically trained Artificial Neural Network (ANN).
-2. *Native Unsupervised Learning:* Training an SNN from scratch utilizing local Spike-Timing-Dependent Plasticity (@stdp).
+1. *Neuron Model Evaluation:* Evaluating the decoding efficiency and accuracy of different simulated spiking models, specifically comparing a biologically inspired Leaky Integrate-and-Fire (LIF) model against a computationally streamlined Current-Accumulating (Ramp) model.
+2. *Inference via Weight Transfer:* Evaluating the zero-shot performance of these SNNs initialized with weights directly mapped from a classically trained Artificial Neural Network (ANN).
+3. *Native Unsupervised Learning:* Training the SNN from scratch utilizing local Spike-Timing-Dependent Plasticity (@stdp).
 ]
 
 #v(2em)
-== Dataset & Pre-processing
+== 3.1 Dataset & Pre-processing
 
 #serif-text()[ To benchmark these algorithms, we require a dataset that necessitates the extraction of complex spatial features but remains computationally tractable for rapid experimental iteration. We utilize the MNIST database of handwritten digits @Placeholder.
 
-The dataset consists of a training set of 60,000 examples and a test set of 10,000 examples of digits (0-9). Each instance is a 28x28 pixel grayscale image. While standard deep learning models routinely score over 90% accuracy on this task, making it largely a solved problem in classical AI, its well-understood feature space makes it an ideal, isolated baseline for verifying novel neuromorphic architectures.
+The dataset consists of a training set of 60,000 examples and a test set of 10,000 examples of digits (0-9). Each instance is a $28 times 28$ pixel grayscale image. While standard deep learning models routinely score over 90% accuracy on this task, making it largely a solved problem in classical AI, its well-understood feature space makes it an ideal, isolated baseline. Because the spatial hierarchy of MNIST is relatively shallow, it allows us to evaluate the efficacy of neuromorphic learning rules without the confounding variables introduced by massive, multi-layered convolutional architectures.
 
-Because SNNs operate on discrete events rather than continuous values, the raw pixel intensities (ranging from 0 to 255) must be pre-processed and translated into spike trains before they can be ingested by the network. ]
+Crucially, the MNIST images are pre-processed by the dataset creators to be size-normalized and centered within the pixel grid using the center of mass of the pixels. This spatial alignment is a vital prerequisite for our chosen network topology. Unlike Convolutional Neural Networks (@cnn:pl), which slide localized filters across an image, the Fully Connected Network (@fcn) utilized in this thesis lacks translation invariance. If a digit were shifted several pixels off-center, the @fcn would perceive it as an entirely novel pattern. The pre-centered nature of MNIST mitigates this limitation, ensuring that the network can reliably map specific geometric strokes to specific input neurons.
 
-#figure( include("figures/dataexample.typ"), caption: [Sample of the MNIST dataset. Pixel intensities must be translated into temporal spike events.])
+Furthermore, the dataset exhibits a high degree of spatial sparsity. In a typical MNIST image, the vast majority of pixels represent the empty background. From a neuromorphic engineering perspective, this sparsity is highly advantageous. As established in the theoretical framework, event-driven systems expend energy strictly when events occur. A sparse input array ensures that the majority of input neurons remain quiescent, minimizing bus congestion and validating the energy-efficiency claims of the proposed Spiking Neural Network (@snn).
+
+Before the raw images can be converted into temporal spike trains, they must undergo standard spatial pre-processing to ensure compatibility with the network's mathematical boundaries. This consists of two primary transformations:
+
+1. Normalization: Raw pixel intensities in the MNIST dataset range from $0$ (pure black) to $255$ (pure white). To stabilize the learning algorithms and ensure consistent weight scaling, these values are strictly normalized to a continuous float range of $p_i \in [0.0, 1.0]$.
+2. Flattening: Because this thesis utilizes a Fully Connected Network (FCN) to facilitate direct weight transfer, the 2D spatial structure of the images must be unrolled. Each $28 times 28$ matrix is flattened into a 1-dimensional vector of $784$ elements.
+
+Consequently, every individual image is presented to the system as a discrete array of $784$ normalized intensities. In the classical Artificial Neural Network (ANN), these continuous values are fed directly into the input neurons. However, because Spiking Neural Networks (SNNs) operate exclusively on discrete events, these normalized values must be passed through a temporal encoding algorithm before inference or learning can begin. ]
+
+#figure( include("figures/dataexample.typ"), caption: [Sample of the MNIST dataset. The 28x28 images are normalized and flattened into 1D vectors before being translated into temporal spike events.])
 
 
 #v(2em)
-== Network Architecture
+== 3.2 Network Architecture
 
 #serif-text()[ To facilitate a direct, one-to-one mapping of synaptic weights from the offline Artificial Neural Network (@ann) to the native Spiking Neural Network (@snn), both models must share an identical macroscopic topology. Therefore, this implementation utilizes a Fully Connected Network (@fcn), also known as a Multi-Layer Perceptron (@mlp), rather than a Convolutional Neural Network (@cnn).
 
 While @cnn:pl are the standard baseline for vision tasks due to their spatial inductive biases, transferring convolutional kernels into a spiking substrate introduces significant mapping complexities—specifically the need to physically unroll and duplicate shared weights across the spiking array. An @fcn provides a straightforward, mathematically transparent architecture for cleanly evaluating direct weight transfer and @stdp without confounding architectural variables.
 
-The network is structured as a shallow hierarchy to capture the primitive geometric features of the dataset: ]
+The network is structured as a shallow hierarchy to capture the primitive geometric features of the dataset. Let $N_l$ denote the number of neurons in layer $l$. The formal architecture is defined as follows: ]
 
 #box-text()[
-- *Input Layer:* The $28 times 28$ pixel grayscale images are flattened into a 1D vector, requiring $784$ input neurons.
-- *Hidden Layer(s):* Fully connected intermediate layers designed to extract and recombine features (e.g., combining simple edges into loops and lines).
-- *Output Layer:* $10$ neurons, corresponding directly to the categorical digit classes (0 through 9).
+- *Input Layer ($L_0$):* The $28 times 28$ pixel grayscale images are flattened into a 1D vector, requiring $N_0 = 784$ input neurons.
+- *Hidden Layer ($L_1$):* A fully connected intermediate layer consisting of $N_1 =$ [INSERT NUMBER OF HIDDEN NEURONS, e.g., 256] neurons. The synaptic connections are defined by the weight matrix $W^{(1)} in bb(R)^{N_1 times N_0}$.
+- *Output Layer ($L_2$):* $N_2 = 10$ neurons, corresponding directly to the categorical digit classes (0 through 9). The connections from the hidden layer are defined by the weight matrix $W^{(2)} \in bb(R)^{N_2 times N_1}$.
 ]
 
 #figure( include("figures/architechture.typ"), caption: [Network architecture. The 28x28 images are flattened and passed through a Fully Connected Network. Both the ANN and SNN share this identical macroscopic topology.])
 
-#serif-text()[ Despite the macroscopic symmetry required for weight sharing, the microscopic dynamics of the two networks differ fundamentally. The offline @ann utilizes standard continuous activation functions (such as ReLU) to calculate smooth gradients during backpropagation.
+#v(1em)
+#mini-header()[Weight Initialization and Biases]
 
-In contrast, the @snn replaces these continuous functions with Integrate-and-Fire neurons governed by a strict voltage threshold. This simulates the biological "all-or-nothing" action potential, acting as a hard step function. Furthermore, the spiking architecture utilizes lateral inhibition at the output layer. This engenders a Winner-Takes-All (@wta) dynamic; as the network integrates evidence over time, the first output neuron to fire strongly inhibits its competitors, forcing a definitive categorical decision and actively suppressing noise. ]
+#serif-text()[ For the baseline @ann, the weight matrices are initialized using [INSERT INITIALIZATION METHOD, e.g., Kaiming/He normal initialization or standard PyTorch defaults] to ensure stable variance during the initial forward passes.
 
+A critical architectural consideration in ANN-to-SNN conversion is the handling of bias vectors ($b^{(l)}$). While standard ANNs utilize biases to shift activation functions, representing a static continuous bias in a spiking network requires either injecting a constant background current into the neuron or actively modifying the neuron's firing threshold. To maintain pure, event-driven sparsity and isolate the performance of the synaptic weights, explicit bias terms were [CHOOSE ONE: omitted entirely from both architectures / converted to constant input currents in the SNN]. ]
+
+#v(1em)
+#mini-header()[ANN-SNN Compatibility]
+
+#serif-text()[ Despite the macroscopic symmetry required for weight sharing, the microscopic dynamics of the two networks differ fundamentally. The offline @ann utilizes standard continuous activation functions (specifically ReLU) to compute smooth gradients during backpropagation.
+
+In contrast, the @snn replaces these continuous functions with Integrate-and-Fire neurons governed by a strict voltage threshold. This simulates the biological "all-or-nothing" action potential, acting as a hard step function. Furthermore, the spiking architecture utilizes lateral inhibition at the output layer. This engenders a Winner-Takes-All (@wta) dynamic: as the network integrates evidence over time, the first output neuron to reach its threshold heavily suppresses its competitors, forcing a definitive categorical decision and actively filtering sub-threshold noise. ]
 
 #v(2em)
 == Information Representation
 
-#serif-text()[ The choice of neural code lays the foundation for information flow and dictates the efficiency of the entire system. While Rate Coding (encoding pixel intensity as spike frequency) is straightforward and simple to implement with standard Integrate-and-Fire neurons, it is highly inefficient. Rate codes require integration over extended time windows to calculate an average, introducing latency and saturating the network bus with redundant spikes.
+#serif-text()[ The choice of neural code lays the foundation for information flow and dictates the efficiency of the entire system. While Rate Coding (encoding pixel intensity as spike frequency) is straightforward and simple to implement with standard Integrate-and-Fire neurons, it is inefficient compared to @ttfs. Rate codes require integration over extended time windows to calculate an average, introducing latency and saturating the network bus with redundant spikes. Furthermore, on digital hardware rate coding imposes additional stress on the system due to rapid switching which is very bad for transistor power draw and bus congestion.
 
-To maximize energy efficiency and processing speed, this implementation utilizes a Time-to-First-Spike (@ttfs) temporal encoding. In this regime, a single spike carries the information payload. A high-intensity (bright) pixel triggers an early spike, while a low-intensity (dark) pixel triggers a late spike. This compresses the spatial information into a highly sparse, priority-driven queue; downstream neurons begin processing as soon as the most salient features arrive, without waiting for an entire frame to integrate.
+To maximize energy efficiency and processing speed, this implementation utilizes a @ttfs temporal encoding. In this regime, a single spike carries the information payload. A high-intensity (bright) pixel triggers an early spike, while a low-intensity (dark) pixel triggers a late spike. This compresses the spatial information into a highly sparse, priority-driven queue; downstream neurons begin processing as soon as the most salient features arrive, without waiting for an entire frame to integrate.
 
 As noted in @neuralcoding, temporal codes suffer from Phase Ambiguity—downstream neurons need a reference "clock" to decode latency. To resolve this without relying on a rigid, global system clock, we simulate the biological concept of a *saccade* (the rapid movement of the eye to fixate on a target). The initial presentation of the image acts as a synchronized global event ($t_0$). All subsequent input spikes are evaluated relative to this saccade onset, providing a natural, biologically plausible temporal reference frame. ]
 
-#serif-text()[ The choise of a coding shceme puts key constraints on the design any processing system as it lays the founation for the flow of information. In @neuralcoding we dicussed several candidate neural codes that are both biologically plausible and have been used in previous neuromorphic systems. The neural code plays a large role in determening the effecieny of the system. Many neuromorphic systems use rate code as it is easy to translate values it is straight forward. any float value can be encoded as a rate code and integrate and fire neurons work well with this encoding. An IF neuron using rate code can reduce the multiply and add operations with just add operations. each spike arriving at a synapse adds its weight to the total. It is easy to see that for a rate code a higher rate input means more of that input contributing to the total sum. Using a rate code we can convert multiply and accumulate operations to just a series of accumulate operations by discretetizing the input values. The main reason for why this thesis will not use a rate code is that it is relativly ineficient and slow compared to a temporal code. In a temporal code only one spike is required to establish its value in relation to other synapses, making a single event much more dense in information. This is especially important for systems that do not have the connection density of a biological brain and must use shared buses that can be congested if too many spikes are present on the bus. Secondly to determine the value of a rate code you have to take an average of multiple spikes, imposing a delay. Using a @ttfs encoding requires more sophisticated neuron models than a simple integrate and fire, it need more bookkeeping to keep track of the relative arival of incoming spikes and as mentioned in @neuralcoding and as we will explain by using a temporal encoding we need to handle the phase abmiguity problem.
-
-t fire. the problem with this is that if we have a short one spike first that does not make the neuron fire but just before the timer runs out we get a large burst that would make the neuron fire but since the first isolated one triggered the counter we do not get a out spike. However i think this is fixed with the "clock" beeing a saccade to sync and fix the phase ambiguity
-
-A neural code should have the following characteristics: ]
-
-#box-text()[
-  - Fast
-  - Effecient in terms of neurons used
-  - Able to encode a wide range of stimuli
-  - Robust to noise
-]
-
-#serif-text()[ Visual tasks which is what the application this thesis focuses on ]
-#box-text()[
-  1. a population code is used in conjunction with a temporal code
-  2. Population code is used alone (eg individual order within a population does not matter)
-]
-
-#serif-text()[ That beeing said and as discussed in @neuralcoding combining neural codes and using the right one for the job is also an important aspect to consider, there is not a clear consenus on which code is better it is a matter of the task at hand. As we also have talked about, Combining differnt codes toghether can make for a powerful representation of information. This thesis focuses on visaul recognition and a TTFS combined with population code is the representation of choise. The popultion code will represent a distinct pattern in an image. This can be set up to detect lines and primitve shapes, deeper layers will use populations of primitve shapes to detect more complex features like circles and boxes and so on. ]
 
 #v(1em)
-=== Encoding <encoding>
+=== Encoding
 
-#serif-text()[ To convert a float value (like a pixel value from an image to a @ttfs encoding we first need to find the range of the pixels from minimum to maximum value. Then we need to decide on what featere of interest we wish to represent, a natural choise is pixel luminance but others such as contrast or hue or other features using other color spaces could be used. For our purposes we will not be using contrast but since our image is engineered for this task we can skip the contrast extraction that needs to be in place for real world images and poduce images that has clear distinct lines present in the raw pixel data (since the dimensions are small a line in the image will typically only be a few pixels wide so there would be no difference if we took the contrast of pixels or the luminance direclty).. If the image is black and white it is straight forward to extract the luminance as most often the pixel luminace is stored directly. Once we have ound the range say minimum is 0 and max is 255 we can construct an event queue where the pixel intensity determines its place in the queue and its assoiated delay. The conversion mapping can be linar where each pixel gets its luminace multiplied by a scalar other usefull mappings can be logarithmic or exponential. ]
+#serif-text()[ To convert the continuous pixel intensities of the MNIST dataset into the discrete TTFS spike trains, the input space must be mathematically normalized and mapped to a temporal delay. For a given input image, we extract the luminance of each pixel and normalize it to a bounded range, where $p_i \in [0, 1]$ ($1$ representing maximum intensity and $0$ representing the background).
 
-#figure(
-kind:"algo",
-caption: [Linear intensity to dely encoding],
-supplement: [Algorithm],
-mono-text(pseudocode-list(hooks:.5em, indentation:1em, booktabs:true)[
-procedure intensity_to_delay_encoding(image, T_max=100, T_min=0): #h(1fr)
-  + normalized_image = normalize(image)
-  + spike_times = T_max - (T_max - T_min) \* normalized_image
-  + return spike_times
-]))
+We implement two distinct conversion mappings to evaluate latency dynamics: Linear and Logarithmic. Let $T_{max}$ represent the maximum allowed simulation window for a single inference step.
 
-#figure(
-kind:"algo",
-caption: [Logarithmic intensity to dely encoding],
-supplement: [Algorithm],
-mono-text(pseudocode-list(hooks:.5em, indentation:1em, booktabs:true)[
-procedure intensity_to_delay_encoding(image, T_max=100, T_min=0): #h(1fr)
-  + normalized_image = normalize(image)
-  + spike_times = T_max - (T_max - T_min) \* normalized_image
-  + return spike_times
-]))
-
-#serif-text()[ In deeper layers the meaning of the information may be obscured as is common with deep neural networks, however temporal encoding should if the neuron model is designed with this sceme in mind should produce shorter delays for greater values if a deeper layer neuron reacts to a box and its neigbour in the same layer reacts to a circle and the image is a rounded box (but more box than circle) then the neuron responind to a box should emit a spike faster than the neuron responding to a circle. ]
+For the Linear mapping, the spike latency $t_i$ is inversely proportional to the pixel intensity: ]
 
 #v(1em)
-=== Decoding
+#figure( kind: "eq", supplement: [Equation], caption: [Linear Intensity-to-Delay Encoding], [
+$ t_i = T_"max" - (T_"max" dot p_i) $
+])
+#v(1em)
 
-#serif-text()[ Decoding the neural code requres an adequate neuron model that uses the neural code to run useful computations. As discussed in @biologicalprinciples a neuron should have the following charecteristcs: ]
+#serif-text()[ For the Logarithmic mapping, the delay is scaled logarithmically, which allocates higher temporal resolution to brighter pixels, further segregating the most salient features at the start of the simulation window: ]
+
+#v(1em)
+#figure( kind: "eq", supplement: [Equation], caption: [Logarithmic Intensity-to-Delay Encoding], [
+$ t_i = T_"max" - (T_"max" dot (log(1 + p_i))\(log(2))) $
+])
+#v(1em)
+
+#serif-text()[ Under both mappings, the brightest pixels fire immediately near $t=0$, transmitting the most critical structural features of the digit first, while background pixels are suppressed. ]
+
+
+#v(1em)
+=== Decoding and Neuron Models
+
+#serif-text()[ Decoding temporal information requires a neuron model capable of accumulating discrete events and discerning their relative arrival times. Because this thesis evaluates the trade-offs between biological fidelity and computational efficiency, we implement and test two distinct neuron models for the decoding phase: ]
+
+#v(1em)
+#mini-header()[Model A: The Current-Accumulating (Ramp) Model]
+
+#serif-text()[ The first approach is a computationally streamlined Integrate-and-Fire (IF) variant designed specifically for TTFS encodings. In a purely temporal code, earlier spikes must carry more influence than later spikes. To achieve this without complex exponential math, this model utilizes a two-stage linear accumulator.
+
+When a spike arrives, its weight $w_i$ is added to an internal current variable $I(t)$, which acts as the "slope" of the neuron. This current then continuously adds to the membrane potential $V_m(t)$ at every time step. Furthermore, to ensure strong early stimuli trigger immediate responses, the weight is also added directly to the potential: ]
+
+#v(1em)
+#figure( kind: "eq", supplement: [Equation], caption: [Current-Accumulating Dynamics], [
+$ I(t) = I(t_"prev") + w_i $ \
+$ V_m(t) = V_m(t_"prev") + I(t) \cdot (t - t_"prev") + w_i $
+])
+#v(1em)
+
+#serif-text()[ In this scheme, the first spike initiates a linear counter. Subsequent spikes increase or decrease the slope depending on their weight. Consequently, neurons that receive strong early inputs will experience a steeply rising potential, allowing them to reach the firing threshold significantly faster than neurons receiving later or weaker inputs. ]
+
+#v(1em)
+#mini-header()[Model B: The Leaky Integrate-and-Fire (LIF) Model]
+
+#serif-text()[ The second approach evaluates the standard, biologically realistic Leaky Integrate-and-Fire model. Instead of maintaining a continuous slope, the LIF model penalizes late-arriving spikes by decaying the membrane potential over time.
+
+In the event-driven simulation, when a spike arrives, the incoming weight $w_i$ is added to the potential. However, the existing potential is exponentially decayed based on the time elapsed since the previous event ($t_"prev"$), governed by the membrane time constant $tau_m$: ]
+
+#v(1em)
+#figure( kind: "eq", supplement: [Equation], caption: [Discrete Leaky Integration], [
+$ V_m(t) = max (0, V_m(t_"prev") dot exp(-(t - t_"prev")(tau_m)) + w_i ) $
+])
+#v(1em)
+
+#serif-text()[ This exponential decay naturally favors spikes that arrive in rapid, early succession, effectively decoding the TTFS priority queue while filtering out isolated background noise. ]
+
+#v(1em)
+#mini-header()[Thresholding and Lateral Inhibition]
+
+#serif-text()[ Regardless of the chosen internal dynamics (Ramp vs. LIF), both models share the same discrete output behavior. Following the integration of an input spike, the neuron evaluates its firing condition: ]
 
 #box-text()[
-  - Acuumulate spikes in some form (integrate)
-  - Fire when some treshold has been reached
-  - Leak the potential over time
-]
-
-
-#serif-text()[ We have seen that glif neuron is bio plausible and such a neuron is simple and can be realized easily on hardware the way. Using a temporal code the neuron has to differentiate between inputs in the time domain otherwise it cannot decode the information and cannot do useful work. Earlier inputs are encoded with larger values and should have a greater portion of summation going on inside the neuron. The neurons need to be desigend to work with the chosen encoding either at individual neuron level or population level
-
--If order matters (temporal code) the neuron must handle it
-Evidence for bio-plauibility can be found from eq 1 where the R(u) is dependent on the membrane potential
-
-make the input exponentially weaker in proportion to the threshold. If the treshold is zero then the incoming spike does not get suppressed if the therhold is very close to max then the incoming spike gets more suppressed. ]
-
-
-#figure( include("figures/thresholdsensitive.typ"), caption: [Neuron model where new incomming spikes have an exponential decaying influence on the potential])
-
-#serif-text()[ A counter starts when the first spike arrives
-
-Needs a global reset or local like we talked about in the biological section about phase ambiguity ]
-
-#figure(
-kind:"algo",
-caption: [Logarithmic intensity to dely encoding],
-supplement: [Algorithm],
-mono-text(pseudocode-list(hooks:.5em, indentation:1em, booktabs:true)[
-integrate_and_fire(excitatory, inhibitory, threshold) -> integer:
-  + excitatory_spikes = [] #h(1fr)
-  + if inhibitory is None:
-    + inhibitory_spikes = []
-  + else:
-    + inhibitory_spikes = []
-  + all_spikes = excitatory_spikes + inhibitory_spikes
-  + if not all_spikes:
-    + return None
-  + all_spikes.sort(key=lambda x: x[0])
-  + integrated_potential = 0.0
-  + firing_time = None
-  + for time, spike_type in all_spikes:
-    + integrated_potential += spike_type
-    + integrated_potential = max(0, integrated_potential)
-    + if integrated_potential >= threshold:
-      + firing_time = time
-      + break
-  + return firing_time
-]))
-
-
-#serif-text()[ In a time to first spike scheme of we care about the order (the relative values since information is stored in time and order) we have to use weights and a neuron model that distinguish between inputs arriving earlier than others. I present a scheme where the first neuron that arrives starts a linear count where the slope of the counter is the weight additional inputs will increase or decrease the slope according to their weight. We can see that neurons arriving earlier will get more time to increase the counter and thus will carry a higher value. If the counter reaches a threshold the neuron will fire. The astute will notice that in this scheme the neuron will fire even for the smallest stimulus since the counter will count up a non zero value and eventually reach the threshold, to mitigate this we can simply say that if the counter is too slow the neuron will not fire we will see later that this scheme satisfies the criteria above.
-
-The problem with this decoding is for strong stimuli we would ideally make the neuron respond immediately and fire, but it has to wait until the counter has reached the threshold to fix this we can also add the weight of the input directly to the potential while also starting a counter. Now if early strong inputs arrive they will fill up the potential and make the neuron fire almost immediately. Small inputs wil take some time  ]
-
-#figure( include("figures/neuronmodel.typ"), caption: [Proposed simplifed layout of a SNN. The neurons are connected with hirearcical busses that allow for the network to be configured as a _small world network_] )
-
-
-recall this equation. @ttfs model should mathematically behave the same
-$ I_i(t) = sum_j w_(i j) dot S_j(t) $
-
-#serif-text()[ Leaky integrate and fire models seem the best bet, however complex dynamics like exponential decay and analog weights and potentials seem excessive, we might do without. Binary weights 1 for excitatory and and 0 for inhibitory. Stronger weights can be modeled with multiple parallel synapses
-
-Another way which is also based on relative firing order of single spikes could be a passcode encoding. Such an encoding could work by having neurons only react to a sequence. It has an internal state machine of sorts and will only advance to the next state if recives the correct input in the correct order. This encoding does only care about relative order not relative timings. ]
-
-#pagebreak()
-
+1. *Threshold Check:* If $V_m(t) \ge V_"th"$, the neuron emits an output spike at time $t$.
+2. *Reset:* The potential $V_m(t)$ and current $I(t)$ are reset to $0$.
+3. *Lateral Inhibition (Output Layer only):* If the neuron belongs to the output classification layer, its spike triggers a Winner-Takes-All (WTA) condition, instantly suppressing all other neurons in the layer to halt computation and finalize the digit classification. ]
 
 #v(2em)
-== SNN Implementation Details
+== Simulation Loop
+
+#serif-text()[ The inference execution is governed by a discrete "saccade" simulation loop. The temporal window for a single MNIST image is strictly bounded to $T_{max} = 64$ discrete time steps (ticks).
+
+To ensure that deep layer spikes have sufficient time to propagate through the network before the simulation window closes, the input encoding is temporally padded. Using the linear intensity-to-delay algorithm defined in Section 3.3.1, the maximum input delay is capped at $t=32$. Therefore, a pure black pixel spikes at $t=32$, leaving $32$ subsequent ticks for the hidden and output layers to integrate the final data.
+
+At each time step $t \in [0, 64)$, the simulator executes a parallelized Window Integrator evaluation: ]
+
+#box-text()[
+1. *Event Detection:* The simulator queries all input and hidden neurons to identify which neurons are scheduled to spike at the exact current tick $t$.
+2. *Parallel Integration:* Using optimized matrix-vector multiplication (`torch.mv`), the synaptic weights of the active neurons are concurrently summed into the membrane potentials ($V_m$) of the downstream layer.
+3. *Thresholding & Single-Spike Constraint:* A neuron in the hidden layer ($N_1 = 128$) fires if its potential crosses a predefined high threshold ($V_"th_h"} = 200.0$). The output layer ($N_2 = 10$) operates on a lower threshold ($V_"th_o"} = 100.0$).
+]
+
+#serif-text()[ Crucially, to enforce the Time-to-First-Spike (@ttfs) paradigm, a strict single-spike constraint is applied. A boolean mask tracks the firing history of every neuron; once a neuron exceeds its threshold, it emits a spike, records its timestamp, and is permanently locked out from firing again for the remainder of the 64-tick saccade. This eliminates burst firing, guaranteeing maximum sparsity and preventing bus congestion. The final classification is determined by the output neuron that records the earliest spike timestamp. ]
+
+#figure(include("figures/simulatorarch.typ"),caption:[Simulator architechture block diagram])
+#figure( include("figures/eventloop.typ"), caption: [In-memory])
 
 #v(2em)
 == Training Methodologies
@@ -928,7 +898,6 @@ Another way which is also based on relative firing order of single spikes could 
 #serif-text()[ start with fully connected and then run strengthen connections that have "statistical significance" (not random / patterns) or is correlated to something (reward signal) at the end of an epoch prune connectionn making the network more effecient. This is similar to how the brain does it when sleeping
 
 Do some math with references to the optimasation section
-
 
 If the post neuron fires then we should strengthen the weights. Synapses gets grown at random this might be inneficient but it is highly parallelizable an idea could be to grow synapses with a kind of gravity where post synapses has a pulling effect if they are already strong
 
@@ -947,6 +916,18 @@ A second problem is how to decode order. When do we start the decreasing timer, 
 
 #v(1em)
 === Weight Transfer
+
+#serif-text()[ Direct one-to-one transfer of floating-point weights from an ANN to an SNN often results in catastrophic failure; the continuous activation scales do not naturally align with discrete spiking thresholds. Furthermore, physical neuromorphic hardware (such as crossbar arrays) imposes strict limitations on synaptic weight resolution, rarely supporting 32-bit floating-point numbers.
+
+To emulate these hardware constraints and ensure threshold compatibility, the continuous weights of the trained ANN ($W_"ANN"$) undergo a pseudo-INT8 quantization process before being loaded into the SNN simulator. The weights are multiplied by a static scaling factor of $64$, rounded to the nearest integer, and clamped to an 8-bit signed integer range $[-128, 127]$: ]
+
+#v(1em)
+#figure( kind: "eq", supplement: [Equation], caption: [Weight Scaling and Quantization], [
+$ W_"SNN"^{(l)} = max (-128, \min (127, "round"(W_"ANN"^(l) dot 64) ) ) $
+])
+#v(1em)
+
+#serif-text()[ This transformation maps a standard continuous weight of $2.0$ to the maximum synaptic efficacy of $128$. By porting these quantized discrete weights ($W_1$ and $W_2$) directly to the GPU, the simulator strictly enforces the memory boundaries of physical neuromorphic silicon. ]
 
 #figure(
 kind:"algo",
@@ -975,25 +956,9 @@ mono-text(pseudocode-list(hooks:.5em, indentation:1em, booktabs:true)[
 #v(1em)
 === STDP Inspired
 
-#pagebreak()
-
-== Simulation Setup
-
-#serif-text()[ We have discussed the benefits of co algorithm design and designing new specialed computer hardware that run neuromorphic algorithms directly on the substrate via gates or analaog elements and exotic new materials. However developing biologically inspired computers and algorithms on cheap and avaliable CPU and GPU hardware is a great way to quicly iterate and test
-
-Altough many simulation and software packages exists as outlines in. The methods in this thesis has been tested using custom simulaton software for full control ]
 
 
-#figure(include("figures/simulatorarch.typ"),caption:[Simulator architechture block diagram])
-
-#serif-text()[ The simulator runs an event loop Spikes are pushed to a heap The simulator can run both on CPU and GPU, When running on CPU the spikes are pushed to a heap, when running on GPU spikes are pushed to a adress event bus the algorithms presented in this thesis are highly paralizable It is built from the ground up using the Vulkan API ]
-
-#figure( include("figures/eventloop.typ"), caption: [In-memory])
-
-// #figure(image("figures/screenshot.png"), caption: [Neuron model where new incomming spikes have an exponential decaying influence on the potential])
-
-#pagebreak()
-
+#v(2em)
 == Evaluation Metrics
 
 #serif-text()[ To test and verify the methods we need a way to measure the performance for classification tasks accuracy recall and . is often used. This works great for supervised learning. For unsupervised learing ... ]
@@ -1091,6 +1056,13 @@ using ttf is difficult
 using negative image - still problem with absolute contrast
 
 can be done locally with speial sensors and using logarithmic intensity to delay ]
+
+
+== Problems
+
+Hardware is still a long way from beeing viable/affordable to neuromorphics. We need better memory (non volotile) memristors spintronics, the connenction density of brains is so much denser than what we can acive in modern CMOS
+
+We can say that modern digital CMOS is the way to go in the nearest future but we can make massive async digital chips compatible with modern CMOS
 
 #lorem(150)
 
