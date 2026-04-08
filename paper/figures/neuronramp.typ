@@ -1,3 +1,4 @@
+
 #import "@preview/cetz:0.4.2"
 #import "@preview/cetz-plot:0.1.3": plot, chart
 
@@ -15,15 +16,15 @@
       tick: (stroke: black + 1pt),
     ))
     plot.plot(
-    size: (10, 4), 
-    x-tick-step: 1, 
+    size: (10, 4),
+    x-tick-step: 1,
     y-tick-step: 1,
     y-min: -2,
     x-format: v => text(8pt, str(v)),
     y-format: v => text(8pt, str(v)),
-    axis-style: "left", 
-    name: "phase", 
-    {    
+    axis-style: "left",
+    name: "phase",
+    {
     plot.add(
       data,
       mark-style: (stroke:2pt + black),
