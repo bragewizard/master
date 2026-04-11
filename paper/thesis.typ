@@ -852,12 +852,10 @@ evaluate_model_B_LIF(incoming_spikes, weights, threshold, tau_m) -> integer:
 
 #serif-text()[ To strictly enforce order differentiation without the computational overhead of exponentials, Model C introduces a linear time-dependent accumulator. In a @ttfs code, earlier spikes must have a disproportionate influence. To achieve this, an incoming spike adds its weight to an internal current variable $I(t)$, which acts as the persistent "slope" of the membrane potential. ]
 
-#v(1em)
 #figure( kind: "eq", supplement: [Equation], caption: [Current-Accumulating Dynamics], [
 $ I(t) = I(t_"prev") + w_i $ \
 $ V_m(t) = V_m(t_"prev") + I(t) dot (t - t_"prev") + w_i $
 ])
-#v(1em)
 
 #serif-text()[ *Computational Cost:* Moderate. It replaces expensive exponentials with simple linear multiplication based on the time delta ($t - t_"prev"$).
 *Temporal Decoding Capability:* Excellent. The first spike initiates the linear counter. Because earlier spikes have more time to multiply their slope against the passing time ticks, an early arrival will drive the potential to the threshold vastly faster than a late arrival of the exact same weight. It mathematically recognizes order.
@@ -896,45 +894,47 @@ evaluate_model_C_Ramp(incoming_spikes, weights, threshold) -> integer:
 ]))
 
 #v(1em)
-#mini-header()[Model D: Fully Asynchronous State-Dependent Decay]
+#mini-header()[Model D: Threshold-Sensitive Integration (State-Dependent Discounting)]
 
-#serif-text()[ The final model represents the ideal target for purely event-driven neuromorphic systems: a model capable of temporal order decoding *without* requiring any global clocks, saccades, or synchronization pulses.
+#serif-text()[ The final model introduces a fundamentally different approach to temporal order decoding. Rather than penalizing spikes based on the passage of time (as in standard LIF), this model penalizes spikes based on the current internal state of the neuron.
 
-In this model, the exponential decay is strictly proportional to the current membrane potential, creating a self-regulating dynamical system. Because the decay drives the neuron toward a resting equilibrium continuously, the neuron naturally "forgets" ancient history. ]
+In this paradigm, the increase in membrane potential is inversely proportional to the current potential itself. When a spike arrives at a neuron in its resting state ($V_m = 0$), there is no discount, and the full synaptic weight is added. However, if a spike arrives when the neuron is already close to the firing threshold, its impact is exponentially discounted. ]
 
-#figure( kind: "eq", supplement: [Equation], caption: [Asynchronous State-Dependent Update], [
-$ (dif V_m)\(dif t) = -(V_m)\(tau_m) + sum_j w_(i j) delta(t - t_j) $
+#figure( kind: "eq", supplement: [Equation], caption: [State-Dependent Weight Discounting], [
+$ V_m(t) = V_m(t_"prev") + w_i dot exp(-gamma (V_m(t_"prev"))\(V_"th")) $
 ])
 
-#serif-text()[ *Computational Cost:* High, similar to Model B, due to the continuous calculation of state-dependent decay parameters.
-*Temporal Decoding Capability:* High. The continuous state-dependent decay ensures that order matters significantly; a strong early spike establishes a baseline that subsequent spikes build upon, while isolated late spikes decay before reaching the threshold.
-*Synchronization:* None. This model is 100% asynchronous. It requires no global reset signal and no defined simulation window. Between image presentations, the natural decay functions as a "soft reset," returning the neuron to a resting state dynamically. This allows the system to operate continuously on a raw, uninterrupted stream of event data. ]
+#serif-text()[ From a computational perspective, this approach imposes a moderate cost. While it requires an exponential calculation (or a linear approximation), it does not need to continuously track the elapsed time ($Delta t$) between individual spikes, saving memory overhead compared to continuous-time dynamic models. Furthermore, this mechanism excels at temporal decoding because it inherently prioritizes the sequence of arrival. The earliest spikes encounter an "empty" neuron and contribute their absolute maximum weight. Spikes arriving later encounter a partially filled potential and are severely dampened. Consequently, high-weight spikes must arrive early to have a meaningful impact, naturally aligning with the @ttfs encoding hierarchy. Because this model drops the continuous temporal leak in favor of event-driven weight scaling, the potential does not naturally decay to zero between images. Therefore, much like Models A and C, it relies on a global "saccade" reset at the conclusion of the simulation window to clear the internal state for the next inference phase. ]
 
-#figure( include("figures/thresholdsensitive.typ"), caption: [Network architecture. The 28x28 images are flattened and passed through a Fully Connected Network. Both the ANN and SNN share this identical macroscopic topology.])
+#figure( include("figures/thresholdsensitive.typ"), caption: [Neuron model where new incoming spikes have an exponentially decaying influence based on the current potential.])
 
+#v(1em)
 #figure(
 kind: "algo",
-caption: [Model D: Fully Asynchronous State-Dependent Decay],
+caption: [Model D: Threshold-Sensitive Integration],
 supplement: [Algorithm],
 mono-text(pseudocode-list(hooks: .5em, indentation: 1em, booktabs: true)[
-evaluate_model_D_Async(continuous_spike_stream, weights, threshold, tau_m):
-  + // Note: No global saccade reset or T_max boundary
+evaluate_model_D_Discount(incoming_spikes, weights, threshold, gamma) -> integer:
+  + sort(incoming_spikes, by_time)
   + v_m = 0.0
-  + t_prev = 0.0
+  + firing_time = None
   +
-  + for spike in continuous_spike_stream:
+  + for spike in incoming_spikes:
     + weight = weights[spike.source]
-    + delta_t = spike.time - t_prev
     +
-    + // Natural continuous decay acts as a soft-reset for ancient history
-    + v_m = v_m \* exp(-delta_t / tau_m) + weight
+    + // Calculate the discount factor based on current potential
+    + // If v_m is 0, discount is 1.0 (Full weight)
+    + // If v_m is near threshold, discount approaches 0 (Low weight)
+    + discount_factor = exp(-gamma \* (v_m / threshold))
+    +
+    + // Apply the state-dependent increase
+    + v_m = v_m + (weight \* discount_factor)
     +
     + if v_m >= threshold:
-      + emit_output_spike(spike.time)
-      + v_m = 0.0 // Local reset only
-      + current_I = 0.0
-    +
-    + t_prev = spike.time
+      + firing_time = spike.time
+      + break
+  +
+  + return firing_time
 ]))
 
 #v(1em)
