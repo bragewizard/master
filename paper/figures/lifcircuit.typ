@@ -4,11 +4,11 @@
   import cetz.draw: *
 
   set-style(
-    stroke: (thickness: 2pt, cap: "round", join: "round"),
-    mark: (fill: black, scale: 1)
+    stroke: (thickness: 1.6pt, cap: "butt", join: "miter"),
+    mark: (fill: black, scale: 1.0)
   )
 
-  circle((0, 3), radius: 0.05, fill: black) 
+  circle((0, 3), radius: 0.05, fill: black)
   content((-0.6, 3), $I_"in"$)
 
   line((0, 3), (6, 3))
@@ -29,27 +29,27 @@
 
   group({
     translate((3,0))
-    line((-0.5, -0.15), (0.5, -0.15)) 
-    line((-0.2, 0.15), (0.2, 0.15)) 
+    line((-0.5, -0.15), (0.5, -0.15))
+    line((-0.2, 0.15), (0.2, 0.15))
     content((1, 0), $V_"rest"$)
   })
 
   line((3, -0.15), (3, -1))
 
-  line((5.5, 3), (5.5, 1.3)) 
-  line((5.5, 1), (5.5, -1))   
+  line((5.5, 3), (5.5, 1.3))
+  line((5.5, 1), (5.5, -1))
 
   group({
     translate((5,1))
-    line((0.0, 0.0), (1, 0.0)) 
-    line((0.0, 0.3), (1, 0.3)) 
+    line((0.0, 0.0), (1, 0.0))
+    line((0.0, 0.3), (1, 0.3))
     content((1.5, 0.15), $C$)
   })
 
   group({
     translate((8,0))
-    line((-0.5, -0.15), (0.5, -0.15)) 
-    line((-0.2, 0.15), (0.2, 0.15)) 
+    line((-0.5, -0.15), (0.5, -0.15))
+    line((-0.2, 0.15), (0.2, 0.15))
     content((1, 0), $V_"reset"$)
   })
 

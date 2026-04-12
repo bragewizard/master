@@ -6,12 +6,12 @@
 
   // Global styles
   set-style(
-    stroke: (thickness: 1.4pt, cap: "round", join: "miter"),
-    mark: (fill: black, scale: 1)
+    stroke: (thickness: 1.6pt, cap: "butt", join: "miter"),
+    mark: (fill: black, scale: 1.0)
   )
 
   // Helper function to draw exact node-to-node connections
-  let connect(p1, p2, mark-type, color, line-thickness: 1.2pt) = {
+  let connect(p1, p2, mark-type, color ) = {
     let dx = p2.at(0) - p1.at(0)
     let dy = p2.at(1) - p1.at(1)
     let d = calc.sqrt(dx * dx + dy * dy)
@@ -24,7 +24,7 @@
 
     line((start-x, start-y), (end-x, end-y),
          mark: (end: mark-type, scale: 0.8, fill: color),
-         stroke: (paint: color, thickness: line-thickness))
+         stroke: (paint: color))
   }
 
   group({
@@ -42,40 +42,37 @@
     }
 
     // Lateral Inhibitory (from the strongly stimulated center node)
-    connect((3, y_in), (1.5, y_out), "|", red.darken(10%), line-thickness: 1.5pt)
-    connect((3, y_in), (4.5, y_out), "|", red.darken(10%), line-thickness: 1.5pt)
+    connect((3, y_in), (1.5, y_out), "|", red.darken(10%))
+    connect((3, y_in), (4.5, y_out), "|", red.darken(10%))
 
     // 2. Draw Nodes
     for (i, x) in xs.enumerate() {
       // Input nodes
-      circle((x, y_in), radius: 0.3, fill: white, stroke: black)
-
-      // Output nodes (Center is highly active, neighbors are suppressed)
-      let out_fill = if i == 2 { gray.darken(40%) } else if i == 1 or i == 3 { white } else { gray.lighten(60%) }
-      circle((x, y_out), radius: 0.3, fill: out_fill, stroke: black)
+      circle((x, y_in), radius: 0.3, fill: white, stroke: black+3pt)
+      circle((x, y_out), radius: 0.3, fill: white, stroke: black+3pt)
     }
 
-    line((3, -1.2), (3, -0.4), mark: (end: ">"), stroke: (thickness: 2.5pt, paint: blue.darken(20%)))
-    content((3, -1.6), text(size: 8pt, weight: "bold", fill: blue.darken(20%), "Strong\nStimulus"))
+    line((3, -1.2), (3, -0.4), mark: (end: ">", fill:blue), stroke: (thickness: 2.5pt, paint: blue))
+    content((3, -1.8), text(weight: "bold", fill: blue, "Strong\nStimulus"))
 
     // Neighbors (Weak)
-    line((1.5, -0.8), (1.5, -0.4), mark: (end: ">"), stroke: (thickness: 1pt, paint: blue.lighten(20%)))
-    line((4.5, -0.8), (4.5, -0.4), mark: (end: ">"), stroke: (thickness: 1pt, paint: blue.lighten(20%)))
+    line((1.5, -0.8), (1.5, -0.4), mark: (end: ">", fill:blue), stroke: (thickness: 1pt, paint: blue))
+    line((4.5, -0.8), (4.5, -0.4), mark: (end: ">", fill:blue), stroke: (thickness: 1pt, paint: blue))
 
     // 4. Legend
-    line((0.2, -1.3), (0.8, -1.3), mark: (end: ">"), stroke: black)
-    content((1.6, -1.3), text(size: 8pt, "Excitation"))
-    line((0.2, -1.8), (0.8, -1.8), mark: (end: "|"), stroke: red.darken(10%))
-    content((1.6, -1.8), text(size: 8pt, "Inhibition"))
+    line((-1.0, -1.5), (0.0, -1.5), mark: (end: ">"), stroke: black)
+    content((1.0, -1.5), [Excitation])
+    line((-1.0, -2.1), (0.0, -2.1), mark: (end: "|"), stroke: red.darken(10%))
+    content((1.0, -2.1), [Inhibition])
 
     // Layer Labels
-    content((-1, y_out), text(size: 9pt, "Output\nLayer"))
-    content((-1, y_in), text(size: 9pt, "Input\nLayer"))
+    content((-1.1, y_out), text("Output\nLayer"))
+    content((-1.1, y_in), text("Input\nLayer"))
   })
   group({
     // FIXED: Translated -8.5cm on the y-axis to move it below Panel A
-    translate((7.5, 0))
-    content((2.5, 4.8), text(weight: "bold", size: 10pt, "(B) Contrast Enhancement"))
+    translate((7.3, 0))
+    content((2.5, 4.8), text(weight: "bold", [(B) Contrast Enhancement]))
 
     // 1. Draw Axes
     line((-0.2, 0), (5.5, 0), mark: (end: ">"))
@@ -89,7 +86,7 @@
        let y = 2.0 * calc.exp(- calc.pow(x - 2.5, 2) / 1.5)
        (x, y)
     })
-    line(..input-pts, stroke: (paint: blue.darken(20%), thickness: 1.5pt, dash: "dashed"))
+    line(..input-pts, stroke: (paint: blue.darken(20%), dash: "dashed"))
 
     // 3. Output Response Curve (Difference of Gaussians / Mexican Hat)
     let output-pts = range(0, 51).map(i => {
@@ -98,16 +95,16 @@
        let y = 3.2 * calc.exp(-calc.pow(x - 2.5, 2) / 0.4) - 1.2 * calc.exp(-calc.pow(x - 2.5, 2) / 2.5)
        (x, y)
     })
-    line(..output-pts, stroke: (paint: green.darken(10%), thickness: 1.4pt))
+    line(..output-pts, stroke: (paint: green.darken(40%)))
 
     // 4. Labels and Callouts
-    content((4.4, 2.2), text(fill: blue.darken(20%), size: 8pt, "Input\nStimulus"))
+    content((4.4, 2.2), text(fill: blue.darken(20%), [Input\ Stimulus]))
 
-    content((4.4, 3.4), text(fill: green.darken(10%), size: 8pt, "Output\nResponse"))
+    content((4.4, 3.4), text(fill: green.darken(40%), [Output\ Response]))
 
     // Highlight the suppression zones (negative values)
-    content((2.5, -1.6), text(fill: red.darken(10%), size: 8pt, "Suppressed by lateral inhibition"))
-    line((2.5, -1.3), (1.5, -0.8), mark: (end: ">", fill:red),stroke: (paint: red.darken(10%), thickness: 0.8pt))
-    line((2.5, -1.3), (3.5, -0.8), mark: (end: ">", fill:red),stroke: (paint: red.darken(10%), thickness: 0.8pt))
+    content((2.5, -1.6), text(fill: red.darken(10%), [Suppressed by lateral inhibition]))
+    line((2.5, -1.3), (1.5, -0.8), mark: (end: ">", fill:red),stroke: (paint: red.darken(10%)))
+    line((2.5, -1.3), (3.5, -0.8), mark: (end: ">", fill:red),stroke: (paint: red.darken(10%)))
     })
 })

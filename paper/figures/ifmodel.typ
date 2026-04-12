@@ -4,9 +4,11 @@
   import cetz.draw: *
 
   set-style(
-    stroke: (thickness: 1.6pt, cap: "butt", join: "miter"),
+    stroke: (thickness: 1.2pt, cap: "round", join: "miter"),
     mark: (fill: black, scale: 1.0)
   )
+
+
 
   group({
     line((-0.2, 0), (8.5, 0), mark: (end: ">"))
@@ -35,13 +37,13 @@
         for ts in spikes {
             if t >= ts {
                 // Exponential decay influence of each past spike
-                v += amp * calc.exp(-(t - ts) / tau)
+                v += amp
             }
         }
         pts.push((t, v))
     }
 
-    line(..pts, stroke: (paint: green.darken(30%), join: "round"))
+    line(..pts, stroke: (paint: green.darken(30%), thickness: 2pt, join: "round"))
   })
 
   // ------------------------------------------------------------------

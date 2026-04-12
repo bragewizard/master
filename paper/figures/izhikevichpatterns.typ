@@ -4,7 +4,8 @@
   import cetz.draw: *
 
   set-style(
-    stroke: (thickness: 1.4pt, cap: "round", join: "round")
+    stroke: (thickness: 1.6pt, cap: "butt", join: "miter"),
+    mark: (fill: black, scale: 1.0)
   )
 
   // Reusable helper function for consistent panel setup
@@ -12,7 +13,7 @@
     content((2.1, 2.6), text(weight: "bold", size: 9pt, name))
   }
 
-  let trace-style = (paint: blue.darken(40%), thickness: 1.4pt)
+  let trace-style = (paint: blue.darken(40%))
 
   // ---------------------------------------------------------
   // (A) Tonic Spiking - Constant frequency firing

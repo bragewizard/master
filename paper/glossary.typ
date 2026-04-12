@@ -132,18 +132,6 @@
     description: "",
   ),
   (
-    key: "cpu",
-    short: "CPU",
-    long: "Central Processing Unit",
-    description: "",
-  ),
-  (
-    key: "gpu",
-    short: "GPU",
-    long: "Graphics Processing Unit",
-    description: "",
-  ),
-  (
     key: "cmos",
     short: "CMOS",
     long: "Complementary Metal-Oxide-Semiconductor",
@@ -156,9 +144,27 @@
     description: "",
   ),
   (
-    key: "ap",
+    key: "alu",
+    short: "ALU",
+    long: "Arithmetic Logic Unit",
+    description: "",
+  ),
+  (
+    key: "syops",
+    short: "SyOPs",
+    long: "Synaptic Operations",
+    description: "",
+  ),
+  (
+    key: "actionpotential",
     short: "action potential",
     long: "",
     description: "Voltage potential in the neuron cell membrane that propagates trough the neurons axon and to its synapses",
+  ),
+  (
+    key: "spike",
+    short: "spike",
+    long: "",
+    description: "Alias for an action potential that travels trough the network. We refer to a spike as an action potential abtracted into a single event in time",
   ),
 )

@@ -7,8 +7,8 @@
   import cetz.draw: *
 
   set-style(
-    stroke: (thickness: 1.5pt, cap: "round", paint:black),
-    mark: (fill: black, scale: 1)
+    stroke: (thickness: 1.6pt, cap: "butt", join: "miter"),
+    mark: (fill: black, scale: 1.0)
   )
 
   let draw-gate(name, offset, logic, line-coords: none) = {
@@ -17,13 +17,13 @@
     group({
       content((0.3, 3.8), text(weight: "bold", size: 9pt, name))
 
-      line((-0.5, 0), (3, 0), mark: (end: ">", fill:black), stroke: (thickness: 1.4pt, paint: black))
-      line((0, -0.5), (0, 3), mark: (end: ">", fill:black), stroke: (thickness: 1.4pt, paint: black))
+      line((-0.5, 0), (3, 0), mark: (end: ">", fill:black))
+      line((0, -0.5), (0, 3), mark: (end: ">", fill:black))
       content((3.3, 0), $x_1$)
       content((0, 3.3), $x_2$)
 
       if line-coords != none {
-        line(..line-coords, stroke: (dash: "dashed", paint: green, thickness: 1.5pt))
+        line(..line-coords, stroke: (dash: "dashed", paint: green))
         content((1.2, 2.7), text(fill: green, size: 8pt, "Separable"))
       } else {
         content((2.4, 2.7), text(fill: red, size: 8pt, "Not Linearly Separable"))

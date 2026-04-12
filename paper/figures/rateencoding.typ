@@ -4,13 +4,13 @@
   import cetz.draw: *
 
   set-style(
-    stroke: (thickness: 1.4pt, cap: "butt", join: "miter"),
-    mark: (fill: black, scale: 1)
+    stroke: (thickness: 1.6pt, cap: "butt", join: "miter"),
+    mark: (fill: black, scale: 1.0)
   )
 
   let setup-axes(x-label, y-label) = {
-    line((-0.2, 0), (10, 0), mark: (end: ">"), stroke: (thickness: 1.4pt))
-    line((0, -0.2), (0, 5.2), mark: (end: ">"), stroke: (thickness: 1.4pt))
+    line((-0.2, 0), (10, 0), mark: (end: ">"))
+    line((0, -0.2), (0, 5.2), mark: (end: ">"))
     content((10.2, 0), x-label)
     content((0, 5.5), y-label)
   }

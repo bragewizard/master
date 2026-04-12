@@ -5,8 +5,8 @@
 
   // Global styles
   set-style(
-    stroke: (thickness: 1.4pt, cap: "round", join: "miter"),
-    mark: (fill: black, scale: 1)
+    stroke: (thickness: 1.6pt, cap: "butt", join: "miter"),
+    mark: (fill: black, scale: 1.0)
   )
 
   group({

@@ -12,12 +12,16 @@
   let t-min = 0.114
   let t-max = 0.133
 
-set-style(axes: (
-  stroke: (thickness: 1pt, paint: black),
-  x: (mark: (end: ">", fill:black, size:1pt)),
-  y: (mark: (end: ">", fill:black, size:1pt)),
-  tick: (stroke: black + 1pt),
-))
+  set-style(
+    stroke: (thickness: 1.6pt, cap: "butt", join: "miter"),
+    mark: (fill: black, scale: 1.0)
+  )
+  set-style(axes: (
+    stroke: (thickness: 1.6pt, paint: black),
+    x: (mark: (end: ">", fill:black)),
+    y: (mark: (end: ">", fill:black)),
+    tick: (stroke: black + 1.6pt),
+  ))
   // --- TOP PLOT: THE TRACE ---
   group(name: "trace-group", {
     plot.plot(

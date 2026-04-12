@@ -1,25 +1,25 @@
 #import "@preview/cetz:0.4.2"
 
-#cetz.canvas(length: .9cm, {
+#cetz.canvas(length: 0.9cm, {
   import cetz.draw: *
 
   set-style(
-    stroke: (thickness: 2pt, cap: "round", join: "round"),
-    mark: (fill: black, scale: 0.8)
+    stroke: (thickness: 1.6pt, cap: "butt", join: "miter"),
+    mark: (fill: black, scale: 1.0)
   )
 
-  line((-0.1, 0), (10.5, 0), mark: (end: ">", fill:black), stroke: (thickness: 1pt, paint: black))
+  line((-0.1, 0), (10.5, 0), mark: (end: ">", fill:black))
   content((12, 0), "Time (ms)")
   for i in range(1, 6) {
     let x = i * 2 // Scaling factor
-    line((x, -0.1), (x, 0.1), stroke: (thickness: 1pt))
+    line((x, -0.1), (x, 0.1))
     content((x, -0.5), [#i])
   }
-  line((0, -0.1), (0, 0.1), stroke: (thickness: 1pt))
+  line((0, -0.1), (0, 0.1))
   content((0, -0.5), "0")
 
   // Y-axis (Membrane Potential in mV)
-  line((0, -0.1), (0, 10), mark: (end: ">", fill:black), stroke: (thickness: 1pt, paint: black))
+  line((0, -0.1), (0, 10), mark: (end: ">", fill:black))
   content((0, 10.5), "Membrane Potential (mV)")
 
   // Ticks and horizontal reference lines
@@ -27,12 +27,12 @@
   for level in y-levels {
     let y = level.at(1)
     let label = level.at(0)
-    line((-0.1, y), (0.1, y), stroke: (thickness: 1pt))
+    line((-0.1, y), (0.1, y))
     content((-0.6, y), [#label])
 
     // Horizontal dashed lines
     if label == -70 or label == -55 {
-       line((0.1, y), (10, y), stroke: (dash: "dashed", paint: gray, thickness: 1pt))
+       line((0.1, y), (10, y), stroke: (dash: "dashed", paint: gray, ))
     }
   }
 
@@ -56,25 +56,25 @@
   )
 
   // FIXED: Using `catmull` to draw a smooth curve through multiple points
-  catmull(..trace-points,tension:.5, stroke: (paint: blue.darken(40%), thickness: 2pt))
+  catmull(..trace-points,tension:.5, stroke: (paint: blue.darken(40%)))
 
   // 4. Add Annotation Callouts (A-C)
   // (A) Stimulus/Depolarization
-  line((3.2, rest-y + 1.2), (3, rest-y + 0.4), mark: (start: ">", fill: black),stroke: (thickness: 1pt, paint: black))
+  line((3.2, rest-y + 1.2), (3, rest-y + 0.4), mark: (start: ">", fill: black))
   content((1.7, rest-y + 0.7), text(size: 8pt, "(A) Stimulus /\nDepolarization"))
 
   // (B) Peak Overshoot
   let peak-pt = (2, peak-y)
   content((4.8, peak-y + 0.6), text(size: 8pt, "(B) Peak Overshoot\n(+40 mV)"))
-  line((peak-pt.at(0), 0.1), (peak-pt.at(0), -0.1), stroke: (thickness: 1pt)) // Vertical spike mark on x-axis
+  line((peak-pt.at(0), 0.1), (peak-pt.at(0), -0.1)) // Vertical spike mark on x-axis
 
   // Repolarization Callout
-  line((4.4, 6), (4.4, 5), mark: (end: ">", fill: black), stroke: (thickness: 1pt))
+  line((4.4, 6), (4.4, 5), mark: (end: ">", fill: black))
   content((5.7, 5.5), text(size: 8pt, "Repolarization"))
 
   // (C) Hyperpolarization/Undershoot
   let undershoot-pt = (4.9, undershoot-y)
-  line((undershoot-pt.at(0), undershoot-y + 1), (undershoot-pt.at(0), 1.5), mark: (end: ">", fill: black), stroke: (thickness: 1pt, paint: black))
+  line((undershoot-pt.at(0), undershoot-y + 1), (undershoot-pt.at(0), 1.5), mark: (end: ">", fill: black))
   content((6.8, undershoot-y + 1.5), text(size: 8pt, "(C) Undershoot\n/Hyperpolarization"))
 
   // 5. Mark Refractory Periods (D, E) below the axis

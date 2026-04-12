@@ -4,24 +4,25 @@
 
 #show math.equation : set text(size: 16pt, weight: "medium")
 
-#cetz.canvas(length: .8cm,{
+#cetz.canvas(length: 1cm,{
   import cetz.draw: *
+
   set-style(
-    stroke: (thickness: 2pt, cap: "round", paint:black),
-    mark: (fill: black, scale: 1)
+    stroke: (thickness: 1.6pt, cap: "butt", join: "miter"),
+    mark: (fill: black, scale: 1.0)
   )
 
   rect((-.6,.4),(.6,5.6), fill: blue.lighten(40%), stroke:none, radius:4pt)
-  rect((-.3,6.6),(.5,7.4), fill: blue.lighten(60%), stroke:none, radius:2pt)
+  rect((-.2,6.6),(.4,7.4), fill: blue.lighten(60%), stroke:none, radius:2pt)
 
   rect((.7,.4),(3.3, 5.6), fill:green.lighten(40%),stroke:none, radius:4pt)
-  rect((.5,6.6),(1.3,7.4), fill:green.lighten(60%), stroke:none, radius:2pt)
+  rect((.4,6.6),(1.0,7.4), fill:green.lighten(60%), stroke:none, radius:2pt)
 
   rect((3.4, .4), (4.6, 5.6), fill:red.lighten(20%),stroke:none, radius:4pt)
-  rect((4,6.2),(4.6,7.8), fill:red.lighten(50%), stroke:none, radius:2pt)
+  rect((4.2,6.2),(4.7,7.8), fill:red.lighten(50%), stroke:none, radius:2pt)
 
   for i in range(1,6) {
-    bezier((0,i),(4,3),(2,i),(2,3), stroke: (paint:rgb(0,0,0,128),thickness:2pt))
+    bezier((0,i),(4,3),(2,i),(2,3), stroke: (paint:rgb(0,0,0,255)))
     circle((0,i),radius:.3,fill:white,stroke:3pt)
   }
   circle((4,3),radius:.3,fill:white,stroke:3pt)

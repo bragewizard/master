@@ -4,12 +4,12 @@
   import cetz.draw: *
 
   set-style(
-    stroke: (thickness: 1.4pt, cap: "round", join: "miter"),
-    mark: (fill: black, scale: 1)
+    stroke: (thickness: 1.6pt, cap: "butt", join: "miter"),
+    mark: (fill: black, scale: 1.0)
   )
 
   // Helper function to draw connections that stop exactly at the node boundaries
-  let connect(p1, p2, color: gray.darken(30%), line-thickness: 1pt) = {
+  let connect(p1, p2) = {
     let dx = p2.at(0) - p1.at(0)
     let dy = p2.at(1) - p1.at(1)
     let d = calc.sqrt(dx * dx + dy * dy)
@@ -22,8 +22,7 @@
     let end-y = p2.at(1) - dy * r / d
 
     line((start-x, start-y), (end-x, end-y),
-         mark: (end: ">", scale: 0.6, fill: color),
-         stroke: (paint: color, thickness: line-thickness))
+         mark: (end: ">"))
   }
 
   // Define node layers (Shared coordinates for both panels)
@@ -46,9 +45,9 @@
     }
 
     // Draw Nodes (Input = White, Hidden = Light Gray, Output = Dark Gray)
-    for p in inputs { circle(p, radius: 0.3, fill: white, stroke: black) }
-    for p in hiddens { circle(p, radius: 0.3, fill: gray.lighten(70%), stroke: black) }
-    for p in outputs { circle(p, radius: 0.3, fill: gray.darken(20%), stroke: black) }
+    for p in inputs { circle(p, radius: 0.3, fill: white, stroke:3pt) }
+    for p in hiddens { circle(p, radius: 0.3, fill: white,stroke: 3pt) }
+    for p in outputs { circle(p, radius: 0.3, fill: white, stroke: 3pt) }
 
     // Optional Layer Labels
     content((0, 0), text(size: 8pt, "Input"))
@@ -105,19 +104,5 @@
     content((4, 0), text(size: 8pt, "Output"))
 
 
-  })
-  group({
-    translate((4, -5)) // Shift right panel
-    for i in range(1,3) {
-      for j in range(3) {
-        bezier((0,i),(1.7,j),(1,i),(1,j),mark:(end:">"))
-        bezier((2,j),(3.7,i),(3,j),(3,i), mark:(end:">"))
-      }
-      circle((0,i),radius:.3,fill:white,stroke:3pt)
-      circle((4,i),radius:.3,fill:white,stroke:3pt)
-    }
-    for i in range(4) {
-      circle((2,i),radius:.3,fill:white,stroke:3pt)
-    }
   })
 })
