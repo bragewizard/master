@@ -25,7 +25,7 @@
 
 #v(.5em)
 #text(size: 9pt, weight: "medium")[
-#h(1fr) Wordcount = #total-words / 25000
+#h(1fr) Wordcount = #total-words
 ]
 
 // FRONTPAGE
@@ -55,14 +55,14 @@ This work explores the implementation of these principles on standard CPU/GPU ha
   #text(weight:"semibold",size:16pt,[ACKNOWLEDGEMENTS & DECLARATIONS])
 
   #serif-text()[
-I would like to thank my supervisor and the very kind and helpful comunity at ROBIN and NANO labratories at the departemnt of informatics. I would like to that professor Farad at SDU
+I would like to thank my supervisors and the very kind and helpful comunity at the ROBIN and NANO research groups at the departemnt of informatics.
 
 #v(1em)
 #mini-header()[Declaration of the use of generative artificial intelligence]
 
-In this scientific work, generative artificial intelligence (AI) has been used. All data and personal information have been processed in accordance with the University of Oslo's regulations, and I, as the author of the document, take full responsibility for its content, claims, and references. An overview of the use of generative AI is provided below.
+In this scientific work, generative @ai has been used. All data and personal information have been processed in accordance with the University of Oslo's regulations, and I, as the author of the document, take full responsibility for its content, claims, and references. An overview of the use of generative @ai is provided below.
 
-The service GPT UiO, developed by UiO IT department, has been used to improve the content of the report/assignment. A first version of the work was pasted in its entirety, and the model was given the prompt [rewrite this text to make the language more lively.] The text was then iterated a few times through the model where new prompts were used to get the correct structure of the text. The final result was cut out, fact-checked, and partly rewritten by the author.
+The service Gemini, developed by Google, has been used to improve the content of the thesis. Sections of text like a subsection, paragraph or source code for figures was given to the model along with prompts to make the language free of errors and more profesional.  The text was then iterated a few times through the model where new prompts were used to get the correct structure and flow of the text. In the case for figures the model was used to speed up the development of the figures with the model generating numbers for positioning elements. The final result was cut out, fact-checked, and partly rewritten by the author.
 ]]
 ]]
 
@@ -499,7 +499,7 @@ The @stdp rule adjusts the synaptic weight based on the relative timing differen
 
 #serif-text()[ This asymmetry allows the network to self-organize, naturally filtering out random noise while reinforcing specific spatiotemporal patterns. We adapt this causal rule to a discrete temporal window for our unsupervised learning experiments in @s.ttfsstdp. ]
 
-#figure(include("figures/stdpcurve.typ"), caption:[The @stdp Learning Curve. Synaptic weight change is plotted against spike timing difference. Pre-before-post timing triggers strengthening (@ltp), while post-before-pre triggers weakening (@ltd).],placement: auto)
+#figure(include("figures/stdpcurve.typ"), caption:[The @stdp Learning Curve. Synaptic weight change is plotted against spike timing difference. Pre-before-post timing triggers strengthening @ltp, while post-before-pre triggers weakening @ltd.],placement: auto)
 
 #v(1em)
 === Homeostatic Plasticity <s.homeostatic>
@@ -704,14 +704,14 @@ To empirically validate the theoretical advantages of neuromorphic algorithms, w
 
 The dataset consists of a training set of 60,000 examples and a test set of 10,000 examples of digits (0-9). Each instance is a $28 times 28$ pixel grayscale image. While standard deep learning models routinely score over 90% accuracy on this task, making it largely a solved problem in classical AI, its well-understood feature space makes it an ideal, isolated baseline. Because the spatial hierarchy of MNIST is relatively shallow, it allows us to evaluate the efficacy of neuromorphic learning rules without the confounding variables introduced by massive, multi-layered convolutional architectures.
 
-Crucially, the MNIST images are pre-processed by the dataset creators to be size-normalized and centered within the pixel grid using the center of mass of the pixels. This spatial alignment is a vital prerequisite for our chosen network topology. Unlike Convolutional Neural Networks (@cnn:pl), which slide localized filters across an image, the Fully Connected Network (@fcn) utilized in this thesis lacks translation invariance. If a digit were shifted several pixels off-center, the @fcn would perceive it as an entirely novel pattern. The pre-centered nature of MNIST mitigates this limitation, ensuring that the network can reliably map specific geometric strokes to specific input neurons.
+Crucially, the MNIST images are pre-processed by the dataset creators to be size-normalized and centered within the pixel grid using the center of mass of the pixels. This spatial alignment is a vital prerequisite for our chosen network topology. Unlike @cnn:pl, which slide localized filters across an image, the @fcn utilized in this thesis lacks translation invariance. If a digit were shifted several pixels off-center, the @fcn would perceive it as an entirely novel pattern. The pre-centered nature of MNIST mitigates this limitation, ensuring that the network can reliably map specific geometric strokes to specific input neurons.
 
 Furthermore, the dataset exhibits a high degree of spatial sparsity. In a typical MNIST image, the vast majority of pixels represent the empty background. From a neuromorphic engineering perspective, this sparsity is highly advantageous. As established in the theoretical framework, event-driven systems expend energy strictly when events occur. A sparse input array ensures that the majority of input neurons remain quiescent, minimizing bus congestion and validating the energy-efficiency claims of the proposed @snn.
 
 Before the raw images can be converted into temporal spike trains, they must undergo standard spatial pre-processing to ensure compatibility with the network's mathematical boundaries. This consists of two primary transformations: ]
 
 #box-text()[
-1. *Normalization*: Raw pixel intensities in the MNIST dataset range from $0$ (pure black) to $255$ (pure white). To stabilize the learning algorithms and ensure consistent weight scaling, these values are strictly normalized to a continuous float range of $p_i \in [0.0, 1.0]$.
+1. *Normalization*: Raw pixel intensities in the MNIST dataset range from $0$ (pure black) to $255$ (pure white). To stabilize the learning algorithms and ensure consistent weight scaling, these values are strictly normalized to a continuous float range of $p_i in [0.0, 1.0]$.
 2. *Flattening*: Because this thesis utilizes a Fully Connected Network (FCN) to facilitate direct weight transfer, the 2D spatial structure of the images must be unrolled. Each $28 times 28$ matrix is flattened into a 1-dimensional vector of $784$ elements. ]
 
 #serif-text()[ Consequently, every individual image is presented to the system as a discrete array of $784$ normalized intensities. In the classical Artificial Neural Network (ANN), these continuous values are fed directly into the input neurons. However, because @snn:pl operate exclusively on discrete events, these normalized values must be passed through a temporal encoding algorithm before inference or learning can begin. ]
@@ -910,14 +910,13 @@ evaluate_model_A_IF(incoming_spikes, weights, threshold) -> integer:
 #v(1em)
 #mini-header()[Model B: The Standard Leaky Integrate-and-Fire (LIF)]
 
-#serif-text()[ Following the biophysical derivation of the @lif model in @s.biolif, Model B penalizes late-arriving spikes by decaying the membrane potential exponentially over time, governed by a membrane time constant $tau_m$. ]
+#serif-text()[ Model B---the @lif model is covered in great detail in @s.biolif, Model B fires only if the incoming spiketrain has a sufficient density of spikes. A sparse spiketrain can not overcome the expontially decaying membrane potential. ]
 
-#figure( kind: "eq", supplement: [Equation], caption: [Standard Leaky Integration], [
-$ V_m(t) = max (0, V_m(t_"prev") dot exp(-(t - t_"prev")\(tau_m)) + w_i ) $
-])
+#box-text[
+*Computational Cost:* This model is significantly more intensive, requiring the calculation of exponential functions for every discrete event, which consumes substantial clock cycles on standard arithmetic logic units.
 
-#serif-text()[ *Computational Cost:* This model is significantly more intensive, requiring the calculation of exponential functions for every discrete event, which consumes substantial clock cycles on standard arithmetic logic units.
 *Temporal Decoding Capability:* The exponential leak naturally favors spikes that arrive in rapid succession, providing a basic temporal filter. However, standard LIF struggles to strictly prioritize *order* in a @ttfs scheme unless the time constant $tau_m$ is perfectly tuned to the specific temporal distribution of the dataset.
+
 *Synchronization:* Similar to Model A, while the leak reduces residual noise, it generally still requires a global saccade reset between distinct inference phases to guarantee a clean slate for the next image. ]
 
 
@@ -951,48 +950,62 @@ evaluate_model_B_LIF(incoming_spikes, weights, threshold, tau_m) -> integer:
 #v(1em)
 #mini-header()[Model C: The Current-Accumulating Linear Ramp]
 
-#serif-text()[ To strictly enforce order differentiation without the computational overhead of exponentials, Model C introduces a linear time-dependent accumulator. In a @ttfs code, earlier spikes must have a disproportionate influence. To achieve this, an incoming spike adds its weight to an internal current variable $I(t)$, which acts as the persistent "slope" of the membrane potential. ]
+#serif-text()[
+  To enforce temporal order differentiation without the transcendental computational overhead of exponential kernels, Model C utilizes a linear time-dependent accumulator. In a @ttfs encoding scheme, the relative latency of an afferent spike must dictate its magnitude of influence on the post-synaptic potential. This is achieved by modeling the membrane potential $u(t)$ as a system of coupled differential equations driven by a sequence of Dirac delta impulses:
 
-#figure( kind: "eq", supplement: [Equation], caption: [Current-Accumulating Dynamics], [
-$ I(t) = I(t_"prev") + w_i $ \
-$ V_m(t) = V_m(t_"prev") + I(t) dot (t - t_"prev") + w_i $
-])
+  $ dot(I)(t) = sum_i w_i delta(t - t_i) $
+  $ dot(u)(t) = I(t) + sum_i w_i delta(t - t_i) $
 
-#serif-text()[ *Computational Cost:* Moderate. It replaces expensive exponentials with simple linear multiplication based on the time delta ($t - t_"prev"$).
-*Temporal Decoding Capability:* Excellent. The first spike initiates the linear counter. Because earlier spikes have more time to multiply their slope against the passing time ticks, an early arrival will drive the potential to the threshold vastly faster than a late arrival of the exact same weight. It mathematically recognizes order.
-*Synchronization:* This model requires strict global synchronization (a saccade clock). Without a global reset to zero out the slope $I(t)$ and potential $V_m(t)$, the linear ramp would continue to grow infinitely to the mathematical limits of the hardware. ]
-
-#figure( include("figures/rampmodel.typ"), caption: [Network architecture. The 28x28 images are flattened and passed through a Fully Connected Network. Both the @ann and @snn share this identical macroscopic topology.])
+  This formulation ensures that an afferent spike at time $t_i$ with weight $w_i$ exerts a dual influence: it induces an immediate translocation of the potential state while simultaneously incrementing the rate of change for all subsequent integration intervals. Because early spikes establish the baseline slope $I(t)$ for the remainder of the simulation window, they exert a disproportionate influence on the time-to-threshold. Consequently, the network becomes inherently sensitive to rank-order inputs.
+]
 
 #figure(
-kind: "algo",
-caption: [Model C: Current-Accumulating Linear Ramp],
-supplement: [Algorithm],
-mono-text(pseudocode-list(hooks: .5em, indentation: 1em, booktabs: true)[
-evaluate_model_C_Ramp(incoming_spikes, weights, threshold) -> integer:
-  + sort(incoming_spikes, by_time)
-  + v_m = 0.0
-  + current_I = 0.0
-  + t_prev = 0.0
-  + firing_time = None
-  +
-  + for spike in incoming_spikes:
-    + weight = weights[spike.source]
-    + delta_t = spike.time - t_prev
-    +
-    + // Accumulate voltage based on historical current slope
-    + v_m = v_m + (current_I \* delta_t) + weight
-    + // Update current slope for future ticks
-    + current_I = current_I + weight
-    +
-    + if v_m >= threshold:
-      + firing_time = spike.time
-      + break
-    +
-    + t_prev = spike.time
-  +
-  + return firing_time
-]))
+  kind: "eq",
+  supplement: [Equation],
+  caption: [Discrete Recurrence Relations for Model C],
+  [
+    $ I(t_i^+) = I(t_(i-1)^+) + w_i $
+    $ u(t_i^+) = u(t_(i-1)^+) + I(t_(i-1)^+) dot (t_i - t_(i-1)) + w_i $
+  ]
+)
+
+#box-text()[
+  *Computational Complexity:* Optimized. The model replaces power-intensive transcendental operations with floating-point additions and a single multiplication per spike event ($I dot Delta t$).
+
+  *Temporal Decoding:* High. The quadratic-like growth of the potential relative to spike arrival times allows for precise differentiation of closely timed input sequences.
+
+  *Synchronization:* This model requires a rigorous global synchronization protocol (e.g., a saccade-driven clock). In the absence of a periodic global reset to zero the state variables $I(t)$ and $u(t)$, the linear integration would diverge toward hardware saturation limits.
+]
+
+#figure(
+  include("figures/rampmodel.typ"),
+  caption: [Evolution of state variables in Model C. This demonstrates the resulting piecewise linear membrane potential $u(t)$. Note how earlier spikes increase the integration gradient, accelerating the trajectory toward the firing threshold $theta$.]
+)
+
+#figure(
+  kind: "algo",
+  caption: [Model C: Discrete State Update Algorithm],
+  supplement: [Algorithm],
+  mono-text(pseudocode-list(hooks: .5em, indentation: 1em, booktabs: true)[
+    linearRampNeuron(S, W, theta) -> t_fire: #h(1fr)
+      + // Let S be the ordered set of spikes $(t_i, w_i)$
+      + $u arrow.l 0.0$
+      + $I arrow.l 0.0$
+      + $t_"prev" arrow.l 0.0$
+      +
+      + for each $(t_i, w_i) in S$:
+        + $Delta t arrow.l t_i - t_"prev"$
+        + $u arrow.l u + (I dot Delta t) + w_i$
+        + $I arrow.l I + w_i$
+        +
+        + if $u >= theta$:
+          + return $t_i$
+        +
+        + $t_"prev" arrow.l t_i$
+      +
+      + return $infinity$
+  ])
+)
 
 #v(1em)
 #mini-header()[Model D: Threshold-Sensitive Integration (State-Dependent Discounting)]
@@ -1309,7 +1322,7 @@ Because this phase is unsupervised, the network is not provided with the correct
 
 #pagebreak()
 
-= Results <results>
+= Results <s.results>
 
 == Neruon Models
 
@@ -1409,7 +1422,7 @@ Because @stdp naturally depresses irrelevant synapses toward zero, a thresholdin
 While the software simulations in this thesis demonstrate the algorithmic viability of sparse processing, achieving true biological efficiency requires novel materials. Non-volatile memory technologies, such as memristors and spintronics, offer the ability to physically colocate extreme-density analog weights with logic gates, perfectly mirroring biological synapses. Until these exotic substrates become commercially viable, the near-term future of applied neuromorphic computing lies in massively parallel, asynchronous digital ASICs designed using standard CMOS, serving as a transitional bridge to fully analog systems. ]
 
 #v(2em)
-== Future Work <future_work>
+== Future Work <s.futurework>
 
 #serif-text()[ The findings and limitations discussed in this thesis present several promising avenues for future research in neuromorphic engineering: ]
 
@@ -1422,7 +1435,7 @@ While the software simulations in this thesis demonstrate the algorithmic viabil
 
 #pagebreak()
 
-= Conclusion <conclusion>
+= Conclusion <s.conclusion>
 
 #serif-text()[
 #lorem(100)

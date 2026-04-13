@@ -4,7 +4,7 @@
   import cetz.draw: *
 
   set-style(
-    stroke: (thickness: 1.6pt, cap: "butt", join: "miter"),
+    stroke: (thickness: 2pt, cap: "round", join: "round"),
     mark: (fill: black, scale: 1.0)
   )
 

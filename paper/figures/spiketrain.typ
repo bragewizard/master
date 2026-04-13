@@ -13,7 +13,7 @@
   let t-max = 0.133
 
   set-style(
-    stroke: (thickness: 1.6pt, cap: "butt", join: "miter"),
+    stroke: (thickness: 1.6pt, cap: "round", join: "round"),
     mark: (fill: black, scale: 1.0)
   )
   set-style(axes: (

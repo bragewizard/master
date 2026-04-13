@@ -2,7 +2,7 @@
   (
     key: "ai",
     short: "AI",
-    long: "Artificial Intenligence",
+    long: "Artificial Inteligence",
     description: "",
   ),
   (
@@ -166,5 +166,11 @@
     short: "spike",
     long: "",
     description: "Alias for an action potential that travels trough the network. We refer to a spike as an action potential abtracted into a single event in time",
+  ),
+  (
+    key: "spiketrain",
+    short: "spiketrain",
+    long: "",
+    description: "",
   ),
 )

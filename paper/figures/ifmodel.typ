@@ -4,11 +4,9 @@
   import cetz.draw: *
 
   set-style(
-    stroke: (thickness: 1.2pt, cap: "round", join: "miter"),
+    stroke: (thickness: 1.6pt, cap: "round", join: "round"),
     mark: (fill: black, scale: 1.0)
   )
-
-
 
   group({
     line((-0.2, 0), (8.5, 0), mark: (end: ">"))

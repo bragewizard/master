@@ -8,7 +8,7 @@
   import cetz.draw: *
 
   set-style(
-    stroke: (thickness: 1.6pt, cap: "butt", join: "miter"),
+    stroke: (thickness: 1.6pt, cap: "round", join: "round"),
     mark: (fill: black, scale: 1.0)
   )
 
@@ -22,11 +22,11 @@
   rect((4.2,6.2),(4.7,7.8), fill:red.lighten(50%), stroke:none, radius:2pt)
 
   for i in range(1,6) {
-    bezier((0,i),(4,3),(2,i),(2,3), stroke: (paint:rgb(0,0,0,255)))
-    circle((0,i),radius:.3,fill:white,stroke:3pt)
+    bezier((0,i),(4,3),(2,i),(2,3), stroke: (paint:rgb(0,0,0,255),thickness:2pt))
+    circle((0,i),radius:.3,fill:white, stroke:2pt)
   }
-  circle((4,3),radius:.3,fill:white,stroke:3pt)
-  line((2,7),(3,7), mark:(end: ">"), stroke:2pt)
+  circle((4,3),radius:.3,fill:white, stroke:2pt)
+  line((2,7),(3,7), mark:(end: ">"))
   content((0,7),align(center+ top)[$ sum_(i=0)^n x_i w_i $])
   content((5,7),align(center+ top)[$ cases(1 "if" >= b, 0 "if" <b) $])
 })

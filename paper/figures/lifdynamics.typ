@@ -4,7 +4,7 @@
   import cetz.draw: *
 
   set-style(
-    stroke: (thickness: 1.6pt, cap: "butt", join: "miter"),
+    stroke: (thickness: 1.6pt, cap: "round", join: "round"),
     mark: (fill: black, scale: 1.0)
   )
 
@@ -15,12 +15,14 @@
     content((9.0, 0), $t$)
     content((0, 4.5), $u(t)$)
 
-    line((-0.2, 2.5), (8.5, 2.5), stroke: (dash: "dashed", paint: gray))
-    content((-0.8, 2.5), $theta.alt$)
+    let tresh = 3
     let v_rest = 0.5
-    let tau = 1.0
-    let amp = 1.2
+    let tau = 1.2
+    let amp = 1.4
     let spikes = (1.0, 3.0, 3.8, 4.4, 7.0)
+
+    content((-0.8, tresh), $theta.alt$)
+    line((-0.2, tresh), (8.5, tresh), stroke: (dash: "dashed", paint: gray))
 
     // Reference Lines
     line((0, v_rest), (8.5, v_rest), stroke: (paint: gray, dash: "dashed"))
