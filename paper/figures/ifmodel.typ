@@ -15,38 +15,37 @@
     content((9.0, 0), $t$)
     content((0, 4.5), $u(t)$)
 
-    line((-0.2, 2.5), (8.5, 2.5), stroke: (dash: "dashed", paint: gray))
-    content((-0.8, 2.5), $theta.alt$)
+    let tresh = 3
     let v_rest = 0.5
-    let tau = 1.0
-    let amp = 1.2
+    let tau = 1.5
+    let amp = 0.8
     let spikes = (1.0, 3.0, 3.8, 4.4, 7.0)
 
-    // Reference Lines
+    content((-0.8, tresh), $theta.alt$)
+    line((-0.2, tresh), (8.5, tresh), stroke: (dash: "dashed", paint: gray))
     line((0, v_rest), (8.5, v_rest), stroke: (paint: gray, dash: "dashed"))
     content((-0.8, 0.5), $u_"rest"$)
 
-
     let pts = ()
     let dt = 0.02
-    for i in range(426) { // 8.5 / 0.02
+    let v = v_rest
+    let j = 0
+    for i in range(426) {
         let t = i * dt
-        let v = v_rest
-        for ts in spikes {
-            if t >= ts {
-                // Exponential decay influence of each past spike
-                v += amp
-            }
+
+        if (v > tresh) {
+            v = v_rest
         }
+        while j < spikes.len() and spikes.at(j) < t {
+            j += 1
+            v += amp
+        }
+        // v += amp * calc.exp(-(t - spikes.at(j)) / tau)
         pts.push((t, v))
     }
-
-    line(..pts, stroke: (paint: green.darken(30%), thickness: 2pt, join: "round"))
+    line(..pts, stroke: (paint: green.darken(30%), join: "round"))
   })
 
-  // ------------------------------------------------------------------
-  // BOTTOM PANEL: Incoming Spikes
-  // ------------------------------------------------------------------
   group({
     translate((0, -2.0))
 

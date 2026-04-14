@@ -17,16 +17,14 @@
 
     let tresh = 3
     let v_rest = 0.5
-    let tau = 1.0
-    let amp = 0
+    let tau = 1.4
+    let amp = 1.8
     let spikes = (1.0, 3.0, 3.8, 4.4, 7.0)
 
     content((-0.8, tresh), $theta.alt$)
     line((-0.2, tresh), (8.5, tresh), stroke: (dash: "dashed", paint: gray))
-    // Reference Lines
     line((0, v_rest), (8.5, v_rest), stroke: (paint: gray, dash: "dashed"))
     content((-0.8, 0.5), $u_"rest"$)
-
 
     let pts = ()
     let dt = 0.02
@@ -35,24 +33,23 @@
     for i in range(426) {
         let t = i * dt
 
-        while j < spikes.len() and spikes.at(j) < t {
-            amp += 0.003
-            v += 0.2
-            j += 1
-        }
         if (v > tresh) {
             v = v_rest
-            amp = 0.0
         }
-        v += amp
+        while j < spikes.len() and spikes.at(j) < t {
+            j += 1
+            v += amp * calc.exp(-v / tau)
+        }
+        // v += amp * calc.exp(-(t - spikes.at(j)) / tau)
         pts.push((t, v))
     }
-    line(..pts, stroke: (paint: green.darken(30%)))
+    line(..pts, stroke: (paint: green.darken(30%), join: "round"))
   })
 
   group({
     translate((0, -2.0))
 
+    // Axes
     line((-0.2, 0), (8.5, 0), mark: (end: ">"))
     content((9, -0.0), text(size: 9pt, [$t$]))
     content((-0.8, 0.5), text(size: 9pt, [Incoming\ Spikes]))

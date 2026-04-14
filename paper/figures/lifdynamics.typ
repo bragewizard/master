@@ -17,38 +17,36 @@
 
     let tresh = 3
     let v_rest = 0.5
-    let tau = 1.2
-    let amp = 1.4
+    let tau = 1.5
+    let amp = 1.2
     let spikes = (1.0, 3.0, 3.8, 4.4, 7.0)
 
     content((-0.8, tresh), $theta.alt$)
     line((-0.2, tresh), (8.5, tresh), stroke: (dash: "dashed", paint: gray))
-
-    // Reference Lines
     line((0, v_rest), (8.5, v_rest), stroke: (paint: gray, dash: "dashed"))
     content((-0.8, 0.5), $u_"rest"$)
 
-
     let pts = ()
     let dt = 0.02
-    for i in range(426) { // 8.5 / 0.02
+    let v = v_rest
+    let j = 0
+
+    for i in range(426) {
         let t = i * dt
-        let v = v_rest
-        for ts in spikes {
-            if t >= ts {
-                // Exponential decay influence of each past spike
-                v += amp * calc.exp(-(t - ts) / tau)
-            }
+        if (v >= tresh) {
+            v = v_rest
+        }
+        let dv = (-(v - v_rest) / tau) * dt
+        v += dv
+        while j < spikes.len() and spikes.at(j) < t {
+            j += 1
+            v += amp
         }
         pts.push((t, v))
     }
-
     line(..pts, stroke: (paint: green.darken(30%), join: "round"))
   })
 
-  // ------------------------------------------------------------------
-  // BOTTOM PANEL: Incoming Spikes
-  // ------------------------------------------------------------------
   group({
     translate((0, -2.0))
 

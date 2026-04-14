@@ -23,7 +23,6 @@
 
     content((-0.8, tresh), $theta.alt$)
     line((-0.2, tresh), (8.5, tresh), stroke: (dash: "dashed", paint: gray))
-    // Reference Lines
     line((0, v_rest), (8.5, v_rest), stroke: (paint: gray, dash: "dashed"))
     content((-0.8, 0.5), $u_"rest"$)
 
@@ -50,9 +49,6 @@
     line(..pts, stroke: (paint: green.darken(30%)))
   })
 
-  // ------------------------------------------------------------------
-  // BOTTOM PANEL: Incoming Spikes
-  // ------------------------------------------------------------------
   group({
     translate((0, -2.0))
 

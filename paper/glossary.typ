@@ -156,21 +156,32 @@
     description: "",
   ),
   (
+    key: "aer",
+    short: "AER",
+    long: "Adress Event Representation",
+    description: "",
+  ),
+(
     key: "actionpotential",
     short: "action potential",
     long: "",
-    description: "Voltage potential in the neuron cell membrane that propagates trough the neurons axon and to its synapses",
+    description: "A rapid change in voltage across a neuron's cell membrane that propagates down the axon to the synapses.",
   ),
   (
     key: "spike",
     short: "spike",
     long: "",
-    description: "Alias for an action potential that travels trough the network. We refer to a spike as an action potential abtracted into a single event in time",
+    description: "An action potential conceptualized as a discrete, instantaneous event. In neuromorphic and computational models, it represents a binary signal traveling through the network.",
   ),
   (
-    key: "spiketrain",
-    short: "spiketrain",
+    key: "spike train",
+    short: "spike train",
     long: "",
-    description: "",
+    description: "A sequence of action potentials (spikes) occurring over time. It typically represents the temporal firing pattern of a single neuron.",
   ),
-)
+  (
+    key: "saccade",
+    short: "saccade",
+    long: "",
+    description: "A rapid, simultaneous movement of both eyes that abruptly shifts the point of fixation from one area of interest to another in the visual field.",
+  ),)

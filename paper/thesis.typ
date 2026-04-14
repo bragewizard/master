@@ -716,9 +716,13 @@ Before the raw images can be converted into temporal spike trains, they must und
 
 #serif-text()[ Consequently, every individual image is presented to the system as a discrete array of $784$ normalized intensities. In the classical Artificial Neural Network (ANN), these continuous values are fed directly into the input neurons. However, because @snn:pl operate exclusively on discrete events, these normalized values must be passed through a temporal encoding algorithm before inference or learning can begin. ]
 
-#figure( include("figures/dataexample.typ"), caption: [Sample of the MNIST dataset. The 28x28 images are normalized and flattened into 1D vectors before being translated into temporal spike events.])
+#figure( image("figures/mnistexamples.png"), caption: [Sample of the MNIST dataset. The 28x28 images are normalized and flattened into 1D vectors before being translated into temporal spike events.])
 
-#figure( include("figures/dataexample.typ"), caption: [Sample of the MNIST dataset. The 28x28 images are normalized and flattened into 1D vectors before being translated into temporal spike events.])
+#figure( image("figures/mnistdisribution.png"), caption: [Sample of the MNIST dataset. The 28x28 images are normalized and flattened into 1D vectors before being translated into temporal spike events.])
+
+#figure( image("figures/mnistpixeldisribution.png"), caption: [Sample of the MNIST dataset. The 28x28 images are normalized and flattened into 1D vectors before being translated into temporal spike events.])
+
+// #figure( include("figures/dataexample.typ"), caption: [Sample of the MNIST dataset. The 28x28 images are normalized and flattened into 1D vectors before being translated into temporal spike events.])
 
 
 #v(2em)
@@ -873,79 +877,99 @@ To systematically evaluate these trade-offs, this thesis implements and benchmar
 #v(1em)
 #mini-header()[Model A: The Simple Window Integrator (Standard IF)]
 
-#serif-text()[ The most computationally lightweight approach is the standard Integrate-and-Fire (IF) model without any leak or decay mechanisms. In this paradigm, the neuron acts as a pure arithmetic accumulator during the simulation window. ]
-
-#figure( kind: "eq", supplement: [Equation], caption: [Simple Window Integration], [
-$ V_m(t) = V_m(t_"prev") + w_i $
-])
-
-#serif-text()[ *Computational Cost:* This model is extremely cheap to execute on digital hardware, requiring only a single addition operation $O(1)$ per incoming spike.
-*Temporal Decoding Capability:* While highly efficient, this model is theoretically flawed for pure @ttfs decoding. It cannot differentiate the relative order of incoming signals. If Spike A ($w=5$) arrives at $t=1$ and Spike B ($w=2$) arrives at $t=10$, the final potential is identical to the reverse arrival order.
-*Synchronization:* Because the potential never naturally decays, this model relies entirely on a rigid, globally synchronized "saccade" (a hard reset of $V_m$ to $0$ at the end of the time window) to prevent the network from firing continuously due to lingering historical noise. ]
-
-
-#figure( include("figures/ifmodel.typ"), caption: [Network architecture. The 28x28 images are flattened and passed through a Fully Connected Network. Both the @ann and @snn share this identical macroscopic topology.])
+#serif-text()[ The most computationally lightweight approach is the standard Integrate-and-Fire (IF) model without any leak or decay mechanisms. In this paradigm, the neuron acts as a pure arithmetic accumulator during the simulation window.
+]
 
 #figure(
-kind: "algo",
-caption: [Model A: Simple Window Integrator (Standard IF)],
-supplement: [Algorithm],
-mono-text(pseudocode-list(hooks: .5em, indentation: 1em, booktabs: true)[
-evaluate_model_A_IF(incoming_spikes, weights, threshold) -> integer:
-  + sort(incoming_spikes, by_time)
-  + v_m = 0.0
-  + firing_time = None
-  +
-  + for spike in incoming_spikes:
-    + weight = weights[spike.source]
-    + v_m = v_m + weight  // Pure arithmetic accumulation
-    +
-    + if v_m >= threshold:
-      + firing_time = spike.time
-      + break
-  +
-  + return firing_time
-]))
+  kind: "eq",
+  supplement: [Equation],
+  caption: [Discrete Recurrence Relation for Model A],
+  [
+    $ u(t_i^+) = u(t_(i-1)^+) + w_i $
+  ]
+)
+
+#box-text()[
+  *Computational Complexity:* Minimal. This model is extremely cheap to execute on digital hardware, requiring only a single addition operation $O(1)$ per incoming spike.
+
+  *Temporal Decoding:* Low. While highly efficient, this model is theoretically flawed for pure @ttfs decoding because it cannot differentiate the relative order of incoming signals. If Spike A ($w=5$) arrives at $t=1$ and Spike B ($w=2$) arrives at $t=10$, the final potential is identical to the reverse arrival order.
+
+  *Synchronization:* Because the potential never naturally decays, this model relies entirely on a rigid, globally synchronized @saccade (a hard reset of $u$ to $0$ at the end of the simulation window) to prevent the network from firing continuously due to lingering historical noise.
+]
+
+#figure(
+  include("figures/ifmodel.typ"),
+  caption: [Network architecture. The 28x28 images are flattened and passed through a Fully Connected Network. Both the @ann and @snn share this identical macroscopic topology.]
+)
+
+#v(1em)
+#figure(
+  kind: "algo",
+  caption: [Model A: Simple Window Integrator Algorithm],
+  supplement: [Algorithm],
+  mono-text(pseudocode-list(hooks: .5em, indentation: 1em, booktabs: true)[
+    simpleIntegratorNeuron(S, W, theta) -> t_fire: #h(1fr)
+      + // Let S be the ordered set of spikes $(t_i, w_i)$
+      + $u arrow.l 0.0$
+      +
+      + for each $(t_i, w_i) in S$:
+        + // Pure arithmetic accumulation
+        + $u arrow.l u + w_i$
+        +
+        + if $u >= theta$:
+          + return $t_i$
+      +
+      + return $infinity$
+  ])
+)
 
 #v(1em)
 #mini-header()[Model B: The Standard Leaky Integrate-and-Fire (LIF)]
 
-#serif-text()[ Model B---the @lif model is covered in great detail in @s.biolif, Model B fires only if the incoming spiketrain has a sufficient density of spikes. A sparse spiketrain can not overcome the expontially decaying membrane potential. ]
-
-#box-text[
-*Computational Cost:* This model is significantly more intensive, requiring the calculation of exponential functions for every discrete event, which consumes substantial clock cycles on standard arithmetic logic units.
-
-*Temporal Decoding Capability:* The exponential leak naturally favors spikes that arrive in rapid succession, providing a basic temporal filter. However, standard LIF struggles to strictly prioritize *order* in a @ttfs scheme unless the time constant $tau_m$ is perfectly tuned to the specific temporal distribution of the dataset.
-
-*Synchronization:* Similar to Model A, while the leak reduces residual noise, it generally still requires a global saccade reset between distinct inference phases to guarantee a clean slate for the next image. ]
-
+#serif-text()[ Model B---the @lif model is covered in great detail in @s.biolif. Model B fires only if the incoming spike train has a sufficient density of spikes. A sparse spike train cannot overcome the exponentially decaying membrane potential.
+]
 
 #figure(
-kind: "algo",
-caption: [Model B: Standard Leaky Integrate-and-Fire (LIF)],
-supplement: [Algorithm],
-mono-text(pseudocode-list(hooks: .5em, indentation: 1em, booktabs: true)[
-evaluate_model_B_LIF(incoming_spikes, weights, threshold, tau_m) -> integer:
-  + sort(incoming_spikes, by_time)
-  + v_m = 0.0
-  + t_prev = 0.0
-  + firing_time = None
-  +
-  + for spike in incoming_spikes:
-    + weight = weights[spike.source]
-    + delta_t = spike.time - t_prev
-    +
-    + // Apply exponential leak based on time delta
-    + v_m = max(0.0, v_m \* exp(-delta_t / tau_m) + weight)
-    +
-    + if v_m >= threshold:
-      + firing_time = spike.time
-      + break
-    +
-    + t_prev = spike.time
-  +
-  + return firing_time
-]))
+  kind: "eq",
+  supplement: [Equation],
+  caption: [Discrete Recurrence Relation for Model B],
+  [
+    $ u(t_i^+) = max(0, u(t_(i-1)^+) dot exp(-(t_i - t_(i-1)) / tau_m) + w_i) $
+  ]
+)
+
+#box-text()[
+  *Computational Complexity:* High. This model is significantly more intensive, requiring the calculation of exponential functions for every discrete event, which consumes substantial clock cycles on standard arithmetic logic units.
+
+  *Temporal Decoding:* Moderate. The exponential leak naturally favors spikes that arrive in rapid succession, providing a basic temporal filter. However, standard LIF struggles to strictly prioritize *order* in a @ttfs scheme unless the time constant $tau_m$ is perfectly tuned to the specific temporal distribution of the dataset.
+
+  *Synchronization:* Similar to Model A, while the leak reduces residual noise, it generally still requires a global saccade reset between distinct inference phases to guarantee a clean slate for the next image.
+]
+
+#figure(
+  kind: "algo",
+  caption: [Model B: Standard Leaky Integrate-and-Fire Algorithm],
+  supplement: [Algorithm],
+  mono-text(pseudocode-list(hooks: .5em, indentation: 1em, booktabs: true)[
+    leakyIntegratorNeuron(S, W, theta, tau_m) -> t_fire: #h(1fr)
+      + // Let S be the ordered set of spikes $(t_i, w_i)$
+      + $u arrow.l 0.0$
+      + $t_"prev" arrow.l 0.0$
+      +
+      + for each $(t_i, w_i) in S$:
+        + $Delta t arrow.l t_i - t_"prev"$
+        +
+        + // Apply exponential leak based on time delta
+        + $u arrow.l max(0.0, u dot exp(-Delta t / tau_m) + w_i)$
+        +
+        + if $u >= theta$:
+          + return $t_i$
+        +
+        + $t_"prev" arrow.l t_i$
+      +
+      + return $infinity$
+  ])
+)
 
 #v(1em)
 #mini-header()[Model C: The Current-Accumulating Linear Ramp]
@@ -1010,46 +1034,58 @@ evaluate_model_B_LIF(incoming_spikes, weights, threshold, tau_m) -> integer:
 #v(1em)
 #mini-header()[Model D: Threshold-Sensitive Integration (State-Dependent Discounting)]
 
-#serif-text()[ Drawing inspiration from the adaptation mechanisms of the @glif model (@s.glif), Model D introduces a state-dependent penalty to incoming spikes. Rather than penalizing spikes based on the passage of time, this model penalizes spikes based on the current internal state of the neuron.
+#serif-text()[
+  Drawing inspiration from the adaptation mechanisms of the @glif model (@s.glif), Model D introduces a state-dependent penalty to incoming spikes. Rather than penalizing spikes based on the passage of time, this model penalizes spikes based on the current internal state of the neuron.
 
-In this paradigm, the increase in membrane potential is inversely proportional to the current potential itself. When a spike arrives at a neuron in its resting state ($V_m = 0$), there is no discount, and the full synaptic weight is added. However, if a spike arrives when the neuron is already close to the firing threshold, its impact is exponentially discounted. ]
+  In this paradigm, the increase in membrane potential is inversely proportional to the current potential itself. When a spike arrives at a neuron in its resting state ($u = 0$), there is no discount, and the full synaptic weight is added. However, if a spike arrives when the neuron is already close to the firing threshold $theta$, its impact is exponentially discounted.
+]
 
-#figure( kind: "eq", supplement: [Equation], caption: [State-Dependent Weight Discounting], [
-$ V_m(t) = V_m(t_"prev") + w_i dot exp(-gamma (V_m(t_"prev"))\(V_"th")) $
-])
+#figure(
+  kind: "eq",
+  supplement: [Equation],
+  caption: [Discrete Recurrence Relation for Model D Weight Discounting],
+  [
+    $ u(t_i^+) = u(t_(i-1)^+) + w_i dot exp(-gamma (u(t_(i-1)^+))/theta) $
+  ]
+)
 
-#serif-text()[ From a computational perspective, this approach imposes a moderate cost. While it requires an exponential calculation (or a linear approximation), it does not need to continuously track the elapsed time ($Delta t$) between individual spikes, saving memory overhead compared to continuous-time dynamic models. Furthermore, this mechanism excels at temporal decoding because it inherently prioritizes the sequence of arrival. The earliest spikes encounter an "empty" neuron and contribute their absolute maximum weight. Spikes arriving later encounter a partially filled potential and are severely dampened. Consequently, high-weight spikes must arrive early to have a meaningful impact, naturally aligning with the @ttfs encoding hierarchy. Because this model drops the continuous temporal leak in favor of event-driven weight scaling, the potential does not naturally decay to zero between images. Therefore, much like Models A and C, it relies on a global "saccade" reset at the conclusion of the simulation window to clear the internal state for the next inference phase. ]
+#box-text()[
+  *Computational Complexity:* Moderate. While it requires an exponential calculation (or a linear approximation), it does not need to continuously track the elapsed time ($Delta t$) between individual spikes, saving memory overhead compared to continuous-time dynamic models.
 
-#figure( include("figures/discountmodel.typ"), caption: [Neuron model where new incoming spikes have an exponentially decaying influence based on the current potential.])
+  *Temporal Decoding:* High. This mechanism inherently prioritizes the sequence of arrival. The earliest spikes encounter an "empty" neuron and contribute their absolute maximum weight. Spikes arriving later encounter a partially filled potential and are severely dampened. Consequently, high-weight spikes must arrive early to have a meaningful impact, naturally aligning with the @ttfs encoding hierarchy.
+
+  *Synchronization:* Similar to Models A and C, this model requires a rigorous global synchronization protocol (e.g., a saccade-driven clock). Because this model drops the continuous temporal leak in favor of event-driven weight scaling, the potential does not naturally decay to zero between images and relies on a periodic reset at the conclusion of the simulation window.
+]
+
+#figure(
+  include("figures/discountmodel.typ"),
+  caption: [Evolution of state variables in Model D. This demonstrates a neuron model where new incoming spikes have an exponentially decaying influence based on the current potential $u(t)$.]
+)
 
 #v(1em)
 #figure(
-kind: "algo",
-caption: [Model D: Threshold-Sensitive Integration],
-supplement: [Algorithm],
-mono-text(pseudocode-list(hooks: .5em, indentation: 1em, booktabs: true)[
-evaluate_model_D_Discount(incoming_spikes, weights, threshold, gamma) -> integer:
-  + sort(incoming_spikes, by_time)
-  + v_m = 0.0
-  + firing_time = None
-  +
-  + for spike in incoming_spikes:
-    + weight = weights[spike.source]
-    +
-    + // Calculate the discount factor based on current potential
-    + // If v_m is 0, discount is 1.0 (Full weight)
-    + // If v_m is near threshold, discount approaches 0 (Low weight)
-    + discount_factor = exp(-gamma \* (v_m / threshold))
-    +
-    + // Apply the state-dependent increase
-    + v_m = v_m + (weight \* discount_factor)
-    +
-    + if v_m >= threshold:
-      + firing_time = spike.time
-      + break
-  +
-  + return firing_time
-]))
+  kind: "algo",
+  caption: [Model D: Threshold-Sensitive Integration Algorithm],
+  supplement: [Algorithm],
+  mono-text(pseudocode-list(hooks: .5em, indentation: 1em, booktabs: true)[
+    thresholdSensitiveNeuron(S, W, theta, gamma) -> t_fire: #h(1fr)
+      + // Let S be the ordered set of spikes $(t_i, w_i)$
+      + $u arrow.l 0.0$
+      +
+      + for each $(t_i, w_i) in S$:
+        + // Calculate discount factor based on current potential
+        + // Approaches 1.0 at rest, and 0 near threshold
+        + $eta arrow.l exp(-gamma dot u / theta)$
+        +
+        + // Apply the state-dependent increase
+        + $u arrow.l u + (w_i dot eta)$
+        +
+        + if $u >= theta$:
+          + return $t_i$
+      +
+      + return $infinity$
+  ])
+)
 
 #v(1em)
 === Thresholding and Lateral Inhibition <s.tresholding>

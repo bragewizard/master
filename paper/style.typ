@@ -1,7 +1,5 @@
 #let style(it) = {
   set text(font: "Geist", size: 11pt, weight: "regular", top-edge:.7em)
-  // show math.equation : set text(font:"New Computer Modern Math", size: 12pt, weight: "medium")
-  // show math.equation : set text(font:"STIX Two Math", size: 12pt, weight: "medium")
   show math.equation : set text(font:"Latin Modern Math", size: 12pt, weight: "medium")
   show raw : set text(font:"GeistMono NF", weight: "medium", size:10pt)
   set list(marker: sym.bullet, indent: 1em)
@@ -39,8 +37,6 @@
 
 #let serif-text(body) = {
   set text(font: "Source Serif 4 18pt", size: 12pt, weight: "regular", top-edge:.7em)
-  // set text(font: "STIX Two Text", size: 12pt, weight: "regular", top-edge:.7em)
-  // set text(font: "Source Serif 4 18pt", size: 12pt, weight: "medium", top-edge:.7em)
   body
 }
 

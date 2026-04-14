@@ -8,8 +8,6 @@
     mark: (fill: black, scale: 1.0)
   )
 
-  content((4, 7.5), text(weight: "bold", "In-Memory Computing (Crossbar Array)"))
-
   let n_lines = 4
   let spacing = 1.2
   let offset_x = 2.0
