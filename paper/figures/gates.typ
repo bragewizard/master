@@ -15,7 +15,7 @@
 
     translate(offset)
     group({
-      content((0.3, 3.8), text(weight: "bold", size: 9pt, name))
+      content((0.3, 3.8), text(weight: "bold", name))
 
       line((-0.5, 0), (3, 0), mark: (end: ">", fill:black))
       line((0, -0.5), (0, 3), mark: (end: ">", fill:black))
@@ -24,9 +24,9 @@
 
       if line-coords != none {
         line(..line-coords, stroke: (dash: "dashed", paint: green))
-        content((1.2, 2.7), text(fill: green, size: 8pt, "Separable"))
+        content((1.2, 2.7), text(size: 10pt, "Separable"))
       } else {
-        content((2.4, 2.7), text(fill: red, size: 8pt, "Not Linearly Separable"))
+        content((2.4, 2.7), text(size: 10pt, "Not Linearly Separable"))
       }
 
       let inputs = ((0,0), (0,2), (2,0), (2,2))
@@ -36,11 +36,11 @@
         let is-active = logic.at(i)
 
         if is-active {
-          circle(pt, radius: 0.2, fill: black, stroke: none)
-          content((pt.at(0) + 0.3, pt.at(1) + 0.3), text(size: 7pt, "(1)"))
+          circle(pt, radius: 0.2, fill: black)
+          content((pt.at(0) + 0.3, pt.at(1) + 0.3), text(size: 9pt, "(1)"))
         } else {
           circle(pt, radius: 0.2, fill: white, stroke: 2pt)
-          content((pt.at(0) - 0.3, pt.at(1) - 0.3), text(size: 7pt, "(0)"))
+          content((pt.at(0) - 0.3, pt.at(1) - 0.3), text(size: 9pt, "(0)"))
         }
       }
     })

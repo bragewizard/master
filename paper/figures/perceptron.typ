@@ -12,21 +12,21 @@
     mark: (fill: black, scale: 1.0)
   )
 
-  rect((-.6,.4),(.6,5.6), fill: blue.lighten(40%), stroke:none, radius:4pt)
-  rect((-.2,6.6),(.4,7.4), fill: blue.lighten(60%), stroke:none, radius:2pt)
+  rect((-.6,.4),(.6,5.6), fill: blue.lighten(50%), stroke:blue.darken(50%), radius:4pt)
+  rect((-.35,6.6),(.4,7.4), fill: blue.lighten(60%), stroke:blue.darken(50%), radius:2pt)
 
-  rect((.7,.4),(3.3, 5.6), fill:green.lighten(40%),stroke:none, radius:4pt)
-  rect((.4,6.6),(1.0,7.4), fill:green.lighten(60%), stroke:none, radius:2pt)
+  rect((.7,.4),(3.3, 5.6), fill:green.lighten(50%),stroke:green.darken(50%), radius:4pt)
+  rect((.6,6.6),(1.4,7.4), fill:green.lighten(60%), stroke:green.darken(50%), radius:2pt)
 
-  rect((3.4, .4), (4.6, 5.6), fill:red.lighten(20%),stroke:none, radius:4pt)
-  rect((4.2,6.2),(4.7,7.8), fill:red.lighten(50%), stroke:none, radius:2pt)
+  rect((3.4, .4), (4.6, 5.6), fill:yellow.lighten(50%),stroke:yellow.darken(50%), radius:4pt)
+  rect((4.15,6.3),(4.75,7.7), fill:yellow.lighten(60%), stroke:yellow.darken(50%), radius:2pt)
 
   for i in range(1,6) {
-    bezier((0,i),(4,3),(2,i),(2,3), stroke: (paint:rgb(0,0,0,255),thickness:2pt))
+    bezier((0,i),(4,3),(2,i),(2,3) )
     circle((0,i),radius:.3,fill:white, stroke:2pt)
   }
   circle((4,3),radius:.3,fill:white, stroke:2pt)
   line((2,7),(3,7), mark:(end: ">"))
-  content((0,7),align(center+ top)[$ sum_(i=0)^n x_i w_i $])
-  content((5,7),align(center+ top)[$ cases(1 "if" >= b, 0 "if" <b) $])
+  content((0,7),align(center+ top)[$ sum_(i=0)^n space x_i dot w_i $])
+  content((5,7),align(center+ top)[$ cases(space 1 space "if" >= b, space 0 space "if" <b) $])
 })
