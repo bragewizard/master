@@ -1,5 +1,4 @@
 #import "@preview/cetz:0.4.2"
-// #set text(font: "Geist", weight: "medium", size: 9pt)
 
 #cetz.canvas(length: 1cm, {
   import cetz.draw: *

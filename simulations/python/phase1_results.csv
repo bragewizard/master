@@ -1,0 +1,25 @@
+Regime,Model,Threshold,WeightSum,Pattern,SpikeTime
+Low (Saturation),Simple IF,150.0,300.0,Concordant,6
+Low (Saturation),Simple IF,150.0,300.0,Discordant,14
+Low (Saturation),Standard LIF,140.0,300.0,Concordant,6
+Low (Saturation),Standard LIF,140.0,300.0,Discordant,14
+Low (Saturation),Linear Ramp,500.0,300.0,Concordant,6
+Low (Saturation),Linear Ramp,500.0,300.0,Discordant,11
+Low (Saturation),State Discount,100.0,300.0,Concordant,2
+Low (Saturation),State Discount,100.0,300.0,Discordant,14
+Critical (Balanced),Simple IF,290.0,300.0,Concordant,18
+Critical (Balanced),Simple IF,290.0,300.0,Discordant,18
+Critical (Balanced),Standard LIF,220.0,300.0,Concordant,DNF
+Critical (Balanced),Standard LIF,220.0,300.0,Discordant,18
+Critical (Balanced),Linear Ramp,1800.0,300.0,Concordant,12
+Critical (Balanced),Linear Ramp,1800.0,300.0,Discordant,18
+Critical (Balanced),State Discount,220.0,300.0,Concordant,DNF
+Critical (Balanced),State Discount,220.0,300.0,Discordant,DNF
+High (Deficit),Simple IF,310.0,300.0,Concordant,DNF
+High (Deficit),Simple IF,310.0,300.0,Discordant,DNF
+High (Deficit),Standard LIF,310.0,300.0,Concordant,DNF
+High (Deficit),Standard LIF,310.0,300.0,Discordant,DNF
+High (Deficit),Linear Ramp,2500.0,300.0,Concordant,15
+High (Deficit),Linear Ramp,2500.0,300.0,Discordant,20
+High (Deficit),State Discount,310.0,300.0,Concordant,DNF
+High (Deficit),State Discount,310.0,300.0,Discordant,DNF
