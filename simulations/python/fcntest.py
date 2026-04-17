@@ -15,12 +15,12 @@ BATCH_SIZE = 32
 paused = False
 step_once = False
 
-# --- SETUP ---
 window = pyglet.window.Window(
     WINDOW_SIZE,
     WINDOW_SIZE,
-    caption="MNIST Trainer: [Space] Pause | [S] Step | [V] Viz Weights",
+    caption="MNIST Baseline: [Space] Pause | [S] Step | [V] Viz Weights | [E] Export to SNN",
 )
+
 provider = MNISTProvider()
 batch_group = pyglet.graphics.Batch()
 
@@ -90,6 +90,25 @@ def on_key_press(symbol, modifiers):
         step_once = True
     elif symbol == key.V:
         visualize_weights()
+
+    elif symbol == key.E:
+        print("\n--- The Parameter Bridge: Exporting Baseline ---")
+        # Save the FP32 model state
+        torch.save(model.state_dict(), "phase2_baseline_fcn.pth")
+
+        # Perform a dry-run quantization to show the translation metrics
+        with torch.no_grad():
+            w1_fp = model.fc1.weight.data
+            w1_int8 = (w1_fp * 64).round().clamp(-128, 127)
+
+            print("[+] Saved FP32 parameters to 'phase2_baseline_fcn.pth'")
+            print(
+                f"  -> Hidden Layer FP32 Range: [{w1_fp.min():.4f}, {w1_fp.max():.4f}]"
+            )
+            print(
+                f"  -> Hidden Layer INT8 Range: [{w1_int8.min():.0f}, {w1_int8.max():.0f}]"
+            )
+            print("Ready for Phase II Zero-Shot Transfer!")
 
 
 def update(dt):

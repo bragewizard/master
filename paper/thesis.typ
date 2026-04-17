@@ -1444,6 +1444,35 @@ If $theta$ is configured significantly lower than $sum w_i$, models naturally re
 
 #serif-text()[ While the experimental results validate the core principles of @ttfs encoding and spiking integration, extrapolating these methods from controlled benchmarks to real-world deployment reveals significant engineering bottlenecks. This chapter critically analyzes the limitations observed during the implementation phase, specifically regarding data encoding, spatial representation, architectural translation, and hardware constraints. ]
 
+
+#v(2em)
+== Phase I: Temporal Dynamics and the TTFS Paradox <s.disc_phase1>
+
+#serif-text()[
+  The empirical observations from the Phase I threshold sweeps reveal a fundamental tension between traditional biological neuron models and the specific requirements of Time-To-First-Spike (TTFS) decoding. By systematically shifting the threshold bounds, the isolated unit tests exposed severe vulnerabilities in standard integration strategies, while validating the proposed momentum-based and state-discounting architectures.
+]
+
+=== The "Low Threshold Illusion" and the LIF Paradox
+
+#serif-text()[
+  Under Saturation (Low Threshold) conditions, all models successfully fired earlier for the concordant pattern. However, as hypothesized, this is largely an illusion of magnitude rather than true temporal decoding. The Simple IF (Model A) and LIF (Model B) models simply accumulated the heavily weighted early spikes and crossed the lowered threshold prematurely.
+
+  This vulnerability becomes glaringly apparent in the Critical (Balanced) regime. When forced to accumulate the entire sequence, Model A completely failed to differentiate order, firing simultaneously for both patterns. More critically, Model B (LIF) demonstrated a catastrophic misalignment with TTFS principles. At a balanced threshold, Model B registered a "Did Not Fire" (DNF) for the concordant pattern, but successfully fired for the discordant pattern.
+
+  This occurs due to the interaction between temporal density and the exponential leak. In the concordant pattern, the strongest spikes arrive early, but their accumulated potential decays significantly while waiting for the weaker, later spikes. Conversely, in the discordant pattern, early weak spikes establish a baseline potential, and the massive late-arriving spikes push the neuron over the threshold immediately before they have a chance to decay. Consequently, standard LIF inherently favors "strongest-last" sequences, actively fighting the "strongest-first" priority of TTFS encoding.
+]
+
+=== Selective Filtering vs. Unbounded Momentum
+
+#serif-text()[
+  In contrast to the standard models, the custom architectures (Models C and D) exhibited highly desirable temporal dynamics for rank-order decoding.
+
+  At the Critical (Balanced) threshold, the State-Dependent Discount (Model D) achieved perfect selective filtering. It successfully fired for the concordant pattern while completely suppressing the discordant pattern. By discounting late-arriving spikes based on internal state rather than elapsed time, it ensures that a neuron only fires if the most critical information arrives exactly when the neuron is empty and highly receptive.
+
+  The Linear Ramp (Model C) demonstrated extreme robustness, being the only architecture capable of crossing the High (Deficit) threshold. By converting early spikes into compounding integration momentum, Model C can force a spike even when the raw spatial weight sum is theoretically insufficient. While this unbounded momentum guarantees high firing rates and robust temporal differentiation, it theoretically introduces a risk of network over-excitation. However, in the context of this architecture, this risk is safely mitigated by the strict enforcement of the saccade deadline ($T_"max" = 64$); the global reset prevents the linear ramp from diverging toward hardware saturation across multiple inferences.
+]
+
+
 #v(2em)
 == Encoding Modalities and the Contrast Problem
 
