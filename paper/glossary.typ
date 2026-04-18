@@ -6,6 +6,12 @@
     description: "",
   ),
   (
+    key: "tsne",
+    short: "t-SNE",
+    long: "t-distributed Stochastic Neighbor Embedding",
+    description: "",
+  ),
+  (
     key: "stdp",
     short: "STDP",
     long: "Spike-Timing-Dependent Plasticity",

@@ -1,172 +1,743 @@
-@article{Placeholder,
-  author  = {?},
-  title   = {Placeholder},
-  year    = {2025},
-  notes   = {this is a placeholder reference}
-}
-%  -------------------------------------------------------------------
-% --- ARTIFICIAL INTELLIGENCE (Foundations)
-% -------------------------------------------------------------------
 
-% Summary: This is the foundational paper of Artificial Intelligence.
-% Alan Turing proposes the "Imitation Game" (now the Turing Test)
-% to answer the question, "Can machines think?" It sets the entire
-% philosophical and practical agenda for the field.
-@article{Turing1950,
-  author  = {A. M. Turing},
-  title   = {Computing Machinery and Intelligence},
-  journal = {Mind},
-  volume  = {LIX},
-  number  = {236},
-  pages   = {433--460},
-  year    = {1950}
+@book{gerstner_neuronal_2014,
+	location = {Cambridge, United Kingdom},
+	title = {Neuronal dynamics: from single neurons to networks and models of cognition},
+	isbn = {978-1-107-06083-8 978-1-107-63519-7},
+	shorttitle = {Neuronal dynamics},
+	pagetotal = {577},
+	publisher = {Cambridge University Press},
+	author = {Gerstner, Wulfram and Kistler, Werner M. and Naud, Richard and Paninski, Liam},
+	date = {2014},
 }
 
-% Summary: This paper presents the first mathematical model of a
-% "neuron" (the McCulloch-Pitts neuron). The authors show how these
-% simple binary units can be networked together to perform any logical
-% function, laying the groundwork for all future neural networks.
-@article{McCulloch1943,
-  author  = {Warren S. McCulloch and Walter Pitts},
-  title   = {A logical calculus of the ideas immanent in nervous activity},
-  journal = {The Bulletin of Mathematical Biophysics},
-  volume  = {5},
-  number  = {4},
-  pages   = {115--133},
-  year    = {1943}
+@article{institute_for_beam_physics_and_technology_karlsruhe_institute_of_technology_hermann-von-helmholtz-platz_1_eggenstein-leopoldshafen_baden-wuerttemberg_76344_germany_fast_2025,
+	title = {Fast Simulation of Cellular Automata by Self-Composition},
+	volume = {34},
+	issn = {08912513},
+	url = {https://www.complex-systems.com/abstracts/v34_i03_a01},
+	doi = {10.25088/ComplexSystems.34.3.259},
+	abstract = {Computing the configuration of any one-dimensional cellular automaton at generation n can be accelerated by constructing and running a composite rule with a radius proportional to log  n. The new automaton is the original one, but with its local rule function composed with itself. Consequently, the asymptotic time complexity to compute the configuration of generation n is reduced from O(n2)-time to O(n2/logn)but with O(n2/(logn)3)-space, demonstrating a time-memory tradeoff. Experimental results are given in the case of rule 30.},
+	pages = {259--272},
+	number = {3},
+	journaltitle = {Complex Systems},
+	shortjournal = {{ComplexSystems}},
+	author = {Institute for Beam Physics \{and\} Technology Karlsruhe Institute of Technology Hermann-Von-Helmholtz-Platz 1 Eggenstein-Leopoldshafen, Baden-Wuerttemberg 76344, Germany and Natal, Joseph and Al-saadi, Oleksiy and Department of Computer Science, Sonoma State University 1801 East Cotati Avenue Rohnert Park, {CA} 94928, United States},
+	urldate = {2025-10-27},
+	date = {2025-10-15},
 }
 
-% Summary: This paper introduces the "Perceptron," the first algorithm
-% for a trainable neural network. It's a linear classifier that can
-% learn from data, and it's the direct ancestor of modern,
-% multi-layered networks.
-@article{Rosenblatt1958,
-  author  = {Frank Rosenblatt},
-  title   = {The perceptron: a probabilistic model for information storage and organization in the brain},
-  journal = {Psychological Review},
-  volume  = {65},
-  number  = {6},
-  pages   = {386--408},
-  year    = {1958}
+@incollection{vedaldi_deep_2020,
+	location = {Cham},
+	title = {Deep Spiking Neural Network: Energy Efficiency Through Time Based Coding},
+	volume = {12355},
+	isbn = {978-3-030-58606-5 978-3-030-58607-2},
+	url = {https://link.springer.com/10.1007/978-3-030-58607-2_23},
+	doi = {10.1007/978-3-030-58607-2_23},
+	shorttitle = {Deep Spiking Neural Network},
+	pages = {388--404},
+	booktitle = {Computer Vision – {ECCV} 2020},
+	publisher = {Springer International Publishing},
+	author = {Han, Bing and Roy, Kaushik},
+	editor = {Vedaldi, Andrea and Bischof, Horst and Brox, Thomas and Frahm, Jan-Michael},
+	urldate = {2025-10-27},
+	date = {2020},
+	langid = {english},
 }
 
-% Summary: This is the paper that (re)popularized the backpropagation
-% algorithm. It provided an efficient way to train deep, multi-layer
-% neural networks, overcoming the limitations of the original
-% Perceptron. This algorithm is the engine behind the entire
-% modern deep learning revolution.
-@article{Rumelhart1986,
-  author  = {David E. Rumelhart and Geoffrey E. Hinton and Ronald J. Williams},
-  title   = {Learning representations by back-propagating errors},
-  journal = {Nature},
-  volume  = {323},
-  pages   = {533--536},
-  year    = {1986}
+@article{sommer_efficient_2022,
+	title = {Efficient Hardware Acceleration of Sparsely Active Convolutional Spiking Neural Networks},
+	volume = {41},
+	issn = {0278-0070, 1937-4151},
+	url = {http://arxiv.org/abs/2203.12437},
+	doi = {10.1109/TCAD.2022.3197512},
+	abstract = {Spiking Neural Networks ({SNNs}) compute in an event-based matter to achieve a more efficient computation than standard Neural Networks. In {SNNs}, neuronal outputs (i.e. activations) are not encoded with real-valued activations but with sequences of binary spikes. The motivation of using {SNNs} over conventional neural networks is rooted in the special computational aspects of {SNNs}, especially the very high degree of sparsity of neural output activations. Well established architectures for conventional Convolutional Neural Networks ({CNNs}) feature large spatial arrays of Processing Elements ({PEs}) that remain highly underutilized in the face of activation sparsity. We propose a novel architecture that is optimized for the processing of Convolutional {SNNs} ({CSNNs}) that feature a high degree of activation sparsity. In our architecture, the main strategy is to use less but highly utilized {PEs}. The {PE} array used to perform the convolution is only as large as the kernel size, allowing all {PEs} to be active as long as there are spikes to process. This constant flow of spikes is ensured by compressing the feature maps (i.e. the activations) into queues that can then be processed spike by spike. This compression is performed in run-time using dedicated circuitry, leading to a self-timed scheduling. This allows the processing time to scale directly with the number of spikes. A novel memory organization scheme called memory interlacing is used to efficiently store and retrieve the membrane potentials of the individual neurons using multiple small parallel on-chip {RAMs}. Each {RAM} is hardwired to its {PE}, reducing switching circuitry and allowing {RAMs} to be located in close proximity to the respective {PE}. We implemented the proposed architecture on an {FPGA} and achieved a significant speedup compared to other implementations while needing less hardware resources and maintaining a lower energy consumption.},
+	pages = {3767--3778},
+	number = {11},
+	journaltitle = {{IEEE} Transactions on Computer-Aided Design of Integrated Circuits and Systems},
+	shortjournal = {{IEEE} Trans. Comput.-Aided Des. Integr. Circuits Syst.},
+	author = {Sommer, Jan and Özkan, M. Akif and Keszocze, Oliver and Teich, Jürgen},
+	urldate = {2025-10-27},
+	date = {2022-11},
+	eprinttype = {arxiv},
+	eprint = {2203.12437 [cs]},
+	file = {Sommer et al. - 2022 - Efficient Hardware Acceleration of Sparsely Active Convolutional Spiking Neural Networks.pdf:/home/brage/Zotero/storage/UMF6JE2N/Sommer et al. - 2022 - Efficient Hardware Acceleration of Sparsely Active Convolutional Spiking Neural Networks.pdf:application/pdf},
 }
 
-% Summary: This is the "AlexNet" paper. By using a deep convolutional
-% neural network (CNN) trained with backpropagation on GPUs, the
-% authors won the 2012 ImageNet competition by a massive margin.
-% This single paper ignited the modern boom in deep learning.
-@inproceedings{Krizhevsky2012,
-  author    = {Alex Krizhevsky and Ilya Sutskever and Geoffrey E. Hinton},
-  title     = {ImageNet Classification with Deep Convolutional Neural Networks},
-  booktitle = {Advances in Neural Information Processing Systems 25 (NIPS 2012)},
-  pages     = {1097--1105},
-  year      = {2012}
+@misc{haessig_spiking_2017,
+	title = {Spiking Optical Flow for Event-based Sensors Using {IBM}'s {TrueNorth} Neurosynaptic System},
+	url = {http://arxiv.org/abs/1710.09820},
+	doi = {10.48550/arXiv.1710.09820},
+	abstract = {This paper describes a fully spike-based neural network for optical flow estimation from Dynamic Vision Sensor data. A low power embedded implementation of the method which combines the Asynchronous Time-based Image Sensor with {IBM}'s {TrueNorth} Neurosynaptic System is presented. The sensor generates spikes with sub-millisecond resolution in response to scene illumination changes. These spike are processed by a spiking neural network running on {TrueNorth} with a 1 millisecond resolution to accurately determine the order and time difference of spikes from neighboring pixels, and therefore infer the velocity. The spiking neural network is a variant of the Barlow Levick method for optical flow estimation. The system is evaluated on two recordings for which ground truth motion is available, and achieves an Average Endpoint Error of 11\% at an estimated power budget of under 80mW for the sensor and computation.},
+	number = {{arXiv}:1710.09820},
+	author = {Haessig, Germain and Cassidy, Andrew and Alvarez, Rodrigo and Benosman, Ryad and Orchard, Garrick},
+	urldate = {2025-10-27},
+	date = {2017-10-26},
+	eprinttype = {arxiv},
+	eprint = {1710.09820 [cs]},
+	file = {Haessig et al. - 2017 - Spiking Optical Flow for Event-based Sensors Using IBM's TrueNorth Neurosynaptic System.pdf:/home/brage/Zotero/storage/PEUSF8ZJ/Haessig et al. - 2017 - Spiking Optical Flow for Event-based Sensors Using IBM's TrueNorth Neurosynaptic System.pdf:application/pdf},
 }
 
-% -------------------------------------------------------------------
-% --- NEUROSCIENCE (Foundations)
-% -------------------------------------------------------------------
-
-% Summary: This is arguably the most important paper in neuroscience.
-% Hodgkin and Huxley used the squid giant axon to develop a complete
-% mathematical model of the action potential (the "spike").
-% It describes how ion channels (Na+ and K+) create the nerve impulse.
-@article{Hodgkin1952,
-  author  = {Alan L. Hodgkin and Andrew F. Huxley},
-  title   = {A quantitative description of membrane current and its application to conduction and excitation in nerve},
-  journal = {The Journal of Physiology},
-  volume  = {117},
-  number  = {4},
-  pages   = {500--544},
-  year    = {1952}
+@article{roy_towards_2019,
+	title = {Towards spike-based machine intelligence with neuromorphic computing},
+	volume = {575},
+	issn = {0028-0836, 1476-4687},
+	url = {https://www.nature.com/articles/s41586-019-1677-2},
+	doi = {10.1038/s41586-019-1677-2},
+	pages = {607--617},
+	number = {7784},
+	journaltitle = {Nature},
+	shortjournal = {Nature},
+	author = {Roy, Kaushik and Jaiswal, Akhilesh and Panda, Priyadarshini},
+	urldate = {2025-10-27},
+	date = {2019-11-28},
+	langid = {english},
 }
 
-% Summary: This is not a paper, but the foundational book that
-% proposed the mechanism for synaptic plasticity now known as
-% "Hebbian Learning." It contains the famous phrase:
-% "Neurons that fire together, wire together." This is the
-% biological basis for learning and memory that inspires many AI rules.
-@book{Hebb1949,
-  author    = {D. O. Hebb},
-  title     = {The Organization of Behavior: A Neuropsychological Theory},
-  publisher = {Wiley & Sons},
-  address   = {New York},
-  year      = {1949}
+@article{schuman_opportunities_2022,
+	title = {Opportunities for neuromorphic computing algorithms and applications},
+	volume = {2},
+	issn = {2662-8457},
+	url = {https://www.nature.com/articles/s43588-021-00184-y},
+	doi = {10.1038/s43588-021-00184-y},
+	pages = {10--19},
+	number = {1},
+	journaltitle = {Nature Computational Science},
+	shortjournal = {Nat Comput Sci},
+	author = {Schuman, Catherine D. and Kulkarni, Shruti R. and Parsa, Maryam and Mitchell, J. Parker and Date, Prasanna and Kay, Bill},
+	urldate = {2025-10-27},
+	date = {2022-01-31},
+	langid = {english},
 }
 
-% Summary: This Nobel Prize-winning work is a cornerstone of
-% sensory neuroscience. Hubel and Wiesel recorded from neurons in the
-% cat's visual cortex and discovered its hierarchical structure,
-% finding "simple" and "complex" cells that respond to specific
-% orientations and edges. This work directly inspired the
-% architecture of modern Convolutional Neural Networks (CNNs).
-@article{Hubel1962,
-  author  = {David H. Hubel and Torsten N. Wiesel},
-  title   = {Receptive fields, binocular interaction and functional architecture in the cat's visual cortex},
-  journal = {The Journal of Physiology},
-  volume  = {160},
-  number  = {1},
-  pages   = {106--154},
-  year    = {1962}
+@article{stan_learning_2024,
+	title = {Learning long sequences in spiking neural networks},
+	volume = {14},
+	issn = {2045-2322},
+	url = {https://www.nature.com/articles/s41598-024-71678-8},
+	doi = {10.1038/s41598-024-71678-8},
+	abstract = {Abstract
+            Spiking neural networks ({SNNs}) take inspiration from the brain to enable energy-efficient computations. Since the advent of Transformers, {SNNs} have struggled to compete with artificial networks on modern sequential tasks, as they inherit limitations from recurrent neural networks ({RNNs}), with the added challenge of training with non-differentiable binary spiking activations. However, a recent renewed interest in efficient alternatives to Transformers has given rise to state-of-the-art recurrent architectures named state space models ({SSMs}). This work systematically investigates, for the first time, the intersection of state-of-the-art {SSMs} with {SNNs} for long-range sequence modelling. Results suggest that {SSM}-based {SNNs} can outperform the Transformer on all tasks of a well-established long-range sequence modelling benchmark. It is also shown that {SSM}-based {SNNs} can outperform current state-of-the-art {SNNs} with fewer parameters on sequential image classification. Finally, a novel feature mixing layer is introduced, improving {SNN} accuracy while challenging assumptions about the role of binary activations in {SNNs}. This work paves the way for deploying powerful {SSM}-based architectures, such as large language models, to neuromorphic hardware for energy-efficient long-range sequence modelling.},
+	pages = {21957},
+	number = {1},
+	journaltitle = {Scientific Reports},
+	shortjournal = {Sci Rep},
+	author = {Stan, Matei-Ioan and Rhodes, Oliver},
+	urldate = {2025-10-27},
+	date = {2024-09-20},
+	langid = {english},
 }
 
-% -------------------------------------------------------------------
-% --- NEUROMORPHIC COMPUTING (Foundations)
-% -------------------------------------------------------------------
-
-% Summary: This paper, by Carver Mead, essentially founded the field
-% of neuromorphic engineering. Mead argued for building electronic
-% circuits that operate in the same way as biological neurons
-% (using analog, sub-threshold physics) rather than just simulating
-% them on digital computers.
-@article{Mead1990,
-  author  = {Carver Mead},
-  title   = {Neuromorphic electronic systems},
-  journal = {Proceedings of the IEEE},
-  volume  = {78},
-  number  = {10},
-  pages   = {1629--1636},
-  year    = {1990}
+@misc{koren_biologically_2022,
+	title = {Biologically plausible solutions for spiking networks with efficient coding},
+	rights = {Creative Commons Attribution Non Commercial No Derivatives 4.0 International},
+	url = {https://arxiv.org/abs/2210.07069},
+	doi = {10.48550/ARXIV.2210.07069},
+	abstract = {Understanding how the dynamics of neural networks is shaped by the computations they perform is a fundamental question in neuroscience. Recently, the framework of efficient coding proposed a theory of how spiking neural networks can compute low-dimensional stimulus signals with high efficiency. Efficient spiking networks are based on time-dependent minimization of a loss function related to information coding with spikes. To inform the understanding of the function and dynamics of biological networks in the brain, however, the mathematical models have to be informed by biology and obey the same constraints as biological networks. Currently, spiking network models of efficient coding have been extended to include some features of biological plausibility, such as architectures with excitatory and inhibitory neurons. However, biological realism of efficient coding theories is still limited to simple cases and does not include single neuron and network properties that are known to be key in biological circuits. Here, we revisit the theory of efficient coding with spikes to develop spiking neural networks that are closer to biological circuits. Namely, we find a biologically plausible spiking model realizing efficient coding in the case of a generalized leaky integrate-and-fire network with excitatory and inhibitory units, equipped with fast and slow synaptic currents, local homeostatic currents such as spike-triggered adaptation, hyperpolarization-activated rebound current, heterogeneous firing thresholds and resets, heterogeneous postsynaptic potentials, and structured, low-rank connectivity. We show how the complexity of E-E connectivity matrix shapes network responses.},
+	author = {Koren, Veronika and Panzeri, Stefano},
+	urldate = {2025-10-31},
+	date = {2022},
 }
 
-% Summary: This is a classic early example of Carver Mead's vision
-% in practice. Mahowald and Douglas built a "silicon neuron"—a
-% physical VLSI chip that implemented the Hodgkin-Huxley model's
-% dynamics, successfully mimicking the electrical behavior of a
-% real biological neuron in hardware.
-@article{Mahowald1991,
-  author  = {Misha Mahowald and Rodney Douglas},
-  title   = {A silicon neuron},
-  journal = {Nature},
-  volume  = {354},
-  pages   = {515--518},
-  year    = {1991}
+@incollection{webb_neuronal_2017,
+	title = {Neuronal Function in the Nervous System},
+	rights = {https://www.elsevier.com/tdm/userlicense/1.0/},
+	isbn = {978-0-323-10027-4},
+	url = {https://linkinghub.elsevier.com/retrieve/pii/B978032310027400004X},
+	doi = {10.1016/B978-0-323-10027-4.00004-X},
+	pages = {74--92},
+	booktitle = {Neurology for the Speech-Language Pathologist},
+	publisher = {Elsevier},
+	author = {Webb, Wanda G.},
+	urldate = {2025-11-13},
+	date = {2017},
+	langid = {english},
 }
 
-% Summary: This paper describes the SpiNNaker (Spiking Neural Network
-% Architecture) project. It's a landmark in large-scale neuromorphic
-% systems, using a million ARM processors in parallel to simulate
-% spiking neural networks in real-time, focusing on computational
-% neuroscience and robotics.
-@article{Furber2014,
-  author  = {Steve B. Furber and Francesco Galluppi and Steve Temple and Luis A. Plana},
-  title   = {The SpiNNaker Project},
-  journal = {Proceedings of the IEEE},
-  volume  = {102},
-  number  = {5},
-  pages   = {652--665},
-  year    = {2014}
+@misc{metcalfe_action_2020,
+	title = {Action potentials recorded from the L5 dorsal rootlet of rat using a multiple electrode array},
+	rights = {, Creative Commons Attribution 4.0 International},
+	url = {https://data.mendeley.com/datasets/ybhwtngzmm/1},
+	doi = {10.17632/YBHWTNGZMM.1},
+	abstract = {This dataset is from a neural recording experiment conducted on a single adult female Sprague Dawley rat using a custom-made electrode array (10 wire hooks connected as isolated dipoles, with an effective inter-channel spacing of 1 mm) and commercial amplifiers and instrumentation. The dataset contains 20 recordings all of length 250 ms with a sampling rate of 50 {kHz}. The first 10 recordings were made with the animal at rest and are located in a folder called “Resting”, the filenames are timestamps that correspond to the time the recordings were started (1551.mat to 1608.mat). The second 10 recordings were made while the L5 dermatome was stimulated and are located in a folder called “Cutaneous Stimulation” and likewise the filenames are timestamps that correspond to the time the recordings were started (1554.mat to 1612.mat). The files are all stored as standard {MATLAB} data files are openable with a wide range of software packages including Python via the {SciPy} package. Within each data file there is a single vector called “rawdata” that is a 125,000 x 6 vector where the first column is a time vector and columns 2 thru 6 are Channel 1 thru Channel 5, where Channel 1 represents the most distal dipole, i.e the closest to the tail.},
+	publisher = {Mendeley},
+	author = {Metcalfe, Benjamin},
+	urldate = {2026-01-08},
+	date = {2020-06-12},
+	keywords = {Biomedical Engineering, {FOS}: Medical engineering, Neural-Computer Interface},
 }
+
+@article{metcalfe_dataset_2020,
+	title = {A dataset of action potentials recorded from the L5 dorsal rootlet of rat using a multiple electrode array},
+	volume = {33},
+	issn = {23523409},
+	url = {https://linkinghub.elsevier.com/retrieve/pii/S2352340920314438},
+	doi = {10.1016/j.dib.2020.106561},
+	pages = {106561},
+	journaltitle = {Data in Brief},
+	shortjournal = {Data in Brief},
+	author = {Metcalfe, Benjamin and Hunter, Alan and Graham-Harper-Cater, Jonathan and Taylor, John},
+	urldate = {2026-01-08},
+	date = {2020-12},
+	langid = {english},
+}
+
+@article{noauthor_order_2024,
+	title = {Order matters: neurons in the human brain fire in sequences that encode information},
+	rights = {https://www.springernature.com/gp/researchers/text-and-data-mining},
+	issn = {0028-0836, 1476-4687},
+	url = {https://www.nature.com/articles/d41586-024-03835-y},
+	doi = {10.1038/d41586-024-03835-y},
+	shorttitle = {Order matters},
+	pages = {d41586--024--03835--y},
+	journaltitle = {Nature},
+	shortjournal = {Nature},
+	urldate = {2026-01-10},
+	date = {2024-11-27},
+	langid = {english},
+}
+
+@article{getz_high-resolution_2022,
+	title = {High-resolution imaging and manipulation of endogenous {AMPA} receptor surface mobility during synaptic plasticity and learning},
+	volume = {8},
+	issn = {2375-2548},
+	url = {https://www.science.org/doi/10.1126/sciadv.abm5298},
+	doi = {10.1126/sciadv.abm5298},
+	abstract = {Regulation of synaptic neurotransmitter receptor content is a fundamental mechanism for tuning synaptic efficacy during experience-dependent plasticity and behavioral adaptation. However, experimental approaches to track and modify receptor movements in integrated experimental systems are limited. Exploiting {AMPA}-type glutamate receptors ({AMPARs}) as a model, we generated a knock-in mouse expressing the biotin acceptor peptide ({AP}) tag on the {GluA}2 extracellular N-terminal. Cell-specific introduction of biotin ligase allows the use of monovalent or tetravalent avidin variants to respectively monitor or manipulate the surface mobility of endogenous {AMPAR} containing biotinylated {AP}–{GluA}2 in neuronal subsets. {AMPAR} immobilization precluded the expression of long-term potentiation and formation of contextual fear memory, allowing target-specific control of the expression of synaptic plasticity and animal behavior. The {AP} tag knock-in model offers unprecedented access to resolve and control the spatiotemporal dynamics of endogenous receptors, and opens new avenues to study the molecular mechanisms of synaptic plasticity and learning.
+          ,
+            We measure and control receptor surface traffic in intact tissue with a versatile knock-in mouse model and molecular toolkit.},
+	pages = {eabm5298},
+	number = {30},
+	journaltitle = {Science Advances},
+	shortjournal = {Sci. Adv.},
+	author = {Getz, Angela M. and Ducros, Mathieu and Breillat, Christelle and Lampin-Saint-Amaux, Aurélie and Daburon, Sophie and François, Urielle and Nowacka, Agata and Fernández-Monreal, Mónica and Hosy, Eric and Lanore, Frédéric and Zieger, Hanna L. and Sainlos, Matthieu and Humeau, Yann and Choquet, Daniel},
+	urldate = {2026-03-19},
+	date = {2022-07-29},
+	langid = {english},
+	file = {Full Text:/home/brage/Zotero/storage/6KA6YC5R/Getz et al. - 2022 - High-resolution imaging and manipulation of endogenous AMPA receptor surface mobility during synapti.pdf:application/pdf},
+}
+
+@article{jumper_highly_2021,
+	title = {Highly accurate protein structure prediction with {AlphaFold}},
+	volume = {596},
+	issn = {0028-0836, 1476-4687},
+	url = {https://www.nature.com/articles/s41586-021-03819-2},
+	doi = {10.1038/s41586-021-03819-2},
+	abstract = {Abstract
+
+              Proteins are essential to life, and understanding their structure can facilitate a mechanistic understanding of their function. Through an enormous experimental effort
+              1–4
+              , the structures of around 100,000 unique proteins have been determined
+              5
+              , but this represents a small fraction of the billions of known protein sequences
+              6,7
+              . Structural coverage is bottlenecked by the months to years of painstaking effort required to determine a single protein structure. Accurate computational approaches are needed to address this gap and to enable large-scale structural bioinformatics. Predicting the three-dimensional structure that a protein will adopt based solely on its amino acid sequence—the structure prediction component of the ‘protein folding problem’
+              8
+              —has been an important open research problem for more than 50 years
+              9
+              . Despite recent progress
+              10–14
+              , existing methods fall far short of atomic accuracy, especially when no homologous structure is available. Here we provide the first computational method that can regularly predict protein structures with atomic accuracy even in cases in which no similar structure is known. We validated an entirely redesigned version of our neural network-based model, {AlphaFold}, in the challenging 14th Critical Assessment of protein Structure Prediction ({CASP}14)
+              15
+              , demonstrating accuracy competitive with experimental structures in a majority of cases and greatly outperforming other methods. Underpinning the latest version of {AlphaFold} is a novel machine learning approach that incorporates physical and biological knowledge about protein structure, leveraging multi-sequence alignments, into the design of the deep learning algorithm.},
+	pages = {583--589},
+	number = {7873},
+	journaltitle = {Nature},
+	shortjournal = {Nature},
+	author = {Jumper, John and Evans, Richard and Pritzel, Alexander and Green, Tim and Figurnov, Michael and Ronneberger, Olaf and Tunyasuvunakool, Kathryn and Bates, Russ and Žídek, Augustin and Potapenko, Anna and Bridgland, Alex and Meyer, Clemens and Kohl, Simon A. A. and Ballard, Andrew J. and Cowie, Andrew and Romera-Paredes, Bernardino and Nikolov, Stanislav and Jain, Rishub and Adler, Jonas and Back, Trevor and Petersen, Stig and Reiman, David and Clancy, Ellen and Zielinski, Michal and Steinegger, Martin and Pacholska, Michalina and Berghammer, Tamas and Bodenstein, Sebastian and Silver, David and Vinyals, Oriol and Senior, Andrew W. and Kavukcuoglu, Koray and Kohli, Pushmeet and Hassabis, Demis},
+	urldate = {2026-04-18},
+	date = {2021-08-26},
+	langid = {english},
+	file = {Full Text:/home/brage/Zotero/storage/UILLPUM3/Jumper et al. - 2021 - Highly accurate protein structure prediction with AlphaFold.pdf:application/pdf},
+}
+
+@article{silver_mastering_2016,
+	title = {Mastering the game of Go with deep neural networks and tree search},
+	volume = {529},
+	issn = {0028-0836, 1476-4687},
+	url = {https://www.nature.com/articles/nature16961},
+	doi = {10.1038/nature16961},
+	pages = {484--489},
+	number = {7587},
+	journaltitle = {Nature},
+	shortjournal = {Nature},
+	author = {Silver, David and Huang, Aja and Maddison, Chris J. and Guez, Arthur and Sifre, Laurent and Van Den Driessche, George and Schrittwieser, Julian and Antonoglou, Ioannis and Panneershelvam, Veda and Lanctot, Marc and Dieleman, Sander and Grewe, Dominik and Nham, John and Kalchbrenner, Nal and Sutskever, Ilya and Lillicrap, Timothy and Leach, Madeleine and Kavukcuoglu, Koray and Graepel, Thore and Hassabis, Demis},
+	urldate = {2026-04-18},
+	date = {2016-01-28},
+	langid = {english},
+}
+
+@inproceedings{strubell_energy_2019,
+	location = {Florence, Italy},
+	title = {Energy and Policy Considerations for Deep Learning in {NLP}},
+	url = {https://aclanthology.org/P19-1355},
+	doi = {10.18653/v1/P19-1355},
+	eventtitle = {Proceedings of the 57th Annual Meeting of the Association for Computational Linguistics},
+	pages = {3645--3650},
+	booktitle = {Proceedings of the 57th Annual Meeting of the Association for Computational Linguistics},
+	publisher = {Association for Computational Linguistics},
+	author = {Strubell, Emma and Ganesh, Ananya and {McCallum}, Andrew},
+	urldate = {2026-04-18},
+	date = {2019},
+	langid = {english},
+	file = {Full Text:/home/brage/Zotero/storage/UTF7JVMB/Strubell et al. - 2019 - Energy and Policy Considerations for Deep Learning in NLP.pdf:application/pdf},
+}
+
+@article{geirhos_shortcut_2020,
+	title = {Shortcut learning in deep neural networks},
+	volume = {2},
+	issn = {2522-5839},
+	url = {https://www.nature.com/articles/s42256-020-00257-z},
+	doi = {10.1038/s42256-020-00257-z},
+	pages = {665--673},
+	number = {11},
+	journaltitle = {Nature Machine Intelligence},
+	shortjournal = {Nat Mach Intell},
+	author = {Geirhos, Robert and Jacobsen, Jörn-Henrik and Michaelis, Claudio and Zemel, Richard and Brendel, Wieland and Bethge, Matthias and Wichmann, Felix A.},
+	urldate = {2026-04-18},
+	date = {2020-11-10},
+	langid = {english},
+	file = {Submitted Version:/home/brage/Zotero/storage/JVY8ZZBT/Geirhos et al. - 2020 - Shortcut learning in deep neural networks.pdf:application/pdf},
+}
+
+@article{laughlin_energy_2001,
+	title = {Energy as a constraint on the coding and processing of sensory information},
+	volume = {11},
+	rights = {https://www.elsevier.com/tdm/userlicense/1.0/},
+	issn = {09594388},
+	url = {https://linkinghub.elsevier.com/retrieve/pii/S0959438800002373},
+	doi = {10.1016/S0959-4388(00)00237-3},
+	pages = {475--480},
+	number = {4},
+	journaltitle = {Current Opinion in Neurobiology},
+	author = {Laughlin, S},
+	urldate = {2026-04-18},
+	date = {2001-08-01},
+}
+
+@article{davies_loihi_2018,
+	title = {Loihi: A Neuromorphic Manycore Processor with On-Chip Learning},
+	volume = {38},
+	rights = {https://ieeexplore.ieee.org/Xplorehelp/downloads/license-information/{IEEE}.html},
+	issn = {0272-1732, 1937-4143},
+	url = {https://ieeexplore.ieee.org/document/8259423/},
+	doi = {10.1109/MM.2018.112130359},
+	shorttitle = {Loihi},
+	pages = {82--99},
+	number = {1},
+	journaltitle = {{IEEE} Micro},
+	shortjournal = {{IEEE} Micro},
+	author = {Davies, Mike and Srinivasa, Narayan and Lin, Tsung-Han and Chinya, Gautham and Cao, Yongqiang and Choday, Sri Harsha and Dimou, Georgios and Joshi, Prasad and Imam, Nabil and Jain, Shweta and Liao, Yuyun and Lin, Chit-Kwan and Lines, Andrew and Liu, Ruokun and Mathaikutty, Deepak and {McCoy}, Steven and Paul, Arnab and Tse, Jonathan and Venkataramanan, Guruguhanathan and Weng, Yi-Hsin and Wild, Andreas and Yang, Yoonseok and Wang, Hong},
+	urldate = {2026-04-18},
+	date = {2018-01},
+}
+
+@article{furber_spinnaker_2014,
+	title = {The {SpiNNaker} Project},
+	volume = {102},
+	rights = {https://ieeexplore.ieee.org/Xplorehelp/downloads/license-information/{OAPA}.html},
+	issn = {0018-9219, 1558-2256},
+	url = {https://ieeexplore.ieee.org/document/6750072/},
+	doi = {10.1109/JPROC.2014.2304638},
+	pages = {652--665},
+	number = {5},
+	journaltitle = {Proceedings of the {IEEE}},
+	shortjournal = {Proc. {IEEE}},
+	author = {Furber, Steve B. and Galluppi, Francesco and Temple, Steve and Plana, Luis A.},
+	urldate = {2026-04-18},
+	date = {2014-05},
+	file = {Full Text:/home/brage/Zotero/storage/VK8PWRD8/Furber et al. - 2014 - The SpiNNaker Project.pdf:application/pdf},
+}
+
+@article{glickstein_golgi_2006,
+	title = {Golgi and Cajal: The neuron doctrine and the 100th anniversary of the 1906 Nobel Prize},
+	volume = {16},
+	issn = {09609822},
+	url = {https://linkinghub.elsevier.com/retrieve/pii/S0960982206012036},
+	doi = {10.1016/j.cub.2006.02.053},
+	shorttitle = {Golgi and Cajal},
+	pages = {R147--R151},
+	number = {5},
+	journaltitle = {Current Biology},
+	shortjournal = {Current Biology},
+	author = {Glickstein, Mitch},
+	urldate = {2026-04-18},
+	date = {2006-03},
+	langid = {english},
+	file = {Full Text:/home/brage/Zotero/storage/MQMMDQXB/Glickstein - 2006 - Golgi and Cajal The neuron doctrine and the 100th anniversary of the 1906 Nobel Prize.pdf:application/pdf},
+}
+
+@article{mcculloch_logical_1943,
+	title = {A logical calculus of the ideas immanent in nervous activity},
+	volume = {5},
+	rights = {http://www.springer.com/tdm},
+	issn = {0007-4985, 1522-9602},
+	url = {http://link.springer.com/10.1007/BF02478259},
+	doi = {10.1007/BF02478259},
+	pages = {115--133},
+	number = {4},
+	journaltitle = {The Bulletin of Mathematical Biophysics},
+	shortjournal = {Bulletin of Mathematical Biophysics},
+	author = {{McCulloch}, Warren S. and Pitts, Walter},
+	urldate = {2026-04-18},
+	date = {1943-12},
+	langid = {english},
+}
+
+@book{hebb_organization_2002,
+	location = {Mahwah, N.J},
+	title = {The organization of behavior: a neuropsychological theory},
+	isbn = {978-0-8058-4300-2},
+	shorttitle = {The organization of behavior},
+	pagetotal = {335},
+	publisher = {L. Erlbaum Associates},
+	author = {Hebb, D. O.},
+	date = {2002},
+	keywords = {Neuropsychology},
+}
+
+@article{shatz_developing_1992,
+	title = {The Developing Brain},
+	volume = {267},
+	issn = {0036-8733},
+	url = {https://www.scientificamerican.com/article/the-developing-brain},
+	doi = {10.1038/scientificamerican0992-60},
+	pages = {60--67},
+	number = {3},
+	journaltitle = {Scientific American},
+	shortjournal = {Sci Am},
+	author = {Shatz, Carla J.},
+	urldate = {2026-04-18},
+	date = {1992-09},
+}
+
+@article{minsky_steps_1961,
+	title = {Steps toward Artificial Intelligence},
+	volume = {49},
+	rights = {https://ieeexplore.ieee.org/Xplorehelp/downloads/license-information/{IEEE}.html},
+	issn = {0096-8390, 2162-6634},
+	url = {https://ieeexplore.ieee.org/document/4066245/},
+	doi = {10.1109/JRPROC.1961.287775},
+	pages = {8--30},
+	number = {1},
+	journaltitle = {Proceedings of the {IRE}},
+	shortjournal = {Proc. {IRE}},
+	author = {Minsky, Marvin},
+	urldate = {2026-04-18},
+	date = {1961-01},
+}
+
+@article{rumelhart_learning_1986,
+	title = {Learning representations by back-propagating errors},
+	volume = {323},
+	rights = {http://www.springer.com/tdm},
+	issn = {0028-0836, 1476-4687},
+	url = {https://www.nature.com/articles/323533a0},
+	doi = {10.1038/323533a0},
+	pages = {533--536},
+	number = {6088},
+	journaltitle = {Nature},
+	shortjournal = {Nature},
+	author = {Rumelhart, David E. and Hinton, Geoffrey E. and Williams, Ronald J.},
+	urldate = {2026-04-18},
+	date = {1986-10},
+	langid = {english},
+}
+
+@article{krizhevsky_imagenet_2017,
+	title = {{ImageNet} classification with deep convolutional neural networks},
+	volume = {60},
+	issn = {0001-0782, 1557-7317},
+	url = {https://dl.acm.org/doi/10.1145/3065386},
+	doi = {10.1145/3065386},
+	abstract = {We trained a large, deep convolutional neural network to classify the 1.2 million high-resolution images in the {ImageNet} {LSVRC}-2010 contest into the 1000 different classes. On the test data, we achieved top-1 and top-5 error rates of 37.5\% and 17.0\%, respectively, which is considerably better than the previous state-of-the-art. The neural network, which has 60 million parameters and 650,000 neurons, consists of five convolutional layers, some of which are followed by max-pooling layers, and three fully connected layers with a final 1000-way softmax. To make training faster, we used non-saturating neurons and a very efficient {GPU} implementation of the convolution operation. To reduce overfitting in the fully connected layers we employed a recently developed regularization method called "dropout" that proved to be very effective. We also entered a variant of this model in the {ILSVRC}-2012 competition and achieved a winning top-5 test error rate of 15.3\%, compared to 26.2\% achieved by the second-best entry.},
+	pages = {84--90},
+	number = {6},
+	journaltitle = {Communications of the {ACM}},
+	shortjournal = {Commun. {ACM}},
+	author = {Krizhevsky, Alex and Sutskever, Ilya and Hinton, Geoffrey E.},
+	urldate = {2026-04-18},
+	date = {2017-05-24},
+	langid = {english},
+	file = {Full Text:/home/brage/Zotero/storage/N6YWRPUM/Krizhevsky et al. - 2017 - ImageNet classification with deep convolutional neural networks.pdf:application/pdf},
+}
+
+@inproceedings{he_deep_2016,
+	location = {Las Vegas, {NV}, {USA}},
+	title = {Deep Residual Learning for Image Recognition},
+	isbn = {978-1-4673-8851-1},
+	url = {http://ieeexplore.ieee.org/document/7780459/},
+	doi = {10.1109/CVPR.2016.90},
+	eventtitle = {2016 {IEEE} Conference on Computer Vision and Pattern Recognition ({CVPR})},
+	pages = {770--778},
+	booktitle = {2016 {IEEE} Conference on Computer Vision and Pattern Recognition ({CVPR})},
+	publisher = {{IEEE}},
+	author = {He, Kaiming and Zhang, Xiangyu and Ren, Shaoqing and Sun, Jian},
+	urldate = {2026-04-18},
+	date = {2016-06},
+	file = {Full Text PDF:/home/brage/Zotero/storage/ATMRKEGX/He et al. - 2016 - Deep Residual Learning for Image Recognition.pdf:application/pdf},
+}
+
+@article{mead_neuromorphic_1990,
+	title = {Neuromorphic electronic systems},
+	volume = {78},
+	rights = {https://ieeexplore.ieee.org/Xplorehelp/downloads/license-information/{IEEE}.html},
+	issn = {00189219},
+	url = {http://ieeexplore.ieee.org/document/58356/},
+	doi = {10.1109/5.58356},
+	pages = {1629--1636},
+	number = {10},
+	journaltitle = {Proceedings of the {IEEE}},
+	shortjournal = {Proc. {IEEE}},
+	author = {Mead, C.},
+	urldate = {2026-04-18},
+	date = {1990-10},
+}
+
+@article{mahowald_silicon_1991,
+	title = {The Silicon Retina},
+	volume = {264},
+	issn = {0036-8733},
+	url = {https://www.scientificamerican.com/article/the-silicon-retina},
+	doi = {10.1038/scientificamerican0591-76},
+	pages = {76--82},
+	number = {5},
+	journaltitle = {Scientific American},
+	shortjournal = {Sci Am},
+	author = {Mahowald, Misha A. and Mead, Carver},
+	urldate = {2026-04-18},
+	date = {1991-05},
+}
+
+@article{rosenblatt_perceptron_1958,
+	title = {The perceptron: A probabilistic model for information storage and organization in the brain.},
+	volume = {65},
+	issn = {1939-1471, 0033-295X},
+	url = {https://doi.apa.org/doi/10.1037/h0042519},
+	doi = {10.1037/h0042519},
+	shorttitle = {The perceptron},
+	pages = {386--408},
+	number = {6},
+	journaltitle = {Psychological Review},
+	shortjournal = {Psychological Review},
+	author = {Rosenblatt, F.},
+	urldate = {2026-04-18},
+	date = {1958},
+	langid = {english},
+}
+
+@book{minsky_perceptrons_1988,
+	location = {Cambridge, Mass},
+	edition = {Expanded ed},
+	title = {Perceptrons: an introduction to computational geometry},
+	isbn = {978-0-262-63111-2},
+	shorttitle = {Perceptrons},
+	pagetotal = {292},
+	publisher = {{MIT} Press},
+	author = {Minsky, Marvin and Papert, Seymour},
+	date = {1988},
+	keywords = {Data processing, Geometry, Machine learning, Parallel processing (Electronic computers), Perceptrons},
+}
+
+@misc{vaswani_attention_2023,
+	title = {Attention Is All You Need},
+	url = {http://arxiv.org/abs/1706.03762},
+	doi = {10.48550/arXiv.1706.03762},
+	abstract = {The dominant sequence transduction models are based on complex recurrent or convolutional neural networks in an encoder-decoder configuration. The best performing models also connect the encoder and decoder through an attention mechanism. We propose a new simple network architecture, the Transformer, based solely on attention mechanisms, dispensing with recurrence and convolutions entirely. Experiments on two machine translation tasks show these models to be superior in quality while being more parallelizable and requiring significantly less time to train. Our model achieves 28.4 {BLEU} on the {WMT} 2014 English-to-German translation task, improving over the existing best results, including ensembles by over 2 {BLEU}. On the {WMT} 2014 English-to-French translation task, our model establishes a new single-model state-of-the-art {BLEU} score of 41.8 after training for 3.5 days on eight {GPUs}, a small fraction of the training costs of the best models from the literature. We show that the Transformer generalizes well to other tasks by applying it successfully to English constituency parsing both with large and limited training data.},
+	number = {{arXiv}:1706.03762},
+	publisher = {{arXiv}},
+	author = {Vaswani, Ashish and Shazeer, Noam and Parmar, Niki and Uszkoreit, Jakob and Jones, Llion and Gomez, Aidan N. and Kaiser, Lukasz and Polosukhin, Illia},
+	urldate = {2026-04-18},
+	date = {2023-08-02},
+	eprinttype = {arxiv},
+	eprint = {1706.03762 [cs]},
+	keywords = {Computer Science - Computation and Language, Computer Science - Machine Learning},
+	file = {Preprint PDF:/home/brage/Zotero/storage/M4VVNAM2/Vaswani et al. - 2023 - Attention Is All You Need.pdf:application/pdf;Snapshot:/home/brage/Zotero/storage/NGEBG24F/1706.html:text/html},
+}
+
+@article{eccles_cholinergic_1954,
+	title = {Cholinergic and inhibitory synapses in a pathway from motor‐axon collaterals to motoneurones},
+	volume = {126},
+	rights = {http://onlinelibrary.wiley.com/{termsAndConditions}\#vor},
+	issn = {0022-3751, 1469-7793},
+	url = {https://physoc.onlinelibrary.wiley.com/doi/10.1113/jphysiol.1954.sp005226},
+	doi = {10.1113/jphysiol.1954.sp005226},
+	pages = {524--562},
+	number = {3},
+	journaltitle = {The Journal of Physiology},
+	shortjournal = {The Journal of Physiology},
+	author = {Eccles, J. C. and Fatt, P. and Koketsu, K.},
+	urldate = {2026-04-18},
+	date = {1954-12-30},
+	langid = {english},
+}
+
+@article{noauthor_visualizing_nodate,
+	title = {Visualizing Data using t-{SNE}},
+}
+
+@misc{team_gemini_2025,
+	title = {Gemini: A Family of Highly Capable Multimodal Models},
+	url = {http://arxiv.org/abs/2312.11805},
+	doi = {10.48550/arXiv.2312.11805},
+	shorttitle = {Gemini},
+	abstract = {This report introduces a new family of multimodal models, Gemini, that exhibit remarkable capabilities across image, audio, video, and text understanding. The Gemini family consists of Ultra, Pro, and Nano sizes, suitable for applications ranging from complex reasoning tasks to on-device memory-constrained use-cases. Evaluation on a broad range of benchmarks shows that our most-capable Gemini Ultra model advances the state of the art in 30 of 32 of these benchmarks - notably being the first model to achieve human-expert performance on the well-studied exam benchmark {MMLU}, and improving the state of the art in every one of the 20 multimodal benchmarks we examined. We believe that the new capabilities of the Gemini family in cross-modal reasoning and language understanding will enable a wide variety of use cases. We discuss our approach toward post-training and deploying Gemini models responsibly to users through services including Gemini, Gemini Advanced, Google {AI} Studio, and Cloud Vertex {AI}.},
+	number = {{arXiv}:2312.11805},
+	publisher = {{arXiv}},
+	author = {Team, Gemini and Anil, Rohan and Borgeaud, Sebastian and Alayrac, Jean-Baptiste and Yu, Jiahui and Soricut, Radu and Schalkwyk, Johan and Dai, Andrew M. and Hauth, Anja and Millican, Katie and Silver, David and Johnson, Melvin and Antonoglou, Ioannis and Schrittwieser, Julian and Glaese, Amelia and Chen, Jilin and Pitler, Emily and Lillicrap, Timothy and Lazaridou, Angeliki and Firat, Orhan and Molloy, James and Isard, Michael and Barham, Paul R. and Hennigan, Tom and Lee, Benjamin and Viola, Fabio and Reynolds, Malcolm and Xu, Yuanzhong and Doherty, Ryan and Collins, Eli and Meyer, Clemens and Rutherford, Eliza and Moreira, Erica and Ayoub, Kareem and Goel, Megha and Krawczyk, Jack and Du, Cosmo and Chi, Ed and Cheng, Heng-Tze and Ni, Eric and Shah, Purvi and Kane, Patrick and Chan, Betty and Faruqui, Manaal and Severyn, Aliaksei and Lin, Hanzhao and Li, {YaGuang} and Cheng, Yong and Ittycheriah, Abe and Mahdieh, Mahdis and Chen, Mia and Sun, Pei and Tran, Dustin and Bagri, Sumit and Lakshminarayanan, Balaji and Liu, Jeremiah and Orban, Andras and Güra, Fabian and Zhou, Hao and Song, Xinying and Boffy, Aurelien and Ganapathy, Harish and Zheng, Steven and Choe, {HyunJeong} and Weisz, Ágoston and Zhu, Tao and Lu, Yifeng and Gopal, Siddharth and Kahn, Jarrod and Kula, Maciej and Pitman, Jeff and Shah, Rushin and Taropa, Emanuel and Merey, Majd Al and Baeuml, Martin and Chen, Zhifeng and Shafey, Laurent El and Zhang, Yujing and Sercinoglu, Olcan and Tucker, George and Piqueras, Enrique and Krikun, Maxim and Barr, Iain and Savinov, Nikolay and Danihelka, Ivo and Roelofs, Becca and White, Anaïs and Andreassen, Anders and Glehn, Tamara von and Yagati, Lakshman and Kazemi, Mehran and Gonzalez, Lucas and Khalman, Misha and Sygnowski, Jakub and Frechette, Alexandre and Smith, Charlotte and Culp, Laura and Proleev, Lev and Luan, Yi and Chen, Xi and Lottes, James and Schucher, Nathan and Lebron, Federico and Rrustemi, Alban and Clay, Natalie and Crone, Phil and Kocisky, Tomas and Zhao, Jeffrey and Perz, Bartek and Yu, Dian and Howard, Heidi and Bloniarz, Adam and Rae, Jack W. and Lu, Han and Sifre, Laurent and Maggioni, Marcello and Alcober, Fred and Garrette, Dan and Barnes, Megan and Thakoor, Shantanu and Austin, Jacob and Barth-Maron, Gabriel and Wong, William and Joshi, Rishabh and Chaabouni, Rahma and Fatiha, Deeni and Ahuja, Arun and Tomar, Gaurav Singh and Senter, Evan and Chadwick, Martin and Kornakov, Ilya and Attaluri, Nithya and Iturrate, Iñaki and Liu, Ruibo and Li, Yunxuan and Cogan, Sarah and Chen, Jeremy and Jia, Chao and Gu, Chenjie and Zhang, Qiao and Grimstad, Jordan and Hartman, Ale Jakse and Garcia, Xavier and Pillai, Thanumalayan Sankaranarayana and Devlin, Jacob and Laskin, Michael and Casas, Diego de Las and Valter, Dasha and Tao, Connie and Blanco, Lorenzo and Badia, Adrià Puigdomènech and Reitter, David and Chen, Mianna and Brennan, Jenny and Rivera, Clara and Brin, Sergey and Iqbal, Shariq and Surita, Gabriela and Labanowski, Jane and Rao, Abhi and Winkler, Stephanie and Parisotto, Emilio and Gu, Yiming and Olszewska, Kate and Addanki, Ravi and Miech, Antoine and Louis, Annie and Teplyashin, Denis and Brown, Geoff and Catt, Elliot and Balaguer, Jan and Xiang, Jackie and Wang, Pidong and Ashwood, Zoe and Briukhov, Anton and Webson, Albert and Ganapathy, Sanjay and Sanghavi, Smit and Kannan, Ajay and Chang, Ming-Wei and Stjerngren, Axel and Djolonga, Josip and Sun, Yuting and Bapna, Ankur and Aitchison, Matthew and Pejman, Pedram and Michalewski, Henryk and Yu, Tianhe and Wang, Cindy and Love, Juliette and Ahn, Junwhan and Bloxwich, Dawn and Han, Kehang and Humphreys, Peter and Sellam, Thibault and Bradbury, James and Godbole, Varun and Samangooei, Sina and Damoc, Bogdan and Kaskasoli, Alex and Arnold, Sébastien M. R. and Vasudevan, Vijay and Agrawal, Shubham and Riesa, Jason and Lepikhin, Dmitry and Tanburn, Richard and Srinivasan, Srivatsan and Lim, Hyeontaek and Hodkinson, Sarah and Shyam, Pranav and Ferret, Johan and Hand, Steven and Garg, Ankush and Paine, Tom Le and Li, Jian and Li, Yujia and Giang, Minh and Neitz, Alexander and Abbas, Zaheer and York, Sarah and Reid, Machel and Cole, Elizabeth and Chowdhery, Aakanksha and Das, Dipanjan and Rogozińska, Dominika and Nikolaev, Vitaliy and Sprechmann, Pablo and Nado, Zachary and Zilka, Lukas and Prost, Flavien and He, Luheng and Monteiro, Marianne and Mishra, Gaurav and Welty, Chris and Newlan, Josh and Jia, Dawei and Allamanis, Miltiadis and Hu, Clara Huiyi and Liedekerke, Raoul de and Gilmer, Justin and Saroufim, Carl and Rijhwani, Shruti and Hou, Shaobo and Shrivastava, Disha and Baddepudi, Anirudh and Goldin, Alex and Ozturel, Adnan and Cassirer, Albin and Xu, Yunhan and Sohn, Daniel and Sachan, Devendra and Amplayo, Reinald Kim and Swanson, Craig and Petrova, Dessie and Narayan, Shashi and Guez, Arthur and Brahma, Siddhartha and Landon, Jessica and Patel, Miteyan and Zhao, Ruizhe and Villela, Kevin and Wang, Luyu and Jia, Wenhao and Rahtz, Matthew and Giménez, Mai and Yeung, Legg and Keeling, James and Georgiev, Petko and Mincu, Diana and Wu, Boxi and Haykal, Salem and Saputro, Rachel and Vodrahalli, Kiran and Qin, James and Cankara, Zeynep and Sharma, Abhanshu and Fernando, Nick and Hawkins, Will and Neyshabur, Behnam and Kim, Solomon and Hutter, Adrian and Agrawal, Priyanka and Castro-Ros, Alex and Driessche, George van den and Wang, Tao and Yang, Fan and Chang, Shuo-yiin and Komarek, Paul and {McIlroy}, Ross and Lučić, Mario and Zhang, Guodong and Farhan, Wael and Sharman, Michael and Natsev, Paul and Michel, Paul and Bansal, Yamini and Qiao, Siyuan and Cao, Kris and Shakeri, Siamak and Butterfield, Christina and Chung, Justin and Rubenstein, Paul Kishan and Agrawal, Shivani and Mensch, Arthur and Soparkar, Kedar and Lenc, Karel and Chung, Timothy and Pope, Aedan and Maggiore, Loren and Kay, Jackie and Jhakra, Priya and Wang, Shibo and Maynez, Joshua and Phuong, Mary and Tobin, Taylor and Tacchetti, Andrea and Trebacz, Maja and Robinson, Kevin and Katariya, Yash and Riedel, Sebastian and Bailey, Paige and Xiao, Kefan and Ghelani, Nimesh and Aroyo, Lora and Slone, Ambrose and Houlsby, Neil and Xiong, Xuehan and Yang, Zhen and Gribovskaya, Elena and Adler, Jonas and Wirth, Mateo and Lee, Lisa and Li, Music and Kagohara, Thais and Pavagadhi, Jay and Bridgers, Sophie and Bortsova, Anna and Ghemawat, Sanjay and Ahmed, Zafarali and Liu, Tianqi and Powell, Richard and Bolina, Vijay and Iinuma, Mariko and Zablotskaia, Polina and Besley, James and Chung, Da-Woon and Dozat, Timothy and Comanescu, Ramona and Si, Xiance and Greer, Jeremy and Su, Guolong and Polacek, Martin and Kaufman, Raphaël Lopez and Tokumine, Simon and Hu, Hexiang and Buchatskaya, Elena and Miao, Yingjie and Elhawaty, Mohamed and Siddhant, Aditya and Tomasev, Nenad and Xing, Jinwei and Greer, Christina and Miller, Helen and Ashraf, Shereen and Roy, Aurko and Zhang, Zizhao and Ma, Ada and Filos, Angelos and Besta, Milos and Blevins, Rory and Klimenko, Ted and Yeh, Chih-Kuan and Changpinyo, Soravit and Mu, Jiaqi and Chang, Oscar and Pajarskas, Mantas and Muir, Carrie and Cohen, Vered and Lan, Charline Le and Haridasan, Krishna and Marathe, Amit and Hansen, Steven and Douglas, Sholto and Samuel, Rajkumar and Wang, Mingqiu and Austin, Sophia and Lan, Chang and Jiang, Jiepu and Chiu, Justin and Lorenzo, Jaime Alonso and Sjösund, Lars Lowe and Cevey, Sébastien and Gleicher, Zach and Avrahami, Thi and Boral, Anudhyan and Srinivasan, Hansa and Selo, Vittorio and May, Rhys and Aisopos, Konstantinos and Hussenot, Léonard and Soares, Livio Baldini and Baumli, Kate and Chang, Michael B. and Recasens, Adrià and Caine, Ben and Pritzel, Alexander and Pavetic, Filip and Pardo, Fabio and Gergely, Anita and Frye, Justin and Ramasesh, Vinay and Horgan, Dan and Badola, Kartikeya and Kassner, Nora and Roy, Subhrajit and Dyer, Ethan and Campos, Víctor Campos and Tomala, Alex and Tang, Yunhao and Badawy, Dalia El and White, Elspeth and Mustafa, Basil and Lang, Oran and Jindal, Abhishek and Vikram, Sharad and Gong, Zhitao and Caelles, Sergi and Hemsley, Ross and Thornton, Gregory and Feng, Fangxiaoyu and Stokowiec, Wojciech and Zheng, Ce and Thacker, Phoebe and Ünlü, Çağlar and Zhang, Zhishuai and Saleh, Mohammad and Svensson, James and Bileschi, Max and Patil, Piyush and Anand, Ankesh and Ring, Roman and Tsihlas, Katerina and Vezer, Arpi and Selvi, Marco and Shevlane, Toby and Rodriguez, Mikel and Kwiatkowski, Tom and Daruki, Samira and Rong, Keran and Dafoe, Allan and {FitzGerald}, Nicholas and Gu-Lemberg, Keren and Khan, Mina and Hendricks, Lisa Anne and Pellat, Marie and Feinberg, Vladimir and Cobon-Kerr, James and Sainath, Tara and Rauh, Maribeth and Hashemi, Sayed Hadi and Ives, Richard and Hasson, Yana and Noland, Eric and Cao, Yuan and Byrd, Nathan and Hou, Le and Wang, Qingze and Sottiaux, Thibault and Paganini, Michela and Lespiau, Jean-Baptiste and Moufarek, Alexandre and Hassan, Samer and Shivakumar, Kaushik and Amersfoort, Joost van and Mandhane, Amol and Joshi, Pratik and Goyal, Anirudh and Tung, Matthew and Brock, Andrew and Sheahan, Hannah and Misra, Vedant and Li, Cheng and Rakićević, Nemanja and Dehghani, Mostafa and Liu, Fangyu and Mittal, Sid and Oh, Junhyuk and Noury, Seb and Sezener, Eren and Huot, Fantine and Lamm, Matthew and Cao, Nicola De and Chen, Charlie and Mudgal, Sidharth and Stella, Romina and Brooks, Kevin and Vasudevan, Gautam and Liu, Chenxi and Chain, Mainak and Melinkeri, Nivedita and Cohen, Aaron and Wang, Venus and Seymore, Kristie and Zubkov, Sergey and Goel, Rahul and Yue, Summer and Krishnakumaran, Sai and Albert, Brian and Hurley, Nate and Sano, Motoki and Mohananey, Anhad and Joughin, Jonah and Filonov, Egor and Kępa, Tomasz and Eldawy, Yomna and Lim, Jiawern and Rishi, Rahul and Badiezadegan, Shirin and Bos, Taylor and Chang, Jerry and Jain, Sanil and Padmanabhan, Sri Gayatri Sundara and Puttagunta, Subha and Krishna, Kalpesh and Baker, Leslie and Kalb, Norbert and Bedapudi, Vamsi and Kurzrok, Adam and Lei, Shuntong and Yu, Anthony and Litvin, Oren and Zhou, Xiang and Wu, Zhichun and Sobell, Sam and Siciliano, Andrea and Papir, Alan and Neale, Robby and Bragagnolo, Jonas and Toor, Tej and Chen, Tina and Anklin, Valentin and Wang, Feiran and Feng, Richie and Gholami, Milad and Ling, Kevin and Liu, Lijuan and Walter, Jules and Moghaddam, Hamid and Kishore, Arun and Adamek, Jakub and Mercado, Tyler and Mallinson, Jonathan and Wandekar, Siddhinita and Cagle, Stephen and Ofek, Eran and Garrido, Guillermo and Lombriser, Clemens and Mukha, Maksim and Sun, Botu and Mohammad, Hafeezul Rahman and Matak, Josip and Qian, Yadi and Peswani, Vikas and Janus, Pawel and Yuan, Quan and Schelin, Leif and David, Oana and Garg, Ankur and He, Yifan and Duzhyi, Oleksii and Älgmyr, Anton and Lottaz, Timothée and Li, Qi and Yadav, Vikas and Xu, Luyao and Chinien, Alex and Shivanna, Rakesh and Chuklin, Aleksandr and Li, Josie and Spadine, Carrie and Wolfe, Travis and Mohamed, Kareem and Das, Subhabrata and Dai, Zihang and He, Kyle and Dincklage, Daniel von and Upadhyay, Shyam and Maurya, Akanksha and Chi, Luyan and Krause, Sebastian and Salama, Khalid and Rabinovitch, Pam G. and M, Pavan Kumar Reddy and Selvan, Aarush and Dektiarev, Mikhail and Ghiasi, Golnaz and Guven, Erdem and Gupta, Himanshu and Liu, Boyi and Sharma, Deepak and Shtacher, Idan Heimlich and Paul, Shachi and Akerlund, Oscar and Aubet, François-Xavier and Huang, Terry and Zhu, Chen and Zhu, Eric and Teixeira, Elico and Fritze, Matthew and Bertolini, Francesco and Marinescu, Liana-Eleonora and Bölle, Martin and Paulus, Dominik and Gupta, Khyatti and Latkar, Tejasi and Chang, Max and Sanders, Jason and Wilson, Roopa and Wu, Xuewei and Tan, Yi-Xuan and Thiet, Lam Nguyen and Doshi, Tulsee and Lall, Sid and Mishra, Swaroop and Chen, Wanming and Luong, Thang and Benjamin, Seth and Lee, Jasmine and Andrejczuk, Ewa and Rabiej, Dominik and Ranjan, Vipul and Styrc, Krzysztof and Yin, Pengcheng and Simon, Jon and Harriott, Malcolm Rose and Bansal, Mudit and Robsky, Alexei and Bacon, Geoff and Greene, David and Mirylenka, Daniil and Zhou, Chen and Sarvana, Obaid and Goyal, Abhimanyu and Andermatt, Samuel and Siegler, Patrick and Horn, Ben and Israel, Assaf and Pongetti, Francesco and Chen, Chih-Wei "Louis" and Selvatici, Marco and Silva, Pedro and Wang, Kathie and Tolins, Jackson and Guu, Kelvin and Yogev, Roey and Cai, Xiaochen and Agostini, Alessandro and Shah, Maulik and Nguyen, Hung and Donnaile, Noah Ó and Pereira, Sébastien and Friso, Linda and Stambler, Adam and Kurzrok, Adam and Kuang, Chenkai and Romanikhin, Yan and Geller, Mark and Yan, Z. J. and Jang, Kane and Lee, Cheng-Chun and Fica, Wojciech and Malmi, Eric and Tan, Qijun and Banica, Dan and Balle, Daniel and Pham, Ryan and Huang, Yanping and Avram, Diana and Shi, Hongzhi and Singh, Jasjot and Hidey, Chris and Ahuja, Niharika and Saxena, Pranab and Dooley, Dan and Potharaju, Srividya Pranavi and O'Neill, Eileen and Gokulchandran, Anand and Foley, Ryan and Zhao, Kai and Dusenberry, Mike and Liu, Yuan and Mehta, Pulkit and Kotikalapudi, Ragha and Safranek-Shrader, Chalence and Goodman, Andrew and Kessinger, Joshua and Globen, Eran and Kolhar, Prateek and Gorgolewski, Chris and Ibrahim, Ali and Song, Yang and Eichenbaum, Ali and Brovelli, Thomas and Potluri, Sahitya and Lahoti, Preethi and Baetu, Cip and Ghorbani, Ali and Chen, Charles and Crawford, Andy and Pal, Shalini and Sridhar, Mukund and Gurita, Petru and Mujika, Asier and Petrovski, Igor and Cedoz, Pierre-Louis and Li, Chenmei and Chen, Shiyuan and Santo, Niccolò Dal and Goyal, Siddharth and Punjabi, Jitesh and Kappaganthu, Karthik and Kwak, Chester and {LV}, Pallavi and Velury, Sarmishta and Choudhury, Himadri and Hall, Jamie and Shah, Premal and Figueira, Ricardo and Thomas, Matt and Lu, Minjie and Zhou, Ting and Kumar, Chintu and Jurdi, Thomas and Chikkerur, Sharat and Ma, Yenai and Yu, Adams and Kwak, Soo and Ähdel, Victor and Rajayogam, Sujeevan and Choma, Travis and Liu, Fei and Barua, Aditya and Ji, Colin and Park, Ji Ho and Hellendoorn, Vincent and Bailey, Alex and Bilal, Taylan and Zhou, Huanjie and Khatir, Mehrdad and Sutton, Charles and Rzadkowski, Wojciech and Macintosh, Fiona and Vij, Roopali and Shagin, Konstantin and Medina, Paul and Liang, Chen and Zhou, Jinjing and Shah, Pararth and Bi, Yingying and Dankovics, Attila and Banga, Shipra and Lehmann, Sabine and Bredesen, Marissa and Lin, Zifan and Hoffmann, John Eric and Lai, Jonathan and Chung, Raynald and Yang, Kai and Balani, Nihal and Bražinskas, Arthur and Sozanschi, Andrei and Hayes, Matthew and Alcalde, Héctor Fernández and Makarov, Peter and Chen, Will and Stella, Antonio and Snijders, Liselotte and Mandl, Michael and Kärrman, Ante and Nowak, Paweł and Wu, Xinyi and Dyck, Alex and Vaidyanathan, Krishnan and R, Raghavender and Mallet, Jessica and Rudominer, Mitch and Johnston, Eric and Mittal, Sushil and Udathu, Akhil and Christensen, Janara and Verma, Vishal and Irving, Zach and Santucci, Andreas and Elsayed, Gamaleldin and Davoodi, Elnaz and Georgiev, Marin and Tenney, Ian and Hua, Nan and Cideron, Geoffrey and Leurent, Edouard and Alnahlawi, Mahmoud and Georgescu, Ionut and Wei, Nan and Zheng, Ivy and Scandinaro, Dylan and Jiang, Heinrich and Snoek, Jasper and Sundararajan, Mukund and Wang, Xuezhi and Ontiveros, Zack and Karo, Itay and Cole, Jeremy and Rajashekhar, Vinu and Tumeh, Lara and Ben-David, Eyal and Jain, Rishub and Uesato, Jonathan and Datta, Romina and Bunyan, Oskar and Wu, Shimu and Zhang, John and Stanczyk, Piotr and Zhang, Ye and Steiner, David and Naskar, Subhajit and Azzam, Michael and Johnson, Matthew and Paszke, Adam and Chiu, Chung-Cheng and Elias, Jaume Sanchez and Mohiuddin, Afroz and Muhammad, Faizan and Miao, Jin and Lee, Andrew and Vieillard, Nino and Park, Jane and Zhang, Jiageng and Stanway, Jeff and Garmon, Drew and Karmarkar, Abhijit and Dong, Zhe and Lee, Jong and Kumar, Aviral and Zhou, Luowei and Evens, Jonathan and Isaac, William and Irving, Geoffrey and Loper, Edward and Fink, Michael and Arkatkar, Isha and Chen, Nanxin and Shafran, Izhak and Petrychenko, Ivan and Chen, Zhe and Jia, Johnson and Levskaya, Anselm and Zhu, Zhenkai and Grabowski, Peter and Mao, Yu and Magni, Alberto and Yao, Kaisheng and Snaider, Javier and Casagrande, Norman and Palmer, Evan and Suganthan, Paul and Castaño, Alfonso and Giannoumis, Irene and Kim, Wooyeol and Rybiński, Mikołaj and Sreevatsa, Ashwin and Prendki, Jennifer and Soergel, David and Goedeckemeyer, Adrian and Gierke, Willi and Jafari, Mohsen and Gaba, Meenu and Wiesner, Jeremy and Wright, Diana Gage and Wei, Yawen and Vashisht, Harsha and Kulizhskaya, Yana and Hoover, Jay and Le, Maigo and Li, Lu and Iwuanyanwu, Chimezie and Liu, Lu and Ramirez, Kevin and Khorlin, Andrey and Cui, Albert and {LIN}, Tian and Wu, Marcus and Aguilar, Ricardo and Pallo, Keith and Chakladar, Abhishek and Perng, Ginger and Abellan, Elena Allica and Zhang, Mingyang and Dasgupta, Ishita and Kushman, Nate and Penchev, Ivo and Repina, Alena and Wu, Xihui and Weide, Tom van der and Ponnapalli, Priya and Kaplan, Caroline and Simsa, Jiri and Li, Shuangfeng and Dousse, Olivier and Yang, Fan and Piper, Jeff and Ie, Nathan and Pasumarthi, Rama and Lintz, Nathan and Vijayakumar, Anitha and Andor, Daniel and Valenzuela, Pedro and Lui, Minnie and Paduraru, Cosmin and Peng, Daiyi and Lee, Katherine and Zhang, Shuyuan and Greene, Somer and Nguyen, Duc Dung and Kurylowicz, Paula and Hardin, Cassidy and Dixon, Lucas and Janzer, Lili and Choo, Kiam and Feng, Ziqiang and Zhang, Biao and Singhal, Achintya and Du, Dayou and {McKinnon}, Dan and Antropova, Natasha and Bolukbasi, Tolga and Keller, Orgad and Reid, David and Finchelstein, Daniel and Raad, Maria Abi and Crocker, Remi and Hawkins, Peter and Dadashi, Robert and Gaffney, Colin and Franko, Ken and Bulanova, Anna and Leblond, Rémi and Chung, Shirley and Askham, Harry and Cobo, Luis C. and Xu, Kelvin and Fischer, Felix and Xu, Jun and Sorokin, Christina and Alberti, Chris and Lin, Chu-Cheng and Evans, Colin and Dimitriev, Alek and Forbes, Hannah and Banarse, Dylan and Tung, Zora and Omernick, Mark and Bishop, Colton and Sterneck, Rachel and Jain, Rohan and Xia, Jiawei and Amid, Ehsan and Piccinno, Francesco and Wang, Xingyu and Banzal, Praseem and Mankowitz, Daniel J. and Polozov, Alex and Krakovna, Victoria and Brown, Sasha and Bateni, {MohammadHossein} and Duan, Dennis and Firoiu, Vlad and Thotakuri, Meghana and Natan, Tom and Geist, Matthieu and Girgin, Ser tan and Li, Hui and Ye, Jiayu and Roval, Ofir and Tojo, Reiko and Kwong, Michael and Lee-Thorp, James and Yew, Christopher and Sinopalnikov, Danila and Ramos, Sabela and Mellor, John and Sharma, Abhishek and Wu, Kathy and Miller, David and Sonnerat, Nicolas and Vnukov, Denis and Greig, Rory and Beattie, Jennifer and Caveness, Emily and Bai, Libin and Eisenschlos, Julian and Korchemniy, Alex and Tsai, Tomy and Jasarevic, Mimi and Kong, Weize and Dao, Phuong and Zheng, Zeyu and Liu, Frederick and Yang, Fan and Zhu, Rui and Teh, Tian Huey and Sanmiya, Jason and Gladchenko, Evgeny and Trdin, Nejc and Toyama, Daniel and Rosen, Evan and Tavakkol, Sasan and Xue, Linting and Elkind, Chen and Woodman, Oliver and Carpenter, John and Papamakarios, George and Kemp, Rupert and Kafle, Sushant and Grunina, Tanya and Sinha, Rishika and Talbert, Alice and Wu, Diane and Owusu-Afriyie, Denese and Du, Cosmo and Thornton, Chloe and Pont-Tuset, Jordi and Narayana, Pradyumna and Li, Jing and Fatehi, Saaber and Wieting, John and Ajmeri, Omar and Uria, Benigno and Ko, Yeongil and Knight, Laura and Héliou, Amélie and Niu, Ning and Gu, Shane and Pang, Chenxi and Li, Yeqing and Levine, Nir and Stolovich, Ariel and Santamaria-Fernandez, Rebeca and Goenka, Sonam and Yustalim, Wenny and Strudel, Robin and Elqursh, Ali and Deck, Charlie and Lee, Hyo and Li, Zonglin and Levin, Kyle and Hoffmann, Raphael and Holtmann-Rice, Dan and Bachem, Olivier and Arora, Sho and Koh, Christy and Yeganeh, Soheil Hassas and Põder, Siim and Tariq, Mukarram and Sun, Yanhua and Ionita, Lucian and Seyedhosseini, Mojtaba and Tafti, Pouya and Liu, Zhiyu and Gulati, Anmol and Liu, Jasmine and Ye, Xinyu and Chrzaszcz, Bart and Wang, Lily and Sethi, Nikhil and Li, Tianrun and Brown, Ben and Singh, Shreya and Fan, Wei and Parisi, Aaron and Stanton, Joe and Koverkathu, Vinod and Choquette-Choo, Christopher A. and Li, Yunjie and Lu, T. J. and Ittycheriah, Abe and Shroff, Prakash and Varadarajan, Mani and Bahargam, Sanaz and Willoughby, Rob and Gaddy, David and Desjardins, Guillaume and Cornero, Marco and Robenek, Brona and Mittal, Bhavishya and Albrecht, Ben and Shenoy, Ashish and Moiseev, Fedor and Jacobsson, Henrik and Ghaffarkhah, Alireza and Rivière, Morgane and Walton, Alanna and Crepy, Clément and Parrish, Alicia and Zhou, Zongwei and Farabet, Clement and Radebaugh, Carey and Srinivasan, Praveen and Salm, Claudia van der and Fidjeland, Andreas and Scellato, Salvatore and Latorre-Chimoto, Eri and Klimczak-Plucińska, Hanna and Bridson, David and Cesare, Dario de and Hudson, Tom and Mendolicchio, Piermaria and Walker, Lexi and Morris, Alex and Mauger, Matthew and Guseynov, Alexey and Reid, Alison and Odoom, Seth and Loher, Lucia and Cotruta, Victor and Yenugula, Madhavi and Grewe, Dominik and Petrushkina, Anastasia and Duerig, Tom and Sanchez, Antonio and Yadlowsky, Steve and Shen, Amy and Globerson, Amir and Webb, Lynette and Dua, Sahil and Li, Dong and Bhupatiraju, Surya and Hurt, Dan and Qureshi, Haroon and Agarwal, Ananth and Shani, Tomer and Eyal, Matan and Khare, Anuj and Belle, Shreyas Rammohan and Wang, Lei and Tekur, Chetan and Kale, Mihir Sanjay and Wei, Jinliang and Sang, Ruoxin and Saeta, Brennan and Liechty, Tyler and Sun, Yi and Zhao, Yao and Lee, Stephan and Nayak, Pandu and Fritz, Doug and Vuyyuru, Manish Reddy and Aslanides, John and Vyas, Nidhi and Wicke, Martin and Ma, Xiao and Eltyshev, Evgenii and Martin, Nina and Cate, Hardie and Manyika, James and Amiri, Keyvan and Kim, Yelin and Xiong, Xi and Kang, Kai and Luisier, Florian and Tripuraneni, Nilesh and Madras, David and Guo, Mandy and Waters, Austin and Wang, Oliver and Ainslie, Joshua and Baldridge, Jason and Zhang, Han and Pruthi, Garima and Bauer, Jakob and Yang, Feng and Mansour, Riham and Gelman, Jason and Xu, Yang and Polovets, George and Liu, Ji and Cai, Honglong and Chen, Warren and Sheng, {XiangHai} and Xue, Emily and Ozair, Sherjil and Angermueller, Christof and Li, Xiaowei and Sinha, Anoop and Wang, Weiren and Wiesinger, Julia and Koukoumidis, Emmanouil and Tian, Yuan and Iyer, Anand and Gurumurthy, Madhu and Goldenson, Mark and Shah, Parashar and Blake, M. K. and Yu, Hongkun and Urbanowicz, Anthony and Palomaki, Jennimaria and Fernando, Chrisantha and Durden, Ken and Mehta, Harsh and Momchev, Nikola and Rahimtoroghi, Elahe and Georgaki, Maria and Raul, Amit and Ruder, Sebastian and Redshaw, Morgan and Lee, Jinhyuk and Zhou, Denny and Jalan, Komal and Li, Dinghua and Hechtman, Blake and Schuh, Parker and Nasr, Milad and Milan, Kieran and Mikulik, Vladimir and Franco, Juliana and Green, Tim and Nguyen, Nam and Kelley, Joe and Mahendru, Aroma and Hu, Andrea and Howland, Joshua and Vargas, Ben and Hui, Jeffrey and Bansal, Kshitij and Rao, Vikram and Ghiya, Rakesh and Wang, Emma and Ye, Ke and Sarr, Jean Michel and Preston, Melanie Moranski and Elish, Madeleine and Li, Steve and Kaku, Aakash and Gupta, Jigar and Pasupat, Ice and Juan, Da-Cheng and Someswar, Milan and M, Tejvi and Chen, Xinyun and Amini, Aida and Fabrikant, Alex and Chu, Eric and Dong, Xuanyi and Muthal, Amruta and Buthpitiya, Senaka and Jauhari, Sarthak and Hua, Nan and Khandelwal, Urvashi and Hitron, Ayal and Ren, Jie and Rinaldi, Larissa and Drath, Shahar and Dabush, Avigail and Jiang, Nan-Jiang and Godhia, Harshal and Sachs, Uli and Chen, Anthony and Fan, Yicheng and Taitelbaum, Hagai and Noga, Hila and Dai, Zhuyun and Wang, James and Liang, Chen and Hamer, Jenny and Ferng, Chun-Sung and Elkind, Chenel and Atias, Aviel and Lee, Paulina and Listík, Vít and Carlen, Mathias and Kerkhof, Jan van de and Pikus, Marcin and Zaher, Krunoslav and Müller, Paul and Zykova, Sasha and Stefanec, Richard and Gatsko, Vitaly and Hirnschall, Christoph and Sethi, Ashwin and Xu, Xingyu Federico and Ahuja, Chetan and Tsai, Beth and Stefanoiu, Anca and Feng, Bo and Dhandhania, Keshav and Katyal, Manish and Gupta, Akshay and Parulekar, Atharva and Pitta, Divya and Zhao, Jing and Bhatia, Vivaan and Bhavnani, Yashodha and Alhadlaq, Omar and Li, Xiaolin and Danenberg, Peter and Tu, Dennis and Pine, Alex and Filippova, Vera and Ghosh, Abhipso and Limonchik, Ben and Urala, Bhargava and Lanka, Chaitanya Krishna and Clive, Derik and Sun, Yi and Li, Edward and Wu, Hao and Hongtongsak, Kevin and Li, Ianna and Thakkar, Kalind and Omarov, Kuanysh and Majmundar, Kushal and Alverson, Michael and Kucharski, Michael and Patel, Mohak and Jain, Mudit and Zabelin, Maksim and Pelagatti, Paolo and Kohli, Rohan and Kumar, Saurabh and Kim, Joseph and Sankar, Swetha and Shah, Vineet and Ramachandruni, Lakshmi and Zeng, Xiangkai and Bariach, Ben and Weidinger, Laura and Vu, Tu and Andreev, Alek and He, Antoine and Hui, Kevin and Kashem, Sheleem and Subramanya, Amar and Hsiao, Sissie and Hassabis, Demis and Kavukcuoglu, Koray and Sadovsky, Adam and Le, Quoc and Strohman, Trevor and Wu, Yonghui and Petrov, Slav and Dean, Jeffrey and Vinyals, Oriol},
+	urldate = {2026-04-18},
+	date = {2025-05-09},
+	eprinttype = {arxiv},
+	eprint = {2312.11805 [cs]},
+	keywords = {Computer Science - Computation and Language, Computer Science - Artificial Intelligence, Computer Science - Computer Vision and Pattern Recognition},
+	file = {Preprint PDF:/home/brage/Zotero/storage/KJYDRXTQ/Team et al. - 2025 - Gemini A Family of Highly Capable Multimodal Models.pdf:application/pdf;Snapshot:/home/brage/Zotero/storage/P3EUF5VB/2312.html:text/html},
+}
+
+@article{noauthor_new_nodate,
+	title = {{NEW} {NAVY} {DEVICE} {LEARNS} {BY} {DOING}},
+}
+
+@article{noauthor_von_nodate,
+	title = {von Waldyer},
+}
+
+@misc{sze_efficient_2017,
+	title = {Efficient Processing of Deep Neural Networks: A Tutorial and Survey},
+	url = {http://arxiv.org/abs/1703.09039},
+	doi = {10.48550/arXiv.1703.09039},
+	shorttitle = {Efficient Processing of Deep Neural Networks},
+	abstract = {Deep neural networks ({DNNs}) are currently widely used for many artificial intelligence ({AI}) applications including computer vision, speech recognition, and robotics. While {DNNs} deliver state-of-the-art accuracy on many {AI} tasks, it comes at the cost of high computational complexity. Accordingly, techniques that enable efficient processing of {DNNs} to improve energy efficiency and throughput without sacrificing application accuracy or increasing hardware cost are critical to the wide deployment of {DNNs} in {AI} systems. This article aims to provide a comprehensive tutorial and survey about the recent advances towards the goal of enabling efficient processing of {DNNs}. Specifically, it will provide an overview of {DNNs}, discuss various hardware platforms and architectures that support {DNNs}, and highlight key trends in reducing the computation cost of {DNNs} either solely via hardware design changes or via joint hardware design and {DNN} algorithm changes. It will also summarize various development resources that enable researchers and practitioners to quickly get started in this field, and highlight important benchmarking metrics and design considerations that should be used for evaluating the rapidly growing number of {DNN} hardware designs, optionally including algorithmic co-designs, being proposed in academia and industry. The reader will take away the following concepts from this article: understand the key design considerations for {DNNs}; be able to evaluate different {DNN} hardware implementations with benchmarks and comparison metrics; understand the trade-offs between various hardware architectures and platforms; be able to evaluate the utility of various {DNN} design techniques for efficient processing; and understand recent implementation trends and opportunities.},
+	number = {{arXiv}:1703.09039},
+	publisher = {{arXiv}},
+	author = {Sze, Vivienne and Chen, Yu-Hsin and Yang, Tien-Ju and Emer, Joel},
+	urldate = {2026-04-18},
+	date = {2017-08-13},
+	eprinttype = {arxiv},
+	eprint = {1703.09039 [cs]},
+	keywords = {Computer Science - Computer Vision and Pattern Recognition},
+	file = {Preprint PDF:/home/brage/Zotero/storage/GJXE6AYK/Sze et al. - 2017 - Efficient Processing of Deep Neural Networks A Tutorial and Survey.pdf:application/pdf;Snapshot:/home/brage/Zotero/storage/QJ9TMINQ/1703.html:text/html},
+}
+
+@article{hodgkin_quantitative_1952,
+	title = {A quantitative description of membrane current and its application to conduction and excitation in nerve},
+	volume = {117},
+	rights = {http://onlinelibrary.wiley.com/{termsAndConditions}\#vor},
+	issn = {0022-3751, 1469-7793},
+	url = {https://physoc.onlinelibrary.wiley.com/doi/10.1113/jphysiol.1952.sp004764},
+	doi = {10.1113/jphysiol.1952.sp004764},
+	pages = {500--544},
+	number = {4},
+	journaltitle = {The Journal of Physiology},
+	shortjournal = {The Journal of Physiology},
+	author = {Hodgkin, A. L. and Huxley, A. F.},
+	urldate = {2026-04-18},
+	date = {1952-08-28},
+	langid = {english},
+}
+
+@article{markram_blue_2006,
+	title = {The Blue Brain Project},
+	volume = {7},
+	rights = {http://www.springer.com/tdm},
+	issn = {1471-003X, 1471-0048},
+	url = {https://www.nature.com/articles/nrn1848},
+	doi = {10.1038/nrn1848},
+	pages = {153--160},
+	number = {2},
+	journaltitle = {Nature Reviews Neuroscience},
+	shortjournal = {Nat Rev Neurosci},
+	author = {Markram, Henry},
+	urldate = {2026-04-18},
+	date = {2006-02},
+	langid = {english},
+}
+
+@article{gerstner_how_2009,
+	title = {How Good Are Neuron Models?},
+	volume = {326},
+	issn = {0036-8075, 1095-9203},
+	url = {https://www.science.org/doi/10.1126/science.1181936},
+	doi = {10.1126/science.1181936},
+	abstract = {A recent competition encouraged modelers to predict neuronal activity. Which neuron model performed the best?
+          ,
+
+              Opinions strongly diverge on what constitutes a good model of a neuron (
+
+                1
+
+              –
+
+                3
+
+              ). Two lines of thought on this have coexisted for a long time: detailed biophysical models (of the style proposed in 1952 by the physiologists Alan Hodgkin and Andrew Huxley) that describe ion channels on the tree-like spatial structure of the neuronal cell (
+
+                4
+
+              ), and simple “integrate-and-fire” models based on the much older insight that pulsatile electrical activity (known as an action potential or spike) is a threshold process. Electrophysiologists generally prefer the biophysical models, familiar with the notion of ion channels that open and close (and hence, alter neuronal activity) depending on environmental conditions. Theoreticians, by contrast, typically prefer simple neuron models with few parameters that are amenable to mathematical analysis. Earlier this year, following previous attempts at model comparison on a smaller scale (
+
+                5
+
+              ), the International Neuroinformatics Coordinating Facility ({INCF}) launched an international competition (
+
+                6
+
+              ) that allowed a quantitative comparison of neuron models.},
+	pages = {379--380},
+	number = {5951},
+	journaltitle = {Science},
+	shortjournal = {Science},
+	author = {Gerstner, Wulfram and Naud, Richard},
+	urldate = {2026-04-18},
+	date = {2009-10-16},
+	langid = {english},
+	file = {Full Text PDF:/home/brage/Zotero/storage/KS3EL5HD/Gerstner and Naud - 2009 - How Good Are Neuron Models.pdf:application/pdf},
+}
+
+@article{izhikevich_simple_2003,
+	title = {Simple model of spiking neurons},
+	volume = {14},
+	rights = {https://ieeexplore.ieee.org/Xplorehelp/downloads/license-information/{IEEE}.html},
+	issn = {1045-9227},
+	url = {http://ieeexplore.ieee.org/document/1257420/},
+	doi = {10.1109/TNN.2003.820440},
+	pages = {1569--1572},
+	number = {6},
+	journaltitle = {{IEEE} Transactions on Neural Networks},
+	shortjournal = {{IEEE} Trans. Neural Netw.},
+	author = {Izhikevich, E.M.},
+	urldate = {2026-04-18},
+	date = {2003-11},
+	langid = {english},
+}
+
+@inproceedings{horowitz_11_2014,
+	location = {San Francisco, {CA}, {USA}},
+	title = {1.1 Computing's energy problem (and what we can do about it)},
+	isbn = {978-1-4799-0920-9 978-1-4799-0918-6},
+	url = {http://ieeexplore.ieee.org/document/6757323/},
+	doi = {10.1109/ISSCC.2014.6757323},
+	eventtitle = {2014 {IEEE} International Solid- State Circuits Conference ({ISSCC})},
+	pages = {10--14},
+	booktitle = {2014 {IEEE} International Solid-State Circuits Conference Digest of Technical Papers ({ISSCC})},
+	publisher = {{IEEE}},
+	author = {Horowitz, Mark},
+	urldate = {2026-04-18},
+	date = {2014-02},
+}
+
+@article{lecun_gradient-based_1998,
+	title = {Gradient-based learning applied to document recognition},
+	volume = {86},
+	rights = {https://ieeexplore.ieee.org/Xplorehelp/downloads/license-information/{IEEE}.html},
+	issn = {00189219},
+	url = {http://ieeexplore.ieee.org/document/726791/},
+	doi = {10.1109/5.726791},
+	pages = {2278--2324},
+	number = {11},
+	journaltitle = {Proceedings of the {IEEE}},
+	shortjournal = {Proc. {IEEE}},
+	author = {Lecun, Y. and Bottou, L. and Bengio, Y. and Haffner, P.},
+	urldate = {2026-04-18},
+	date = {1998-11},
+}
+
+@aricle{Placeholder, title={Placeholder},}
