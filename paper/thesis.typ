@@ -11,22 +11,7 @@
 #show: word-count
 
 #register-glossary(entry-list)
-// *TODO*
 
-// - [ ] proof read, stavefeil, flow, struktur, ordlegging akademisk tone. formler, gjenta til fornøyd
-// - [ ] figurer
-// - [ ] referanser
-// - [ ] metode og resultater handcrafted/kopierte vekter
-// - [ ] metode og resultater neuromorfisk læring
-// - [ ] discusion
-// - [ ] conclusion
-// - [ ] abstract
-// - [ ] siste proof read
-
-#v(.5em)
-#text(size: 9pt, weight: "medium")[
-#h(1fr) Wordcount = #total-words
-]
 
 // FRONTPAGE
 #cover()
@@ -40,22 +25,23 @@
 #align(center)[
 #block(width:90%, inset: 2em)[
 #align(left)[
-  #text(weight:"semibold",size:16pt,[ABSTRACT])
+#text(weight:"semibold",size:16pt,[ABSTRACT])
 
-  #serif-text()[ The development of modern Deep Learning has achieved unprecedented performance across various domains, yet it remains fundamentally bottlenecked by the energy and memory inefficiencies of the von Neumann architecture. To address these limitations, this thesis investigates Neuromorphic Computing with @snn:pl as a biologically plausible, highly energy-efficient alternative. By shifting from synchronous, continuous-value matrix multiplications to asynchronous, event-driven sparse computations, neuromorphic systems emulate the physical principles of the biological brain.
+#serif-text()[ The development of modern Deep Learning has achieved unprecedented performance across various domains, yet it remains fundamentally bottlenecked by the energy and memory inefficiencies of the von Neumann architecture. To address these limitations, this thesis investigates Neuromorphic Computing with @snn:pl as a biologically plausible, highly energy-efficient alternative. By shifting from synchronous, continuous-value matrix multiplications to asynchronous, event-driven sparse computations, neuromorphic systems emulate the physical principles of the biological brain.
 
 This work explores the implementation of these principles on standard CPU/GPU hardware. Two primary methodologies are developed and evaluated on visual classification tasks: (1) an inference-optimized @snn that translates weights from a conventionally trained @fcn using @ttfs temporal encoding, and (2) an unsupervised, biologically inspired learning simulator incorporating structural plasticity (dynamic synaptogenesis and pruning). The results demonstrate the viability of temporal coding and local learning rules in extracting meaningful features from visual stimuli, highlighting the potential of neuromorphic algorithms to drastically reduce the computational footprint of artificial intelligence.]]
 ]]
+
+// #text(size: 9pt, weight: "medium")[ #h(1fr) Wordcount: #total-words ]
 
 #pagebreak()
 
 #align(center)[
 #block(width:100%)[
-  #align(left)[
-  #text(weight:"semibold",size:16pt,[ACKNOWLEDGEMENTS & DECLARATIONS])
+#align(left)[
+#text(weight:"semibold",size:16pt,[ACKNOWLEDGEMENTS & DECLARATIONS])
 
-  #serif-text()[
-I would like to thank my supervisors and the very kind and helpful comunity at the ROBIN and NANO research groups at the departemnt of informatics.
+#serif-text()[ I would like to thank my supervisors and the very kind and helpful comunity at the ROBIN and NANO research groups at the departemnt of informatics.
 
 #v(1em)
 #mini-header()[Declaration of the use of generative artificial intelligence]
@@ -260,7 +246,7 @@ The Dirac delta is a generalized distribution defined by the property that it is
 $ delta(t) = cases(infinity "if" t = 0, 0 "if" t != 0), quad integral_(-infinity)^(+infinity) delta (t) dif t = 1 $
 ])<dirac_def>
 
-#serif-text()[ Under this formalism, the output of a neuron is modeled not as a continuous signal, but as a "spike train"—a temporal sequence of these Dirac impulses. For a neuron emitting $N$ spikes at times ${t^((1)), t^((2)), ..., t^((N))}$, the output signal $S(t)$ is defined as: ]
+#serif-text()[ Under this formalism, the output of a neuron is modeled not as a continuous signal, but as a "spike train"—a temporal sequence of these Dirac impulses @gerstner_neuronal_2014. For a neuron emitting $N$ spikes at times ${t^((1)), t^((2)), ..., t^((N))}$, the output signal $S(t)$ is defined as: ]
 
 #figure( kind: "eq", supplement: [Equation], caption: [A spike train represented as a sum of Dirac delta functions.], [ $ S(t) = sum_(f=1)^(N) delta(t - t^((f))) $
 ])<spike_train>
@@ -281,7 +267,7 @@ To build practical, scalable neuromorphic hardware, we must abstract these bioph
 #v(1em)
 === The Leaky Integrate-and-Fire (LIF) Model <s.biolif>
 
-#serif-text()[ The standard approximation used in neuromorphic engineering is the @lif model. This framework aligns perfectly with the "point process" abstraction established in the previous section, as it treats action potentials as instantaneous, discrete events. Its state is defined by a single scalar variable, the membrane potential $u(t)$. The sub-threshold dynamics are governed by a linear differential equation analogous to a simple $R C$ (Resistor-Capacitor) circuit. We implement this model as the computational baseline for our visual classification tasks in @s.decoding (Model B). ]
+#serif-text()[ The standard approximation used in neuromorphic engineering is the @lif model @gerstner_neuronal_2014. This framework aligns perfectly with the "point process" abstraction established in the previous section, as it treats action potentials as instantaneous, discrete events. Its state is defined by a single scalar variable, the membrane potential $u(t)$. The sub-threshold dynamics are governed by a linear differential equation analogous to a simple $R C$ (Resistor-Capacitor) circuit. We implement this model as the computational baseline for our visual classification tasks in @s.decoding (Model B). ]
 
 #figure(include("figures/lifcircuit.typ"), caption:[])
 
@@ -322,7 +308,7 @@ $ "If " u(t) > theta.alt arrow cases( "Emit spike: " S(t) arrow S(t) + delta(t),
 
 #serif-text()[ While the standard @lif model is computationally efficient, its one-dimensional nature limits it primarily to tonic spiking (regular firing under constant input). It struggles to replicate the complex, non-linear behaviors observed in the cortex, such as bursting (clusters of rapid spikes) or spike-frequency adaptation (slowing down after sustained activity).
 
-To capture these dynamics without reverting to the computationally heavy Hodgkin-Huxley equations, we employ the @glif model. This extends the system by introducing a second state variable, $w(t)$, representing cellular adaptation. ]
+To capture these dynamics without reverting to the computationally heavy Hodgkin-Huxley equations, we employ the @glif model @gerstner_neuronal_2014. This extends the system by introducing a second state variable, $w(t)$, representing cellular adaptation. ]
 
 #figure( kind: "eq", supplement: [Equation], caption: [The Adaptive GLIF system. The adaptation variable $w$ provides negative feedback, enabling complex dynamics like bursting and adaptation.], [
 $ tau_m (dif u)/(dif t) &= -(u - u_"rest") + R I(t) - w \
@@ -1400,48 +1386,19 @@ If $theta$ is configured significantly lower than $sum w_i$, models naturally re
 
 #figure(image("figures/phase1tmp.png"),caption:[Neural network before learing yeah])
 
-
 == Phase II:
-#serif-text()[
-#lorem(100)
 
 #figure(image("figures/snnclasification.png"),caption:[Neural network before learing])
 
 #figure(image("figures/snnweights.png"),caption:[Neural network before learing])
 
-#figure(include("figures/network.typ"),caption:[Neural network during learning])
-
-#figure(include("figures/network.typ"),caption:[Neural network after learning])
-
-#lorem(100)
-
-#lorem(100)
-]
-
-== MNIST With SNN Trained Weights
-
-#figure(table(columns: 4,
-  [0], [0], [1], [1],
-  [1], [1], [1], [1]
-),caption:[Number of operations])
-
-#serif-text()[
-#lorem(100)
-
-#lorem(100)
-#lorem(100)
-#lorem(100)
-#lorem(100)
-#lorem(100)
-#lorem(100)
-#lorem(100)
-]
+== Phase III:
 
 #pagebreak()
 
 = Discussion <discussion>
 
-#serif-text()[ While the experimental results validate the core principles of @ttfs encoding and spiking integration, extrapolating these methods from controlled benchmarks to real-world deployment reveals significant engineering bottlenecks. This chapter critically analyzes the limitations observed during the implementation phase, specifically regarding data encoding, spatial representation, architectural translation, and hardware constraints. ]
+#serif-text()[ While the experimental results validate the core principles of @ttfs encoding and spiking integration, extrapolating these methods from benchmarks to real-world deployment reveals significant engineering bottlenecks. This chapter critically analyzes the limitations observed during the implementation phase, specifically regarding data encoding, spatial representation, architectural translation, and hardware constraints. ]
 
 
 #v(2em)
