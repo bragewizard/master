@@ -343,7 +343,7 @@ Deciphering the "Neural Code"—the set of rules by which sensory stimuli are tr
 
 #serif-text()[ The most traditional interpretation of neural activity is rate coding. In this paradigm, information is conveyed by the mean firing frequency of a neuron over a specific temporal window. A strong stimulus (e.g., high pressure on skin) elicits a high firing rate, while a weak stimulus results in sparse activity.
 
-This model effectively treats the neuron as an Analog-to-Digital converter where the precise timing of individual spikes is treated as noise; only the average count carries the signal. While rate coding is robust and easily observed in motor neurons, it suffers from a fundamental latency barrier. To estimate a rate with reasonable precision, the post-synaptic neuron must integrate spikes over a significant duration (tens or hundreds of milliseconds). This contradicts the rapid reaction times (often $<100$ ms) observed in biological agents, suggesting that rate coding alone cannot account for time-critical processing. ]
+This model effectively treats the neuron as an Analog-to-Digital converter where the precise timing of individual spikes is treated as noise; only the average count carries the signal. While rate coding is robust and easily observed in motor neurons, it suffers from a fundamental latency barrier. To estimate a rate with reasonable precision, the post-synaptic neuron must integrate spikes over a significant duration (tens or hundreds of milliseconds). This contradicts the rapid reaction times (often $<100$ ms) observed in biological agents, suggesting that rate coding alone cannot account for time-critical processing @ @thorpe_speed_1996. ]
 
 #figure(include("figures/rateencoding.typ"), caption:[Rate Coding: The stimulus intensity is encoded in the frequency of the spike train. Stronger stimuli elicit more spikes per second.])
 
@@ -352,7 +352,7 @@ This model effectively treats the neuron as an Analog-to-Digital converter where
 
 #serif-text()[ To explain the speed of biological processing, neuromorphic engineering emphasizes temporal coding. In this regime, the precise timing of a spike carries significant information. A primary example is @ttfs coding.
 
-In a @ttfs scheme, the intensity of a stimulus is inversely mapped to the latency of the response relative to a stimulus onset. A stronger input causes the neuron to integrate and cross the threshold faster, firing earlier than neurons receiving weak inputs. This shifts the computational model from counting spikes to a "race" between spikes.
+In a @ttfs scheme, the intensity of a stimulus is inversely mapped to the latency of the response relative to a stimulus onset @rullen_rate_2001. A stronger input causes the neuron to integrate and cross the threshold faster, firing earlier than neurons receiving weak inputs. This shifts the computational model from counting spikes to a "race" between spikes.
 
 In a network utilizing lateral inhibition (@wta), the first neuron to fire inhibits its neighbors, allowing a decision to be made as soon as the first meaningful bit of data arrives. This eliminates the need to wait for a time window to close, drastically reducing latency. Furthermore, since @ttfs coding prioritizes the strongest signals, it acts as a natural filter: the most prominent features arrive first, allowing the system to process signal over noise. This @ttfs scheme forms the primary encoding modality for our MNIST experiments, as detailed in @s.encoding. ]
 
@@ -663,10 +663,31 @@ This synergy between physical topology and functional motifs allows the hardware
 
 #figure( include("figures/inmemoryhierarcy.typ"), caption:[Architectural Comparison. (Left) The Von Neumann architecture separates memory and compute, creating a bottleneck. (Right) The Neuromorphic architecture co-locates them, mimicking the distributed topology of biological neural networks.] )
 
-#v(3em)
-#line(length:100%)
-#v(3em)
-#serif-text()[ Having established the theoretical limitations of traditional deep learning and the physical principles of neuromorphic engineering, the following chapter details the specific methodologies, network architectures, and software frameworks utilized in this thesis to evaluate @ann\-to-@snn weight conversion and native @stdp learning on visual event data. ]
+
+#pagebreak()
+
+= Related Works <s.relatedworks>
+
+#serif-text()[ The shift towards neuromorphic computing is largely driven by the urgent need for energy-efficient machine intelligence. Recent literature highlights a rapidly expanding landscape of opportunities for neuromorphic algorithms, moving beyond isolated benchmarks toward real-world applications. The methodologies implemented in this thesis—specifically temporal coding, sparsity, and local learning—intersect directly with several active areas of state-of-the-art research. ]
+
+#v(1em)
+=== Time-Based Coding and Biological Plausibility
+
+#serif-text()[ The foundational premise of our @ttfs architecture is that precise spike timing carries significant information. This is powerfully supported by recent biological evidence; in vivo recordings from the human cortex confirm that neuronal sequences during population bursts explicitly encode information through their temporal order @xie_neuronal_2024.
+
+Translating these biological temporal sequences into functional artificial networks has been a major focus of recent engineering efforts. Han and Roy have demonstrated that deep spiking neural networks can achieve extreme energy efficiency specifically by leveraging time-based coding paradigms @roy_towards_2019. Concurrently, theorists are continually refining how biological constraints—such as excitation-inhibition balance and adaptive homeostatic currents—can be integrated into leaky integrate-and-fire networks to achieve optimal efficient coding. ]
+
+#v(1em)
+=== Hardware Acceleration and Sparsity
+
+#serif-text()[ A core theoretical advantage of the @ttfs encoding utilized in our experiments is spatial and temporal sparsity. However, realizing these efficiency gains requires bridging the gap between software simulation and physical deployment. Recent SOTA implementations have focused heavily on exploiting this sparsity directly on customized hardware. For example, Sommer et al @sommer_efficient_2022. proposed novel memory interlacing and hardware acceleration architectures for sparsely active convolutional @snn:pl on @fpga:pl, achieving significant speedups by ensuring processing time scales directly with the number of spikes.
+
+Furthermore, event-driven algorithms are increasingly being paired with native event-based sensors. Applications such as spiking optical flow estimation from dynamic vision sensors have been successfully deployed on specialized neuromorphic substrates like IBM's TrueNorth @haessig_spiking_2017, proving the viability of low-power, asynchronous processing in dynamic environments. ]
+
+#v(1em)
+=== Advancements in Sequence Modeling
+
+#serif-text()[ While the experimental scope of this thesis utilizes static visual classification (MNIST) to isolate temporal integration dynamics, the broader @snn field is actively expanding into complex, long-term sequential tasks. Recent breakthroughs have investigated the intersection of @snn:pl with modern State Space Models @stan_learning_2024. This research demonstrates that spiking architectures can now successfully compete with—and in terms of parameter efficiency, outperform—traditional Transformer models on long-range sequence modeling tasks. ]
 
 #pagebreak()
 
@@ -752,7 +773,7 @@ In contrast, the @snn replaces these continuous functions with Integrate-and-Fir
 
 #serif-text()[ The choice of neural code lays the foundation for information flow and dictates the efficiency of the entire system. While Rate Coding (encoding pixel intensity as spike frequency) is straightforward and simple to implement with standard Integrate-and-Fire neurons, it is inefficient compared to @ttfs. Rate codes require integration over extended time windows to calculate an average, introducing latency and saturating the network bus with redundant spikes. Furthermore, on digital hardware rate coding imposes additional stress on the system due to rapid switching which is very bad for transistor power draw and bus congestion.
 
-To maximize energy efficiency and processing speed, this implementation utilizes a @ttfs temporal encoding. In this regime, a single spike carries the information payload. A high-intensity (bright) pixel triggers an early spike, while a low-intensity (dark) pixel triggers a late spike. This compresses the spatial information into a highly sparse, priority-driven queue; downstream neurons begin processing as soon as the most salient features arrive, without waiting for an entire frame to integrate.
+To maximize energy efficiency and processing speed, this implementation utilizes a @ttfs temporal encoding @delorme_face_2001. In this regime, a single spike carries the information payload. A high-intensity (bright) pixel triggers an early spike, while a low-intensity (dark) pixel triggers a late spike. This compresses the spatial information into a highly sparse, priority-driven queue; downstream neurons begin processing as soon as the most salient features arrive, without waiting for an entire frame to integrate.
 
 As noted in @s.neuralcoding, temporal codes suffer from Phase Ambiguity—downstream neurons need a reference "clock" to decode latency. To resolve this without relying on a rigid, global system clock, we simulate the biological concept of a saccade (the rapid movement of the eye to fixate on a target). The initial presentation of the image acts as a synchronized global event ($t_0$). All subsequent input spikes are evaluated relative to this saccade onset, providing a natural, biologically plausible temporal reference frame. ]
 
@@ -1064,7 +1085,7 @@ If $theta$ is configured significantly lower than $sum w_i$, models naturally re
 #v(1em)
 === Pattern Prediction and Order Decoding
 
-#serif-text()[ The core of our learning objective is the detection of spatiotemporal sequences. In a @ttfs paradigm, the relative arrival order of spikes defines the pattern identity. We hypothesize that a neuron successfully learns a pattern (e.g., sequence $A arrow B arrow C$) when it adjusts its internal thresholds to fire as soon as the first sufficient evidence ($A arrow B$) arrives.
+#serif-text()[ The core of our learning objective is the detection of spatiotemporal sequences. Recent in vivo recordings from the human cortex confirm that population bursting relies heavily on the temporal order of spikes to encode and categorize information @xie_neuronal_2024. Consequently, in our TTFS paradigm, the relative arrival order of spikes defines the pattern identity.. We hypothesize that a neuron successfully learns a pattern (e.g., sequence $A arrow B arrow C$) when it adjusts its internal thresholds to fire as soon as the first sufficient evidence ($A arrow B$) arrives.
 
   However, this early firing introduces a prediction risk: if the neuron fires based on a prefix ($A arrow B$) but the expected suffix ($C$) fails to arrive, the synaptic efficacy must be penalized. This mimics the biological concept of error-driven learning without a global supervisor; the neuron "predicts" the completion of a learned pattern and self-corrects based on subsequent local evidence. If the predicted input is absent, the weights associated with the prefix are slightly decayed, preventing the network from becoming overly sensitive to incomplete or noisy patterns.
 ]
@@ -1077,7 +1098,7 @@ If $theta$ is configured significantly lower than $sum w_i$, models naturally re
 #v(1em)
 #figure(
   kind: "algo",
-  caption: [Winner-Takes-All (WTA) Lateral Inhibition],
+  caption: [@wta Lateral Inhibition],
   supplement: [Algorithm],
   mono-text(pseudocode-list(hooks: .5em, indentation: 1em, booktabs: true)[
     applyWTAInhibition(N_"pool", theta, I_"inh") -> $n_"winner"$: #h(1fr)
@@ -1108,18 +1129,14 @@ If $theta$ is configured significantly lower than $sum w_i$, models naturally re
 #v(1em)
 === Weight Quantization and Stability
 
-#serif-text()[
-  To bridge the gap between continuous simulation and physical neuromorphic hardware, we evaluate learning across varying degrees of weight resolution. While standard @stdp assumes continuous weight updates, we implement a quantized learning scheme where synapses are restricted to binary or low-bit integer states. This mimics the constraints of memristive crossbar arrays, where weights are represented by discrete conductance levels. Stability is maintained through homeostatic scaling (@s.homeostatic), ensuring that the total synaptic drive to any individual neuron remains within a fixed dynamic range regardless of the connection density.
-]
+#serif-text()[ To bridge the gap between continuous simulation and physical neuromorphic hardware, we evaluate learning across varying degrees of weight resolution. While standard @stdp assumes continuous weight updates, we implement a quantized learning scheme where synapses are restricted to binary or low-bit integer states. This mimics the constraints of memristive crossbar arrays, where weights are represented by discrete conductance levels. Stability is maintained through homeostatic scaling (@s.homeostatic), ensuring that the total synaptic drive to any individual neuron remains within a fixed dynamic range regardless of the connection density. ]
 
 #v(1em)
 === Weight Transfer <s.weighttransfer_method>
 
-#serif-text()[
-  Following the theory of offline training and mapping discussed in @s.weighttransfer_theory, direct one-to-one transfer of floating-point weights from an @ann to an @snn often results in catastrophic failure; the continuous activation scales do not naturally align with discrete spiking thresholds. Furthermore, physical neuromorphic hardware (such as crossbar arrays) imposes strict limitations on synaptic weight resolution, rarely supporting 32-bit floating-point numbers.
+#serif-text()[ Following the theory of offline training and mapping discussed in @s.weighttransfer_theory, direct one-to-one transfer of floating-point weights from an @ann to an @snn often results in catastrophic failure; the continuous activation scales do not naturally align with discrete spiking thresholds. Furthermore, physical neuromorphic hardware (such as crossbar arrays) imposes strict limitations on synaptic weight resolution, rarely supporting 32-bit floating-point numbers.
 
-  To emulate these hardware constraints and ensure threshold compatibility, the continuous weights of the trained ANN ($W_"ANN"$) undergo a pseudo-INT8 quantization process before being loaded into the @snn simulator. The weights are multiplied by a static scaling factor of $64$, rounded to the nearest integer, and clamped to an 8-bit signed integer range $[-128, 127]$:
-]
+  To emulate these hardware constraints and ensure threshold compatibility, the continuous weights of the trained ANN ($W_"ANN"$) undergo a pseudo-INT8 quantization process before being loaded into the @snn simulator. The weights are multiplied by a static scaling factor of $64$, rounded to the nearest integer, and clamped to an 8-bit signed integer range $[-128, 127]$: ]
 
 #figure(
   kind: "eq",
@@ -1130,18 +1147,14 @@ If $theta$ is configured significantly lower than $sum w_i$, models naturally re
   ]
 )
 
-#serif-text()[
-  This transformation maps a standard continuous weight of $2.0$ to the maximum synaptic efficacy of $128$. By porting these quantized discrete weights ($W_1$ and $W_2$) directly to the GPU, the simulator strictly enforces the memory boundaries of physical neuromorphic silicon.
-]
+#serif-text()[ This transformation maps a standard continuous weight of $2.0$ to the maximum synaptic efficacy of $128$. By porting these quantized discrete weights ($W_1$ and $W_2$) directly to the GPU, the simulator strictly enforces the memory boundaries of physical neuromorphic silicon. ]
 
 #v(1em)
 === TTFS STDP Inspired Learning Rule <s.ttfsstdp>
 
-#serif-text()[
-  Our learning rule adapts the @stdp mechanism from @s.stdp to the @ttfs domain. In standard continuous networks, synaptic weights are updated via global error gradients. In the @stdp paradigm, a synapse $w_(i j)$ connecting a pre-synaptic neuron $i$ to a post-synaptic neuron $j$ is updated based strictly on the temporal difference between their respective firing times.
+#serif-text()[ Our learning rule adapts the @stdp mechanism from @s.stdp to the @ttfs domain. In standard continuous networks, synaptic weights are updated via global error gradients. In the @stdp paradigm, a synapse $w_(i j)$ connecting a pre-synaptic neuron $i$ to a post-synaptic neuron $j$ is updated based strictly on the temporal difference between their respective firing times.
 
-  Let $t_i$ denote the spike time of the input neuron, and $t_j$ denote the spike time of the output neuron. The relative arrival time is defined as $Delta t = t_j - t_i$. Because this architecture utilizes a strict @ttfs encoding where neurons fire at most once per @saccade, the classical continuous @stdp curve is adapted into a discrete, deterministic update rule:
-]
+Let $t_i$ denote the spike time of the input neuron, and $t_j$ denote the spike time of the output neuron. The relative arrival time is defined as $Delta t = t_j - t_i$. Because this architecture utilizes a strict @ttfs encoding where neurons fire at most once per @saccade, the classical continuous @stdp curve is adapted into a discrete, deterministic update rule: ]
 
 #box-text()[
   *@ltp:* If $t_i < t_j$, the pre-synaptic spike arrived before (or exactly at) the moment the post-synaptic neuron fired. This indicates causality. The synapse is strengthened, with the magnitude of the update decaying exponentially the further apart the spikes occurred.
@@ -1164,9 +1177,7 @@ If $theta$ is configured significantly lower than $sum w_i$, models naturally re
   ]
 )
 
-#serif-text()[
-  To prevent runaway synaptic growth or catastrophic sign-flipping, the updated weights are strictly clamped to a positive physical range $w_(i j) in [0, W_"max"]$. Algorithm 5 details the exact logical implementation of this rule.
-]
+#serif-text()[ To prevent runaway synaptic growth or catastrophic sign-flipping, the updated weights are strictly clamped to a positive physical range $w_(i j) in [0, W_"max"]$. Algorithm 5 details the exact logical implementation of this rule. ]
 
 #figure(
   kind: "algo",
@@ -1193,13 +1204,11 @@ If $theta$ is configured significantly lower than $sum w_i$, models naturally re
   ])
 )
 
-#serif-text()[
-  To execute unsupervised feature extraction on the MNIST dataset, the @stdp rule is embedded within the saccade simulation loop. The network is initialized with randomized synaptic weights $W tilde cal(U)(0, 1)$.
+#serif-text()[ To execute unsupervised feature extraction on the MNIST dataset, the @stdp rule is embedded within the saccade simulation loop. The network is initialized with randomized synaptic weights $W tilde cal(U)(0, 1)$.
 
-  During the training phase, an image is presented, and the network executes a forward pass. However, unlike the zero-shot inference phase, lateral inhibition (Winner-Takes-All) plays a critical structural role during training. When an output neuron fires, it aggressively inhibits its neighbors. This competitive dynamic forces different neurons to specialize in different geometric features; if one neuron learns to recognize a "loop," the @wta mechanism prevents other neurons from learning that exact same redundant feature.
+During the training phase, an image is presented, and the network executes a forward pass. However, unlike the zero-shot inference phase, lateral inhibition (Winner-Takes-All) plays a critical structural role during training. When an output neuron fires, it aggressively inhibits its neighbors. This competitive dynamic forces different neurons to specialize in different geometric features; if one neuron learns to recognize a "loop," the @wta mechanism prevents other neurons from learning that exact same redundant feature.
 
-  At the conclusion of the 64-tick saccade, the simulator halts, compares the timestamp arrays of the hidden and output layers, and computes the @stdp weight updates in parallel before the next image is presented. Algorithm 3 outlines this autonomous learning pipeline.
-]
+At the conclusion of the 64-tick saccade, the simulator halts, compares the timestamp arrays of the hidden and output layers, and computes the @stdp weight updates in parallel before the next image is presented. Algorithm 3 outlines this autonomous learning pipeline. ]
 
 #v(2em)
 == Evaluation Metrics
@@ -1209,18 +1218,14 @@ If $theta$ is configured significantly lower than $sum w_i$, models naturally re
 #v(1em)
 === Effectiveness and Classification Performance
 
-#serif-text()[
-  For Phase II (Zero-Shot Weight Transfer), performance is measured against the standard 10,000-image MNIST test set. Since the labels are pre-defined by the source ANN, effectiveness is quantified using standard statistical tools:
-]
+#serif-text()[ For Phase II (Zero-Shot Weight Transfer), performance is measured against the standard 10,000-image MNIST test set. Since the labels are pre-defined by the source ANN, effectiveness is quantified using standard statistical tools: ]
 
 #box-text()[
 - *Top-1 Accuracy:* The percentage of images where the first output neuron to fire via the Winner-Takes-All (WTA) mechanism matches the ground-truth label.
 - *Quantization-Aware Confusion Matrices:* Utilized to identify specific morphological overlaps (e.g., '4' vs. '9'). These matrices help determine if specific geometric features are disproportionately lost during the INT8 quantization process, evaluating the robustness of the weight-transfer mapping.
 ]
 
-#serif-text()[
-  Evaluating Phase III (Unsupervised STDP) requires a shift in methodology. Because the network learns without labels, output neurons do not inherently map to categorical digits; they map to geometric clusters. To generate a comparable accuracy metric, we employ a *Post-Hoc Labeling* strategy:
-]
+#serif-text()[ Evaluating Phase III (Unsupervised STDP) requires a shift in methodology. Because the network learns without labels, output neurons do not inherently map to categorical digits; they map to geometric clusters. To generate a comparable accuracy metric, we employ a *Post-Hoc Labeling* strategy: ]
 
 #box-text()[
 1. *Freezing:* Synaptic plasticity is disabled (learning rate set to zero) after the STDP training phase to prevent further weight drift.
@@ -1231,18 +1236,14 @@ If $theta$ is configured significantly lower than $sum w_i$, models naturally re
 #v(1em)
 === Computational Efficiency (Hardware Proxies)
 
-#serif-text()[
-  While the primary goal of neuromorphic engineering is immense energy reduction, evaluating true physical power draw ($J/"inference"$) is restricted by the use of PyTorch-based software simulators running on standard GPUs. Because these platforms incur heavy overhead simulating temporal event loops on von Neumann hardware, we abandon direct power measurements in favor of hardware-agnostic proxy metrics universally recognized in SNN literature:
-]
+#serif-text()[ While the primary goal of neuromorphic engineering is immense energy reduction, evaluating true physical power draw ($J/"inference"$) is restricted by the use of PyTorch-based software simulators running on standard GPUs. Because these platforms incur heavy overhead simulating temporal event loops on von Neumann hardware, we abandon direct power measurements in favor of hardware-agnostic proxy metrics universally recognized in SNN literature: ]
 
 #v(1em)
 ==== Sparsity and Synaptic Operations (SyOPs)
 
-#serif-text()[
-  In a standard ANN, every forward pass requires a fixed number of Multiply-Accumulate (MAC) operations. In an SNN, computation is driven by discrete events. Because Integrate-and-Fire neurons do not require multiplication (a spike simply triggers the addition of its weight to the post-synaptic potential), MACs are replaced by simpler Synaptic Operations (SyOPs).
+#serif-text()[ In a standard ANN, every forward pass requires a fixed number of Multiply-Accumulate (MAC) operations. In an SNN, computation is driven by discrete events. Because Integrate-and-Fire neurons do not require multiplication (a spike simply triggers the addition of its weight to the post-synaptic potential), MACs are replaced by simpler Synaptic Operations (SyOPs).
 
-  The total computational cost for a single 64-tick saccade is estimated as:
-]
+The total computational cost for a single 64-tick saccade is estimated as: ]
 
 #figure(
   kind: "eq",
@@ -1251,47 +1252,35 @@ If $theta$ is configured significantly lower than $sum w_i$, models naturally re
   [ $ "Total SyOPs" = sum_{l=1}^{L} N_"spikes"^{(l)} dot F_"out"^{(l)} $ ]
 )
 
-#serif-text()[
-  Where $N_"spikes"$ is the total spikes emitted in layer $l$ and $F_"out"$ is the fan-out of the neurons. By comparing the SNN SyOPs against the fixed MAC count of the baseline ANN, we derive a theoretical energy efficiency ratio.
-]
+#serif-text()[ Where $N_"spikes"$ is the total spikes emitted in layer $l$ and $F_"out"$ is the fan-out of the neurons. By comparing the SNN SyOPs against the fixed MAC count of the baseline ANN, we derive a theoretical energy efficiency ratio. ]
 
 #v(1em)
 ==== Temporal Latency Metrics
 
-#serif-text()[
-  To evaluate the efficacy of the Time-to-First-Spike (TTFS) encoding, we measure the *Time-to-Decision Latency*. This is defined as the exact simulation tick $t in [0, 64)$ at which the WTA output layer reaches a decision. A lower average latency indicates a superior temporal decoder that successfully prioritizes salient information, allowing the system to theoretically power down early in the simulation window.
-]
+#serif-text()[ To evaluate the efficacy of the Time-to-First-Spike (TTFS) encoding, we measure the *Time-to-Decision Latency*. This is defined as the exact simulation tick $t in [0, 64)$ at which the WTA output layer reaches a decision. A lower average latency indicates a superior temporal decoder that successfully prioritizes salient information, allowing the system to theoretically power down early in the simulation window. ]
 
 #v(1em)
 === Qualitative Evaluation via Latent Space Projection (t-SNE)
 
-#serif-text()[
-  While quantitative metrics provide a measure of accuracy, they often obscure the underlying topology of the learned representations. To visualize the hidden layer's latent space ($N_1 = 128$), we employ @tsne @van_der_maaten_visualizing_2008. This non-linear technique projects the high-dimensional manifold onto a 2D plane, preserving local proximities.
+#serif-text()[ While quantitative metrics provide a measure of accuracy, they often obscure the underlying topology of the learned representations. To visualize the hidden layer's latent space ($N_1 = 128$), we employ @tsne @van_der_maaten_visualizing_2008. This non-linear technique projects the high-dimensional manifold onto a 2D plane, preserving local proximities.
 
-  This visualization serves as the primary comparative tool for two distinct hypotheses:
-]
+This visualization serves as the primary comparative tool for two distinct hypotheses: ]
 
 #box-text()[
 - *Supervised Latent Space (Phase II):* The projection is expected to reveal highly segregated clusters corresponding to the 10 categorical digit classes, as weights were explicitly optimized via cross-entropy loss.
 - *STDP Latent Space (Phase III):* In contrast, the native STDP algorithm possesses no semantic knowledge. It operates as a temporal coincidence detector, clustering images based on *morphological similarity*. Digits sharing fundamental structural primitives (e.g., the vertical bars of '1's and '7's) should form contiguous manifolds in the latent space.
 ]
 
-#serif-text()[
-  Demonstrating this geometric clustering via t-SNE empirically validates that the local STDP rule has successfully self-organized into a biologically plausible feature extractor, effectively mapping the input distribution to a structured manifold without the supervision of categorical labels.
-]
+#serif-text()[ Demonstrating this geometric clustering via t-SNE empirically validates that the local STDP rule has successfully self-organized into a biologically plausible feature extractor, effectively mapping the input distribution to a structured manifold without the supervision of categorical labels. ]
 
 #v(2em)
 == Experiment Setup and Evaluation Phases
 
-#serif-text()[
-  To systematically evaluate the proposed @snn architectures, the experimental framework is structured as a progressive pipeline, moving from isolated mathematical unit tests to full-scale visual classification. This approach isolates three critical neuromorphic variables: *temporal integration dynamics*, *parameter robustness during quantization*, and *unsupervised feature emergence*.
-]
+#serif-text()[ To systematically evaluate the proposed @snn architectures, the experimental framework is structured as a progressive pipeline, moving from isolated mathematical unit tests to full-scale visual classification. This approach isolates three critical neuromorphic variables: *temporal integration dynamics*, *parameter robustness during quantization*, and *unsupervised feature emergence*. ]
 
 === The SNN Simulation Engine
 
-#serif-text()[
-  The primary testbed is a custom-built, discrete-time SNN simulator implemented in PyTorch. Unlike standard Artificial Neural Networks (ANNs) which process data in a single static "glance," the @snn processes data through a dynamic temporal @saccade lasting $T_"max" = 64$ ticks, requiring state variables to be tracked across the temporal dimension.
-]
+#serif-text()[ The primary testbed is a custom-built, discrete-time SNN simulator implemented in PyTorch. Unlike standard Artificial Neural Networks (ANNs) which process data in a single static "glance," the @snn processes data through a dynamic temporal @saccade lasting $T_"max" = 64$ ticks, requiring state variables to be tracked across the temporal dimension. ]
 
 #figure(
   kind: "algo",
@@ -1328,9 +1317,7 @@ If $theta$ is configured significantly lower than $sum w_i$, models naturally re
 #v(1em)
 === Hardware and Simulation Parameters
 
-#serif-text()[
-  To ensure reproducibility across the network-scale evaluations (Phases II and III), the baseline hardware-proxy parameters are standardized as follows. *(Note: Phase I overrides $V_"th"$ to perform targeted threshold sweeps).*
-]
+#serif-text()[ To ensure reproducibility across the network-scale evaluations (Phases II and III), the baseline hardware-proxy parameters are standardized as follows. *(Note: Phase I overrides $V_"th"$ to perform targeted threshold sweeps).* ]
 
 #table(
   columns: (1fr, 1fr, 2fr),
@@ -1342,15 +1329,13 @@ If $theta$ is configured significantly lower than $sum w_i$, models naturally re
   [Quantization], [INT8], [Bit-depth for ANN-to-SNN weight transfer],
   [$V_"th_h"$], [200.0], [Baseline threshold for hidden layer ($N_1$)],
   [$V_"th_o"$], [100.0], [Baseline threshold for output layer ($N_2$)],
-  [Optimizer], [Adam], [Source optimizer for Phase II Baseline],
+  [Optimizer], [Adam @kingma_adam_2017], [Source optimizer for Phase II Baseline],
 )
 
 #v(1em)
 === Evaluation Phases
 
-#serif-text()[
-  The experiment is executed in three logical phases, building in complexity from an isolated single neuron to a fully self-organizing network.
-]
+#serif-text()[ The experiment is executed in three logical phases, building in complexity from an isolated single neuron to a fully self-organizing network. ]
 
 #mini-header()[Phase I: Temporal Dynamics and Threshold Sweeps]
 #serif-text()[
@@ -1363,14 +1348,10 @@ If $theta$ is configured significantly lower than $sum w_i$, models naturally re
 ]
 
 #mini-header()[Phase II: The ANN Baseline and Zero-Shot Transfer]
-#serif-text()[
-  Phase II benchmarks the "SNN-as-Accelerator" hypothesis. First, an Artificial Neural Network (ANN) baseline is established (using a standard $784 -> 128 -> 10$ MLP without biases) to provide an "ideal" accuracy ceiling. Learned $"FP32"$ weights are then strictly quantized to an $"INT8"$ range and transferred directly into the SNN. We measure the *Accuracy Decay Rate* ($Delta_"Acc" = "Acc"_"ANN" - "Acc"_"SNN"$) to quantify the information lost during this static-to-temporal translation.
-]
+#serif-text()[ Phase II benchmarks the "SNN-as-Accelerator" hypothesis. First, an Artificial Neural Network (ANN) baseline is established (using a standard $784 -> 128 -> 10$ MLP without biases) to provide an "ideal" accuracy ceiling. Learned $"FP32"$ weights are then strictly quantized to an $"INT8"$ range and transferred directly into the SNN. We measure the *Accuracy Decay Rate* ($Delta_"Acc" = "Acc"_"ANN" - "Acc"_"SNN"$) to quantify the information lost during this static-to-temporal translation. ]
 
 #mini-header()[Phase III: Native Unsupervised Learning]
-#serif-text()[
-  The final phase evaluates neuromorphic self-organization. Discarding all pre-trained weights, the network is initialized randomly and exposed to the MNIST dataset strictly via unsupervised @stdp.
-]
+#serif-text()[ The final phase evaluates neuromorphic self-organization. Discarding all pre-trained weights, the network is initialized randomly and exposed to the MNIST dataset strictly via unsupervised @stdp. ]
 
 #box-text()[
 - *Lateral Inhibition:* A @wta mechanism is enforced; the first output neuron to fire suppresses all competitors, driving the network toward distinct feature clustering.
@@ -1379,20 +1360,56 @@ If $theta$ is configured significantly lower than $sum w_i$, models naturally re
 
 #pagebreak()
 
-= Results <s.results>
+= Results <c.results>
+
+#serif-text()[ This chapter presents the empirical data gathered from the three evaluation phases. The results progress from isolated single-neuron temporal dynamics to full-network zero-shot translation, and finally to unsupervised self-organization. ]
 
 #v(2em)
-== Phase I: Neruon Models
+== Phase I: Temporal Dynamics and Threshold Sweeps <s.res_phase1>
 
-#figure(image("figures/phase1tmp.png"),caption:[Neural network before learing yeah])
+#serif-text()[ Phase I evaluated the isolated response of the four neuron models to permuted temporal patterns (Concordant vs. Discordant) across three distinct threshold constraints: Saturation (Low), Critical (Balanced), and Deficit (High). The base spatial weight sum for all trials was $300.0$. The resulting output spike latencies are summarized in @tbl:phase1_results and visualized in @fig:phase1_composite. ]
 
-== Phase II:
+#figure(
+  table(
+    columns: (1fr, 1fr, 1fr, 1fr, 1fr),
+    inset: 8pt,
+    align: center,
+    [*Model*], [*Regime*], [*Threshold ($theta$)*], [*Concordant Spike ($t$)*], [*Discordant Spike ($t$)*],
+    [Model A (Simple IF)], [Saturation], [150.0], [6], [14],
+    [Model A (Simple IF)], [Critical], [290.0], [18], [18],
+    [Model A (Simple IF)], [Deficit], [310.0], [DNF], [DNF],
+    [Model B (Standard LIF)], [Saturation], [140.0], [6], [14],
+    [Model B (Standard LIF)], [Critical], [240.0], [DNF], [18],
+    [Model B (Standard LIF)], [Deficit], [310.0], [DNF], [DNF],
+    [Model C (Linear Ramp)], [Saturation], [500.0], [4], [9],
+    [Model C (Linear Ramp)], [Critical], [1800.0], [8], [17],
+    [Model C (Linear Ramp)], [Deficit], [2500.0], [14], [DNF],
+    [Model D (State Discount)], [Saturation], [100.0], [6], [14],
+    [Model D (State Discount)], [Critical], [220.0], [10], [DNF],
+    [Model D (State Discount)], [Deficit], [310.0], [DNF], [DNF],
+  ),
+  caption: [Output spike latencies across varying threshold regimes. DNF indicates the neuron Did Not Fire within the $T_"max" = 64$ saccade window.],
+  kind: "table",
+  supplement: [Table]
+) <tbl:phase1_results>
 
-#figure(image("figures/snnclasification.png"),caption:[Neural network before learing])
+#serif-text()[
+  *Observation of Saturation:* Under the Low threshold regime, all models successfully fired, with earlier latencies recorded for the concordant pattern across all architectures.
 
-#figure(image("figures/snnweights.png"),caption:[Neural network before learing])
+  *Observation of Critical Balance:* When thresholds were constrained strictly against the spatial weight sum, model behaviors diverged significantly. Model A fired at identical latencies ($t=18$) for both patterns. Model B registered a DNF for the concordant pattern but fired at $t=18$ for the discordant pattern. Model D fired at $t=10$ for the concordant pattern but registered a DNF for the discordant. Model C fired for both, but maintained a distinct temporal gap ($t=8$ vs $t=17$).
 
-== Phase III:
+  *Observation of Deficit:* When the threshold was raised above the spatial weight sum to $310.0$ (and proportional equivalents for dynamic models), Models A, B, and D failed to reach the firing threshold for either pattern. Model C successfully integrated the concordant pattern, firing at $t=14$.
+]
+
+// INSERT YOUR phase1_composite_sweep.png HERE
+#figure(
+  image("figures/phase1tmp.png", width: 95%),
+  caption: [Input spike distributions and resulting temporal dynamics across the three threshold regimes.],
+) <fig:phase1_composite>
+
+=== Architecture Selection for Phase II and III
+
+#serif-text()[ Because Phase II and Phase III require an architecture capable of processing variable input densities without suffering from premature saturation or decay failure, the selected neuron model must demonstrate baseline robustness under deficit constraints. As demonstrated in @tbl:phase1_results, Model C (Current-Accumulating Linear Ramp) was the exclusive architecture capable of overcoming a deficit threshold by leveraging temporal momentum. Consequently, Model C was utilized as the standardized spiking architecture for the network-scale evaluations in the subsequent phases. ]
 
 #pagebreak()
 
@@ -1404,28 +1421,23 @@ If $theta$ is configured significantly lower than $sum w_i$, models naturally re
 #v(2em)
 == Phase I: Temporal Dynamics and the TTFS Paradox <s.disc_phase1>
 
-#serif-text()[
-  The empirical observations from the Phase I threshold sweeps reveal a fundamental tension between traditional biological neuron models and the specific requirements of Time-To-First-Spike (TTFS) decoding. By systematically shifting the threshold bounds, the isolated unit tests exposed severe vulnerabilities in standard integration strategies, while validating the proposed momentum-based and state-discounting architectures.
-]
+#serif-text()[ The empirical observations from the Phase I threshold sweeps reveal a fundamental tension between traditional biological neuron models and the specific requirements of Time-To-First-Spike (TTFS) decoding. By systematically shifting the threshold bounds, the isolated unit tests exposed severe vulnerabilities in standard integration strategies, while validating the proposed momentum-based and state-discounting architectures. ]
 
 === The "Low Threshold Illusion" and the LIF Paradox
 
-#serif-text()[
-  Under Saturation (Low Threshold) conditions, all models successfully fired earlier for the concordant pattern. However, as hypothesized, this is largely an illusion of magnitude rather than true temporal decoding. The Simple IF (Model A) and LIF (Model B) models simply accumulated the heavily weighted early spikes and crossed the lowered threshold prematurely.
+#serif-text()[ Under Saturation (Low Threshold) conditions, all models successfully fired earlier for the concordant pattern. However, as hypothesized, this is largely an illusion of magnitude rather than true temporal decoding. The Simple IF (Model A) and LIF (Model B) models simply accumulated the heavily weighted early spikes and crossed the lowered threshold prematurely.
 
-  This vulnerability becomes glaringly apparent in the Critical (Balanced) regime. When forced to accumulate the entire sequence, Model A completely failed to differentiate order, firing simultaneously for both patterns. More critically, Model B (LIF) demonstrated a catastrophic misalignment with TTFS principles. At a balanced threshold, Model B registered a "Did Not Fire" (DNF) for the concordant pattern, but successfully fired for the discordant pattern.
+This vulnerability becomes glaringly apparent in the Critical (Balanced) regime. When forced to accumulate the entire sequence, Model A completely failed to differentiate order, firing simultaneously for both patterns. More critically, Model B (LIF) demonstrated a catastrophic misalignment with TTFS principles. At a balanced threshold, Model B registered a "Did Not Fire" (DNF) for the concordant pattern, but successfully fired for the discordant pattern.
 
-  This occurs due to the interaction between temporal density and the exponential leak. In the concordant pattern, the strongest spikes arrive early, but their accumulated potential decays significantly while waiting for the weaker, later spikes. Conversely, in the discordant pattern, early weak spikes establish a baseline potential, and the massive late-arriving spikes push the neuron over the threshold immediately before they have a chance to decay. Consequently, standard LIF inherently favors "strongest-last" sequences, actively fighting the "strongest-first" priority of TTFS encoding.
-]
+This occurs due to the interaction between temporal density and the exponential leak. In the concordant pattern, the strongest spikes arrive early, but their accumulated potential decays significantly while waiting for the weaker, later spikes. Conversely, in the discordant pattern, early weak spikes establish a baseline potential, and the massive late-arriving spikes push the neuron over the threshold immediately before they have a chance to decay. Consequently, standard LIF inherently favors "strongest-last" sequences, actively fighting the "strongest-first" priority of TTFS encoding. ]
 
 === Selective Filtering vs. Unbounded Momentum
 
-#serif-text()[
-  In contrast to the standard models, the custom architectures (Models C and D) exhibited highly desirable temporal dynamics for rank-order decoding.
+#serif-text()[ In contrast to the standard models, the custom architectures (Models C and D) exhibited highly desirable temporal dynamics for rank-order decoding.
 
-  At the Critical (Balanced) threshold, the State-Dependent Discount (Model D) achieved perfect selective filtering. It successfully fired for the concordant pattern while completely suppressing the discordant pattern. By discounting late-arriving spikes based on internal state rather than elapsed time, it ensures that a neuron only fires if the most critical information arrives exactly when the neuron is empty and highly receptive.
+At the Critical (Balanced) threshold, the State-Dependent Discount (Model D) achieved perfect selective filtering. It successfully fired for the concordant pattern while completely suppressing the discordant pattern. By discounting late-arriving spikes based on internal state rather than elapsed time, it ensures that a neuron only fires if the most critical information arrives exactly when the neuron is empty and highly receptive.
 
-  The Linear Ramp (Model C) demonstrated extreme robustness, being the only architecture capable of crossing the High (Deficit) threshold. By converting early spikes into compounding integration momentum, Model C can force a spike even when the raw spatial weight sum is theoretically insufficient. While this unbounded momentum guarantees high firing rates and robust temporal differentiation, it theoretically introduces a risk of network over-excitation. However, in the context of this architecture, this risk is safely mitigated by the strict enforcement of the saccade deadline ($T_"max" = 64$); the global reset prevents the linear ramp from diverging toward hardware saturation across multiple inferences.
+The Linear Ramp (Model C) demonstrated extreme robustness, being the only architecture capable of crossing the High (Deficit) threshold. By converting early spikes into compounding integration momentum, Model C can force a spike even when the raw spatial weight sum is theoretically insufficient. While this unbounded momentum guarantees high firing rates and robust temporal differentiation, it theoretically introduces a risk of network over-excitation. However, in the context of this architecture, this risk is safely mitigated by the strict enforcement of the saccade deadline ($T_"max" = 64$); the global reset prevents the linear ramp from diverging toward hardware saturation across multiple inferences.
 ]
 
 

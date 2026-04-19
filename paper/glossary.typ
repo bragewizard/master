@@ -12,6 +12,12 @@
     description: "",
   ),
   (
+    key: "fpga",
+    short: "FPGA",
+    long: "Field Programmable Gate Array",
+    description: "",
+  ),
+  (
     key: "stdp",
     short: "STDP",
     long: "Spike-Timing-Dependent Plasticity",
