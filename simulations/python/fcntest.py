@@ -93,22 +93,78 @@ def on_key_press(symbol, modifiers):
 
     elif symbol == key.E:
         print("\n--- The Parameter Bridge: Exporting Baseline ---")
-        # Save the FP32 model state
         torch.save(model.state_dict(), "phase2_baseline_fcn.pth")
 
-        # Perform a dry-run quantization to show the translation metrics
+        # 1. Evaluate Baseline Accuracy
+        print("Evaluating Baseline ANN Accuracy...")
+        model.eval()
+        correct, total = 0, 0
         with torch.no_grad():
-            w1_fp = model.fc1.weight.data
-            w1_int8 = (w1_fp * 64).round().clamp(-128, 127)
+            # Grabbing a large test batch (adapt to your _data.py provider if needed)
+            test_images, test_labels = provider.get_batch(1000)
+            outputs = model(test_images)
+            predictions = torch.argmax(outputs, dim=1)
+            correct = (predictions == test_labels).sum().item()
+            total = test_labels.size(0)
 
-            print("[+] Saved FP32 parameters to 'phase2_baseline_fcn.pth'")
-            print(
-                f"  -> Hidden Layer FP32 Range: [{w1_fp.min():.4f}, {w1_fp.max():.4f}]"
+        ann_acc = (correct / total) * 100
+        print(f"[+] Baseline ANN Accuracy (FP32): {ann_acc:.2f}%")
+
+        # 2. Extract and Quantize Weights
+        with torch.no_grad():
+            w1_fp = model.fc1.weight.data.cpu().numpy().flatten()
+            w1_int8 = (
+                (model.fc1.weight.data * 64)
+                .round()
+                .clamp(-128, 127)
+                .cpu()
+                .numpy()
+                .flatten()
             )
-            print(
-                f"  -> Hidden Layer INT8 Range: [{w1_int8.min():.0f}, {w1_int8.max():.0f}]"
-            )
-            print("Ready for Phase II Zero-Shot Transfer!")
+
+            print(f"  -> FP32 Range: [{w1_fp.min():.4f}, {w1_fp.max():.4f}]")
+            print(f"  -> INT8 Range: [{w1_int8.min():.0f}, {w1_int8.max():.0f}]")
+
+        # 3. Export to CSV for Typst/CeTZ
+        import csv
+
+        # We sample 5000 weights to keep the CSV lightweight for Typst compilation
+        sample_indices = np.random.choice(len(w1_fp), 5000, replace=False)
+        with open("phase2_weights.csv", "w", newline="") as f:
+            writer = csv.writer(f)
+            writer.writerow(["Index", "FP32_Value", "INT8_Value"])
+            for idx in sample_indices:
+                writer.writerow([idx, w1_fp[idx], w1_int8[idx]])
+        print("[+] Exported weight sample to 'phase2_weights.csv'")
+
+        # 4. Generate the overlaid Histogram Plot
+        plt.figure(figsize=(10, 5))
+        plt.hist(
+            w1_fp,
+            bins=100,
+            alpha=0.6,
+            color="blue",
+            label="FP32 (Original)",
+            density=True,
+        )
+        # Scale INT8 down by 64 just for the visual overlay comparison
+        plt.hist(
+            w1_int8 / 64.0,
+            bins=100,
+            alpha=0.6,
+            color="orange",
+            label="INT8 (Quantized)",
+            density=True,
+        )
+        plt.title("Phase II: Synaptic Weight Distribution (Hidden Layer N1)")
+        plt.xlabel("Synaptic Weight Value")
+        plt.ylabel("Density")
+        plt.legend()
+        plt.grid(axis="y", linestyle="--", alpha=0.5)
+        plt.tight_layout()
+        plt.savefig("weight_distribution.png", dpi=300)
+        print("[+] Saved 'weight_distribution.png'")
+        print("Ready for Phase II Zero-Shot Transfer!")
 
 
 def update(dt):

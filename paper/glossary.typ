@@ -6,6 +6,12 @@
     description: "",
   ),
   (
+    key: "mac",
+    short: "MAC",
+    long: "Multiply And Accumulate",
+    description: "",
+  ),
+  (
     key: "tsne",
     short: "t-SNE",
     long: "t-distributed Stochastic Neighbor Embedding",

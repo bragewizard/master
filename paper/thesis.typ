@@ -32,7 +32,7 @@
 This work explores the implementation of these principles on standard CPU/GPU hardware. Two primary methodologies are developed and evaluated on visual classification tasks: (1) an inference-optimized @snn that translates weights from a conventionally trained @fcn using @ttfs temporal encoding, and (2) an unsupervised, biologically inspired learning simulator incorporating structural plasticity (dynamic synaptogenesis and pruning). The results demonstrate the viability of temporal coding and local learning rules in extracting meaningful features from visual stimuli, highlighting the potential of neuromorphic algorithms to drastically reduce the computational footprint of artificial intelligence.]]
 ]]
 
-// #text(size: 9pt, weight: "medium")[ #h(1fr) Wordcount: #total-words ]
+#text(size: 9pt, weight: "medium")[ #h(1fr) Wordcount: #total-words ]
 
 #pagebreak()
 
@@ -1241,9 +1241,9 @@ At the conclusion of the 64-tick saccade, the simulator halts, compares the time
 #v(1em)
 ==== Sparsity and Synaptic Operations (SyOPs)
 
-#serif-text()[ In a standard ANN, every forward pass requires a fixed number of Multiply-Accumulate (MAC) operations. In an SNN, computation is driven by discrete events. Because Integrate-and-Fire neurons do not require multiplication (a spike simply triggers the addition of its weight to the post-synaptic potential), MACs are replaced by simpler Synaptic Operations (SyOPs).
+#serif-text()[ In a standard @ann, every forward pass requires a fixed number of @mac operations. In an @snn, computation is driven by discrete events. Because @if neurons do not require multiplication (a spike simply triggers the addition of its weight to the post-synaptic potential), @mac:pl are replaced by simpler @syops.
 
-The total computational cost for a single 64-tick saccade is estimated as: ]
+The total computational cost for a single 64-tick @saccade is estimated as: ]
 
 #figure(
   kind: "eq",
@@ -1258,20 +1258,6 @@ The total computational cost for a single 64-tick saccade is estimated as: ]
 ==== Temporal Latency Metrics
 
 #serif-text()[ To evaluate the efficacy of the Time-to-First-Spike (TTFS) encoding, we measure the *Time-to-Decision Latency*. This is defined as the exact simulation tick $t in [0, 64)$ at which the WTA output layer reaches a decision. A lower average latency indicates a superior temporal decoder that successfully prioritizes salient information, allowing the system to theoretically power down early in the simulation window. ]
-
-#v(1em)
-=== Qualitative Evaluation via Latent Space Projection (t-SNE)
-
-#serif-text()[ While quantitative metrics provide a measure of accuracy, they often obscure the underlying topology of the learned representations. To visualize the hidden layer's latent space ($N_1 = 128$), we employ @tsne @van_der_maaten_visualizing_2008. This non-linear technique projects the high-dimensional manifold onto a 2D plane, preserving local proximities.
-
-This visualization serves as the primary comparative tool for two distinct hypotheses: ]
-
-#box-text()[
-- *Supervised Latent Space (Phase II):* The projection is expected to reveal highly segregated clusters corresponding to the 10 categorical digit classes, as weights were explicitly optimized via cross-entropy loss.
-- *STDP Latent Space (Phase III):* In contrast, the native STDP algorithm possesses no semantic knowledge. It operates as a temporal coincidence detector, clustering images based on *morphological similarity*. Digits sharing fundamental structural primitives (e.g., the vertical bars of '1's and '7's) should form contiguous manifolds in the latent space.
-]
-
-#serif-text()[ Demonstrating this geometric clustering via t-SNE empirically validates that the local STDP rule has successfully self-organized into a biologically plausible feature extractor, effectively mapping the input distribution to a structured manifold without the supervision of categorical labels. ]
 
 #v(2em)
 == Experiment Setup and Evaluation Phases
@@ -1358,6 +1344,10 @@ This visualization serves as the primary comparative tool for two distinct hypot
 - *Homeostasis:* Synaptic weights are normalized after each stimulus ($sum w_j = K$) to prevent single-neuron dominance and ensure a distributed feature representation across the hidden layer.
 ]
 
+#box-text()[
+  *The Post-Hoc Assignment Protocol:* Because @stdp is fundamentally unsupervised, the SNN output neurons organically form distinct feature clusters rather than mapping to pre-defined human labels (0-9). To quantify classification accuracy, a post-hoc assignment protocol is utilized. Following the unsupervised training phase, a distinct subset of the training data is passed through the frozen network. A frequency matrix $M$ of size $N_"out" times 10$ tracks the ground-truth label of each image that causes output neuron $j$ to win the @wta competition. The assigned label for neuron $j$ is then defined as $L_j = "argmax"(M_j)$.
+]
+
 #pagebreak()
 
 = Results <c.results>
@@ -1410,6 +1400,98 @@ This visualization serves as the primary comparative tool for two distinct hypot
 === Architecture Selection for Phase II and III
 
 #serif-text()[ Because Phase II and Phase III require an architecture capable of processing variable input densities without suffering from premature saturation or decay failure, the selected neuron model must demonstrate baseline robustness under deficit constraints. As demonstrated in @tbl:phase1_results, Model C (Current-Accumulating Linear Ramp) was the exclusive architecture capable of overcoming a deficit threshold by leveraging temporal momentum. Consequently, Model C was utilized as the standardized spiking architecture for the network-scale evaluations in the subsequent phases. ]
+
+
+#v(2em)
+== Phase II: Zero-Shot Weight Transfer <s.res_phase2>
+
+#serif-text()[
+  Phase II evaluated the accuracy decay incurred when translating a conventionally trained Artificial Neural Network (ANN) to the selected Spiking Neural Network (Model C) without any intermediate retraining.
+]
+
+#v(1em)
+=== Baseline ANN Performance and Parameter Quantization
+
+#serif-text()[ The Phase 0 baseline ANN ($784 -> 128 -> 10$ MLP) was trained for 20 epochs using the Adam optimizer. To satisfy the strict mapping requirements of the SNN, the network was trained with all bias terms disabled ($b=0$). The baseline model achieved a maximum test accuracy of `[XX.X]%` on the standard MNIST test set.
+
+  Prior to transfer, the $"FP32"$ floating-point weights were scaled and quantized to an $"INT8"$ range ($[-128, 127]$). fig illustrates the distribution of weights before and after this parameter bridge quantization. ]
+
+#figure(
+  image("figures/weight_distribution.png", width: 80%),
+  caption: [Histogram of the synaptic weight distribution in the hidden layer before (FP32) and after (INT8) quantization.],
+) <fig:weight_dist>
+
+#v(1em)
+=== SNN Inference and the Isolation of Translation Penalties
+
+#serif-text()[ To rigorously isolate the sources of information loss during the zero-shot transfer, the SNN was evaluated in two distinct precision modes. First, the SNN was loaded with unrounded, scaled $"FP32"$ weights to measure the isolated *Temporal Penalty* (the loss incurred strictly by moving from static activation to discrete TTFS integration). Second, the SNN was loaded with the strictly quantized $"INT8"$ weights to measure the additional *Quantization Penalty*.
+
+Both models utilized the Model C (Linear Ramp) architecture over a $T_"max" = 64$ saccade window. The results are summarized in @tbl:phase2_accuracy. ]
+
+#figure(
+  table(
+    columns: (1fr, 1.2fr, 1fr),
+    inset: 10pt,
+    align: center,
+    [*Phase*], [*Model Configuration*], [*Accuracy (%)*],
+    [Baseline Ceiling], [ANN (Static FP32, Bias=False)], [98.40%],
+    [Temporal Translation], [SNN (Spiking Model C, FP32)], [83.20%],
+    [Hardware Proxy], [SNN (Spiking Model C, INT8)], [83.00%],
+  ),
+  caption: [Performance degradation breakdown. The Temporal Penalty isolates the loss of TTFS encoding, while the Hardware Proxy isolates the loss of $"INT8"$ precision rounding.],
+  kind: "table",
+  supplement: [Table]
+) <tbl:phase2_accuracy>
+
+#serif-text()[ @fig:snn_temporal illustrates the cumulative accuracy of both SNN precision modes as the temporal saccade progresses. While the $"INT8"$ quantization lowers the absolute accuracy ceiling, the temporal trajectory remains nearly identical, proving that the momentum-based decoding of Model C is highly robust to parameter degradation.
+]
+
+#serif-text()[ fig visualizes the classification distribution of the SNN. The network maintained strong structural clustering, successfully utilizing the lateral inhibition (Winner-Takes-All) mechanism to finalize classifications within the discrete temporal window. ]
+
+#figure(
+  image("figures/snn_confusion_matrix.png", width: 80%),
+  caption: [Confusion matrix for the zero-shot SNN on the MNIST test set.],
+) <fig:snn_confusion>
+
+#figure(
+  image("figures/snn_temporal_accuracy.png", width: 80%),
+  caption: [Confusion matrix for the zero-shot SNN on the MNIST test set.],
+) <fig:snn_temporal>
+
+
+=== Computational Efficiency: SynOps and Time-to-Decision <s.res_efficiency>
+
+#serif-text()[ A primary theoretical advantage of @ttfs encoding is temporal sparsity. Because the most salient features (highest intensity pixels) spike earliest in the saccade window, a highly reactive architecture should be able to finalize a classification before the entire input sequence has been processed.
+
+  To quantify this, we establish a hardware-agnostic efficiency metric: Synaptic Operations (SynOps). The standard ANN baseline requires a fixed number of @mac operations per inference, regardless of the input data. Conversely, the SNN only consumes a SynOp when a specific spike propagates. If the lateral inhibition (@wta) router finalizes a decision at $t_"fire"$, all spikes scheduled for $t > t_"fire"$ are preempted and discarded. ]
+
+#figure(
+  table(
+    columns: (1fr, 1.2fr, 1fr, 1.2fr, 1.2fr),
+    inset: 10pt,
+    align: center,
+    [*Architecture*], [*Metric Target*], [*Avg. Latency*], [*Avg. Operations / Image*],[*Compute Reduction*],
+    [ANN (Static FP32)], [Dense MACs], [N/A (Static)], [101,632 MACs],[0%],
+    [SNN (Spiking FP32)], [Sparse SynOps], [8.2 Ticks], [10,900 SynOps],[89.3%],
+    [SNN (Spiking INT8)], [Sparse SynOps], [8.1 Ticks], [10,887 SynOps],[89.3%],
+  ),
+  caption: [Computational cost comparison. The SNN significantly reduces operations by leveraging temporal early-exit sparsity, ignoring low-priority background spikes.],
+  kind: "table",
+  supplement: [Table]
+) <tbl:phase2_efficiency>
+
+#serif-text()[ As detailed in @tbl:phase2_efficiency, the zero-shot $"INT8"$ SNN achieved a Mean Time-to-Decision of `[T.T]` ticks. Because the network halts integration upon classification, it processed an average of only `[S,SSS]` SynOps per image. This represents a `[R.R]%` reduction in computational workload compared to the static ANN baseline, empirically validating the energy-efficiency hypothesis of TTFS neuromorphic arrays. ]
+
+== Phase III
+
+#figure(
+  image("figures/phase3_receptive_before.png", width: 80%),
+  caption: [Confusion matrix for the zero-shot SNN on the MNIST test set.],
+)
+#figure(
+  image("figures/phase3_receptive_after.png", width: 80%),
+  caption: [Confusion matrix for the zero-shot SNN on the MNIST test set.],
+)
 
 #pagebreak()
 
