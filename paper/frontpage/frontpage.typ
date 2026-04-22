@@ -94,12 +94,13 @@
     #v(.8em)
     #text(size: std-size, weight: "semibold", author)
     #v(2em)
-    #grid(columns: (38%,1fr), column-gutter: 0pt,
+    #grid(columns: (33%,17%, 1fr), column-gutter: 0pt,
     [
       #block(width: 90%,[
       #text(size: std-size, dept)\
       #text(size: std-size, fac)])
     ],
+    [],
     [
       #block(width: 100%,[
       #text(size: std-size, sp-name + " - " + "Supervisor")\
@@ -147,7 +148,7 @@
       #place(bottom + left, dx: 11mm, dy: -14mm, text(size: small-size,font:body-font, date))
       #place(top + left, dx: 11mm, dy: 14mm,
         cover-text(
-          "NEUROMORPHIC COMPUTING",
+          "ON NEUROMORPHIC COMPUTING",
           "Brage Wiseth",
           subtitle: "With Spiking Neural Networks",
           sp-name: "Philip Haflinger",

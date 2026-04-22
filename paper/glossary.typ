@@ -192,7 +192,7 @@
     description: "An action potential conceptualized as a discrete, instantaneous event. In neuromorphic and computational models, it represents a binary signal traveling through the network.",
   ),
   (
-    key: "spike train",
+    key: "spiketrain",
     short: "spike train",
     long: "",
     description: "A sequence of action potentials (spikes) occurring over time. It typically represents the temporal firing pattern of a single neuron.",

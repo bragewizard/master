@@ -44,8 +44,8 @@ def run_phase1_experiment():
     # --- 4. THRESHOLD REGIMES ---
     regimes = {
         "Low (Saturation)": {"A": 150.0, "B": 140.0, "C": 500.0, "D": 100.0},
-        "Critical (Balanced)": {"A": 290.0, "B": 220.0, "C": 1800.0, "D": 220.0},
-        "High (Deficit)": {"A": 310.0, "B": 310.0, "C": 2500.0, "D": 310.0},
+        "Critical (Balanced)": {"A": 290.0, "B": 220.0, "C": 1000.0, "D": 220.0},
+        "High (Deficit)": {"A": 310.0, "B": 310.0, "C": 2000.0, "D": 310.0},
     }
 
     models = {
@@ -63,7 +63,7 @@ def run_phase1_experiment():
         print(f"\nEvaluating Regime: {regime_name}")
         for mod_key, (mod_name, run_func) in models.items():
             thresh = thresholds[mod_key]
-            snn.threshold_h[mod_key] = thresh
+            snn.thresholds[mod_key] = thresh
 
             # Concordant
             spikes_h_c = torch.full(
