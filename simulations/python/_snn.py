@@ -24,12 +24,6 @@ class SimpleSNN:
         self.theta_plus = 600.0
         self.theta_decay = 0.90
 
-        # -200.0 is a strong inhibitory blast to suppress competitors
-        self.w_lat = torch.full(
-            (self.num_hidden, self.num_hidden), -200.0, device=self.device
-        )
-        self.w_lat.fill_diagonal_(0.0)  # Neurons cannot inhibit themselves
-
         self.ops_count = 0
         self.update_weights(fcn_model)
 
@@ -55,7 +49,7 @@ class SimpleSNN:
             valid_post = post_spikes.clone()
 
             if use_wta:
-                # OLD: Hard-WTA (Forces exactly 1 winner)
+                # Hard-WTA (Forces exactly 1 winner)
                 valid_post[valid_post == -1] = 999
                 min_time = valid_post.min()
                 if min_time == 999:
@@ -63,8 +57,7 @@ class SimpleSNN:
                 winners = torch.where(valid_post == min_time)[0]
                 winner_idxs = [winners[torch.randint(len(winners), (1,))].item()]
             else:
-                # NEW: Soft-WTA / Lateral Inhibition
-                # Anyone who fired gets to learn
+                # Soft-WTA / k-WTA
                 winner_idxs = torch.where(valid_post != -1)[0].tolist()
                 if not winner_idxs:
                     return []
@@ -79,60 +72,6 @@ class SimpleSNN:
 
                 weights[w_idx].clamp_(self.W_min, self.W_max)
 
-                if k_target:
-                    current_sum = weights[w_idx].abs().sum()
-                    if current_sum > 0:
-                        weights[w_idx] *= k_target / current_sum
-
-            return winner_idxs
-
-    def apply_sadp(
-        self, pre_spikes, post_spikes, weights, k_target=None, use_wta=False
-    ):
-        """SADP Approximation for TTFS with Toggleable WTA."""
-        with torch.no_grad():
-            valid_post = post_spikes.clone()
-
-            if use_wta:
-                # --- HARD-WTA: Force exactly 1 winner ---
-                valid_post[valid_post == -1] = 999
-                min_time = valid_post.min()
-                if min_time == 999:
-                    return []
-                winners = torch.where(valid_post == min_time)[0]
-                winner_idxs = [winners[torch.randint(len(winners), (1,))].item()]
-            else:
-                # --- SOFT-WTA / LATERAL INHIBITION ---
-                # Any neuron that survived lateral inhibition and spiked gets to learn
-                winner_idxs = torch.where(valid_post != -1)[0].tolist()
-                if not winner_idxs:
-                    return []
-
-            # SADP Hyperparameter (Agreement window width)
-            tau_c = 5.0
-
-            for w_idx in winner_idxs:
-                t_fire = post_spikes[w_idx].float()
-                pre_f = pre_spikes.float()
-
-                # Calculate absolute time difference (Agreement)
-                delta_t = torch.abs(pre_f - t_fire)
-
-                # SADP Math: Correlation decays exponentially with time difference
-                ltp_updates = self.A_plus * torch.exp(-delta_t / tau_c)
-
-                valid_pre_mask = pre_spikes != -1
-
-                # 1. Reward agreement (LTP)
-                weights[w_idx, valid_pre_mask] += ltp_updates[valid_pre_mask]
-
-                # 2. Punish complete disagreement / silence (LTD)
-                weights[w_idx, ~valid_pre_mask] -= self.A_minus
-
-                # Clamp between W_min and W_max
-                weights[w_idx].clamp_(self.W_min, self.W_max)
-
-                # Safe Normalization (L1 Norm)
                 if k_target:
                     current_sum = weights[w_idx].abs().sum()
                     if current_sum > 0:
@@ -220,9 +159,7 @@ class SimpleSNN:
 
         return spikes_o
 
-    def run_model_c_linear_ramp(
-        self, input_delays, spikes_h, spikes_o, use_lateral=False
-    ):
+    def run_model_c_linear_ramp(self, input_delays, spikes_h, spikes_o):
         """Model C: Linear Ramp with Strict Hard Reset Timer"""
         base_thresh = self.thresholds["C"]
         v_hidden = torch.zeros(self.num_hidden, device=self.device)
@@ -235,16 +172,6 @@ class SimpleSNN:
             v_hidden += i_hidden
             v_output += i_output
             self.ops_count += self.num_hidden + self.num_output
-
-            # Only run if flag is True (Phase 3)
-            if use_lateral and t > 0:
-                just_fired_h = spikes_h == t - 1
-                if just_fired_h.any():
-                    lateral_blast = torch.mv(self.w_lat, just_fired_h.float())
-                    v_hidden += lateral_blast
-                    i_hidden += lateral_blast  # Suppress the slope as well!
-            # -------------------------------
-
             # 1. Hidden Layer & Timers
             input_mask = input_delays == t
             num_in_spikes = input_mask.sum().item()
@@ -331,7 +258,7 @@ class SimpleSNN:
 
         return spikes_o
 
-    def run_saccade(self, image_tensor, model_type="C", use_lateral=False):
+    def run_saccade(self, image_tensor, model_type="C"):
         self.ops_count = 0
         input_delays = self.encode_to_delays(image_tensor)
         spikes_h = torch.full(
@@ -346,9 +273,7 @@ class SimpleSNN:
         elif model_type == "B":
             self.run_model_b_lif(input_delays, spikes_h, spikes_o)
         elif model_type == "C":
-            self.run_model_c_linear_ramp(
-                input_delays, spikes_h, spikes_o, use_lateral=use_lateral
-            )
+            self.run_model_c_linear_ramp(input_delays, spikes_h, spikes_o)
         elif model_type == "D":
             self.run_model_d_threshold_sensitive(input_delays, spikes_h, spikes_o)
         else:
@@ -366,6 +291,10 @@ class SimpleSNN:
         num_samples = len(labels)
         correct, output_dnfs, hidden_dnfs = 0, 0, 0
         total_ops, spike_times, hidden_spikes_count = [], [], []
+
+        # --- NEW: Arrays to track data for the cumulative accuracy plot ---
+        all_latencies = []
+        all_correct = []
 
         # Rows = Actual Classes, Columns = Predicted Classes
         confusion_matrix = torch.zeros((10, 10), device="cpu")
@@ -390,18 +319,29 @@ class SimpleSNN:
             valid_out[valid_out == -1] = 999
             min_time_out = valid_out.min()
 
+            actual = labels[i].item() if torch.is_tensor(labels[i]) else labels[i]
+
+            # Defaults for plotting
+            img_latency = 999
+            img_is_correct = False
+
             if min_time_out == 999:
                 output_dnfs += 1
             else:
-                spike_times.append(min_time_out.item())
+                img_latency = min_time_out.item()
+                spike_times.append(img_latency)
                 tied_outputs = torch.where(valid_out == min_time_out)[0]
                 prediction = tied_outputs[torch.randint(len(tied_outputs), (1,))].item()
 
-                actual = labels[i]
                 confusion_matrix[actual, prediction] += 1
 
-                if prediction == labels[i]:
+                if prediction == actual:
                     correct += 1
+                    img_is_correct = True
+
+            # Save the individual image results for the plot
+            all_latencies.append(img_latency)
+            all_correct.append(img_is_correct)
 
         acc = (correct / num_samples) * 100
         mean_ops = sum(total_ops) / len(total_ops)
@@ -418,4 +358,7 @@ class SimpleSNN:
             "Efficiency_Gain": eff_gain,
             "Mean_Active_Hidden": mean_active_h,
             "Confusion_Matrix": confusion_matrix.numpy(),
+            # --- NEW: Return the raw arrays for the plot ---
+            "All_Latencies": all_latencies,
+            "All_Correct": all_correct,
         }

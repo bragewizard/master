@@ -11,7 +11,7 @@ plt.rcParams.update(
         "font.family": "sans-serif",
         "font.sans-serif": ["Geist"],
         "font.weight": "medium",
-        "font.size": 12,
+        "font.size": 14,
     }
 )
 
@@ -25,10 +25,10 @@ def plot_confusion_matrix(matrix, filename):
     )
 
     plt.imshow(norm_matrix, cmap="Blues")
-    plt.colorbar(label="Proportion of Predictions")
+    plt.colorbar()
 
-    plt.xlabel("Predicted Digit", fontsize=10)
-    plt.ylabel("Actual Digit", fontsize=10)
+    plt.xlabel("Predicted Digit", fontsize=16)
+    plt.ylabel("Actual Digit", fontsize=16)
 
     ticks = np.arange(10)
     plt.xticks(ticks, ticks)
@@ -46,15 +46,61 @@ def plot_confusion_matrix(matrix, filename):
     print(f"  -> Saved {filename}")
 
 
-def plot_cumulative_accuracy():
+def plot_cumulative_accuracy(
+    latencies, correctness, max_time=64, filename="phase2_cumulative_accuracy.png"
+):
     """
-    Plots accuracy over simulation time,
-    should see a rising s curve from 0 to max accuracy
+    Plots accuracy over simulation time.
+    Shows a rising S-curve from 0 to max accuracy as evidence integrates over time.
     """
+    latencies = np.array(latencies)
+    correctness = np.array(correctness)
+    total_images = len(latencies)
+
+    times = np.arange(0, max_time + 1)
+    accuracies = []
+
+    for t in times:
+        # Count how many images were correctly classified at OR before tick t
+        # (Ignore DNF images where latency might be recorded as 999 or -1)
+        correct_by_t = np.sum(correctness[latencies <= t])
+        acc = (correct_by_t / total_images) * 100.0
+        accuracies.append(acc)
+
+    plt.figure(figsize=(8, 6))
+    plt.plot(times, accuracies, color="#1f77b4", linewidth=3, label="FP32 SNN")
+
+    # Formatting to match academic standards
+    plt.title("Cumulative Accuracy over Time-To-First-Spike", fontsize=14, pad=15)
+    plt.xlabel("Simulation Tick", fontsize=16)
+    plt.ylabel("Accuracy (%)", fontsize=16)
+    plt.xlim(0, max_time)
+    plt.ylim(0, 100)
+    plt.grid(True, linestyle="--", alpha=0.7)
+
+    # Highlight the absolute maximum accuracy achieved
+    max_acc = max(accuracies)
+    max_acc_time = times[np.argmax(accuracies)]
+    plt.scatter([max_acc_time], [max_acc], color="red", zorder=5, s=60)
+    plt.annotate(
+        f"{max_acc:.1f}%",
+        (max_acc_time, max_acc),
+        textcoords="offset points",
+        xytext=(-25, -15),
+        ha="center",
+        fontsize=11,
+        weight="bold",
+        color="red",
+    )
+
+    plt.tight_layout()
+    plt.savefig(filename, dpi=300, bbox_inches="tight")
+    plt.close()
+    print(f"  -> Saved {filename}")
 
 
 def run_phase2_evaluation():
-    print("--- Phase II: Zero-Shot SNN Evaluation (Strict Ops Counting) ---")
+    print("--- Phase II: Zero-Shot SNN Evaluation (FP32 Baseline) ---")
     device = "cuda" if torch.cuda.is_available() else "cpu"
 
     ann = SimpleFCN().to(device)
@@ -66,37 +112,40 @@ def run_phase2_evaluation():
     test_images, test_labels = provider.get_batch(1000)
     test_images, test_labels = test_images.to(device), test_labels.cpu().numpy()
 
-    # Pass 1: FP32
+    # Pass 1: FP32 Zero-Shot Transfer
     print("\n[*] Evaluating FP32 Continuous...")
+    # Scale continuous weights to match TTFS threshold scaling
     snn.w1.data = ann.fc1.weight.data * 64.0
     snn.w2.data = ann.fc2.weight.data * 64.0
+
     res_fp32 = snn.evaluate_dataset(test_images, test_labels)
 
-    # Pass 2: INT8
-    print("[*] Evaluating INT8 Quantized...")
-    snn.w1.data = snn.w1.data.round().clamp(-128, 127)
-    snn.w2.data = snn.w2.data.round().clamp(-128, 127)
-    res_int8 = snn.evaluate_dataset(test_images, test_labels)
+    # Generate the academic plots for the thesis
+    plot_confusion_matrix(res_fp32["Confusion_Matrix"], "phase2_confusion_matrix.png")
 
-    plot_confusion_matrix(res_int8["Confusion_Matrix"], "phase2_confusion_matrix.png")
-    plot_cumulative_accuracy()
+    # Pass the raw arrays of latencies and correct booleans into the plotting function
+    plot_cumulative_accuracy(
+        res_fp32["All_Latencies"],
+        res_fp32["All_Correct"],
+        max_time=64,
+        filename="phase2_cumulative_accuracy.png",
+    )
 
-    for name, res in [("FP32", res_fp32), ("INT8", res_int8)]:
-        print(f"\n[+] Results:")
-        print(f"    - Accuracy:        {res['Accuracy']:.2f}%")
-        print(f"    - Mean Latency:    {res['Mean_Latency']:.1f} Ticks")
-        print(f"    - Mean Operations: {res['Mean_Ops']:,.0f} per image")
-        print(f"    - Compute Saved:   {res['Efficiency_Gain']:.1f}%")
-        print(f"    --- Network Activity ---")
-        print(
-            f"    - Hidden Sparsity: {res['Mean_Active_Hidden']:.1f} / 128 neurons fired per image"
-        )
-        print(
-            f"    - Hidden DNFs:     {res['Hidden_DNFs']} (Images where NO hidden neurons fired)"
-        )
-        print(
-            f"    - Output DNFs:     {res['Output_DNFs']} (Images where NO decision was made)"
-        )
+    print(f"\n[+] Results (FP32 SNN):")
+    print(f"    - Accuracy:        {res_fp32['Accuracy']:.2f}%")
+    print(f"    - Mean Latency:    {res_fp32['Mean_Latency']:.1f} Ticks")
+    print(f"    - Mean Operations: {res_fp32['Mean_Ops']:,.0f} per image")
+    print(f"    - Compute Saved:   {res_fp32['Efficiency_Gain']:.1f}%")
+    print(f"    --- Network Activity ---")
+    print(
+        f"    - Hidden Sparsity: {res_fp32['Mean_Active_Hidden']:.1f} / 128 neurons fired per image"
+    )
+    print(
+        f"    - Hidden DNFs:     {res_fp32['Hidden_DNFs']} (Images where NO hidden neurons fired)"
+    )
+    print(
+        f"    - Output DNFs:     {res_fp32['Output_DNFs']} (Images where NO decision was made)"
+    )
 
 
 if __name__ == "__main__":

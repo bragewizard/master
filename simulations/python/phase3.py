@@ -13,7 +13,7 @@ plt.rcParams.update(
         "font.family": "sans-serif",
         "font.sans-serif": ["Geist"],
         "font.weight": "medium",
-        "font.size": 12,
+        "font.size": 14,
     }
 )
 
@@ -50,10 +50,10 @@ def plot_confusion_matrix(matrix, filename):
     )
 
     plt.imshow(norm_matrix, cmap="Blues")
-    plt.colorbar(label="Proportion of Predictions")
+    plt.colorbar()
 
-    plt.xlabel("Predicted Digit", fontsize=12)
-    plt.ylabel("Actual Digit", fontsize=12)
+    plt.xlabel("Predicted Digit", fontsize=16)
+    plt.ylabel("Actual Digit", fontsize=16)
 
     ticks = np.arange(10)
     plt.xticks(ticks, ticks)
@@ -105,8 +105,7 @@ def run_phase3_full_pipeline():
         img_tensor = train_images[i : i + 1]
         input_delays = snn.encode_to_delays(img_tensor)
 
-        # 2. Run Forward Pass (Turn Lateral Inhibition ON)
-        _ = snn.run_saccade(img_tensor, model_type="C", use_lateral=False)
+        _ = snn.run_saccade(img_tensor, model_type="C")
 
         winning_neurons = snn.apply_stdp(
             input_delays,
