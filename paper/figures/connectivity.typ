@@ -8,19 +8,6 @@
     mark: (fill: black, scale: 1.0)
   )
 
-
-  // for i in range(1,5) {
-  //   for j in range(6) {
-  //     bezier((0,i),(4,j),(2,i),(2,j))
-  //     bezier((4,j),(8,i),(6,j),(6,i))
-  //   }
-  //   circle((0,i),radius:.3,fill:yellow.lighten(50%), stroke:2pt)
-  //   circle((8,i),radius:.3,fill:yellow.lighten(50%), stroke:2pt)
-  // }
-  // for i in range(6) {
-  //   circle((4,i),radius:.3,fill:yellow.lighten(50%), stroke:2pt)
-  // }
-
   let connect(p1, p2) = {
     let r = 0.3 // Node radius
     let start-x = p1.at(0)
@@ -33,7 +20,6 @@
     start-x = start-x + .4
 
     bezier((start-x, start-y), (end-x, end-y), ((end-x - start-x)*0.5 + start-x, start-y),((end-x - start-x)*0.7 +start-x,end-y), mark: (end: ">", scale:0.6))
-    // bezier((0, 1), (2, 0), ((2 - 0)/2, 1),((2 - 0)/2, 0), mark: (end: ">"))
   }
 
   let inputs = ((0, 1), (0, 3))

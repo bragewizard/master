@@ -56,7 +56,7 @@
   )
 
   // FIXED: Using `catmull` to draw a smooth curve through multiple points
-  catmull(..trace-points,tension:.5, stroke: (paint: blue.darken(40%)))
+  catmull(..trace-points,tension:.5, stroke: (paint: blue.darken(50%)))
 
   // 4. Add Annotation Callouts (A-C)
   // (A) Stimulus/Depolarization

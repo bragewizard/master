@@ -32,7 +32,7 @@
 This work explores the implementation of these principles on standard CPU/GPU hardware. Two primary methodologies are developed and evaluated on visual classification tasks: (1) an inference-optimized @snn that translates weights from a conventionally trained @fcn using @ttfs temporal encoding, and (2) an unsupervised, biologically inspired learning simulator incorporating structural plasticity (dynamic synaptogenesis and pruning). The results demonstrate the viability of temporal coding and local learning rules in extracting meaningful features from visual stimuli, highlighting the potential of neuromorphic algorithms to drastically reduce the computational footprint of artificial intelligence.]]
 ]]
 
-// #text(size: 9pt, weight: "medium")[ #h(1fr) Wordcount: #total-words ]
+#text(size: 9pt, weight: "medium")[ #h(1fr) Wordcount: #total-words ]
 
 #pagebreak()
 
@@ -283,13 +283,13 @@ Large-scale initiatives, such as the Blue Brain Project, utilize even more granu
 To build practical, scalable neuromorphic hardware, we must abstract these biophysical details into a phenomenological model. We seek a mathematical framework that captures the essential computational properties---integration, leakage, and thresholding---without simulating the underlying molecular physics. ]
 
 #v(1em)
-=== The Leaky Integrate-and-Fire (LIF) Model <s.biolif>
+=== The @lif Model <s.biolif>
 
-#serif-text()[ The standard approximation used in neuromorphic engineering is the @lif model @gerstner_neuronal_2014. This framework aligns perfectly with the "point process" abstraction established in the previous section, as it treats action potentials as instantaneous, discrete events. Its state is defined by a single scalar variable, the membrane potential $u(t)$. The sub-threshold dynamics are governed by a linear differential equation analogous to a simple $R C$ (Resistor-Capacitor) circuit. We implement this model as the computational baseline for our visual classification tasks in @s.decoding (Model B). ]
+#serif-text()[ The standard approximation used in neuromorphic engineering is the @lif model @gerstner_neuronal_2014. This framework aligns perfectly with the "point process" abstraction established in the previous section, as it treats action potentials as instantaneous, discrete events. Its state is defined by a single scalar variable, the membrane potential $u(t)$. The sub-threshold dynamics are governed by a linear differential equation analogous to a simple $R C$ (Resistor-Capacitor) circuit.]
 
-#figure(include("figures/lifcircuit.typ"), caption:[])
+#figure(include("figures/lifcircuit.typ"), caption:[Electronic circuit modeling the dynamics of the LIF])
 
-#figure( kind: "eq", supplement: [Equation], caption: [The Leaky Integrate-and-Fire (LIF) differential equation. The change in voltage is driven by the leak (decay to rest) and the input current.], $ tau_m​(dif u)/(dif t)=−(u−u_"rest")+R I(t) $)<lif_eq>
+#figure( kind: "eq", supplement: [Equation], caption: [The LIF differential equation. The change in voltage is driven by the leak (decay to rest) and the input current. $tau_m = R C$ is known as the time constant and dictates how fast the membrane potential drains], $ tau_m​(dif u)/(dif t)=−(u−u_"rest")+R I(t) $)<lif_eq>
 
 #serif-text()[ Where $tau_m$ is the membrane time constant (determining how fast the neuron "forgets"), $u_"rest"$ is the resting potential, $R$ is the membrane resistance, and $I(t)$ is the input current.
 
@@ -361,7 +361,7 @@ Deciphering the "Neural Code"---the set of rules by which sensory stimuli are tr
 
 #serif-text()[ The most traditional interpretation of neural activity is rate coding. In this paradigm, information is conveyed by the mean firing frequency of a neuron over a specific temporal window. A strong stimulus (e.g., high pressure on skin) elicits a high firing rate, while a weak stimulus results in sparse activity.
 
-This model effectively treats the neuron as an Analog-to-Digital converter where the precise timing of individual spikes is treated as noise; only the average count carries the signal. While rate coding is robust and easily observed in motor neurons, it suffers from a fundamental latency barrier. To estimate a rate with reasonable precision, the post-synaptic neuron must integrate spikes over a significant duration (tens or hundreds of milliseconds). This contradicts the rapid reaction times (often $<100$ ms) observed in biological agents, suggesting that rate coding alone cannot account for time-critical processing @ @thorpe_speed_1996. ]
+This model effectively treats the neuron as an Analog-to-Digital converter where the precise timing of individual spikes is treated as noise; only the average count carries the signal. While rate coding is robust and easily observed in motor neurons, it suffers from a fundamental latency barrier. To estimate a rate with reasonable precision, the post-synaptic neuron must integrate spikes over a significant duration (tens or hundreds of milliseconds). This contradicts the rapid reaction times (often $<100$ ms) observed in biological agents, suggesting that rate coding alone cannot account for time-critical processing @thorpe_speed_1996. ]
 
 #figure(include("figures/rateencoding.typ"), caption:[Rate Coding: The stimulus intensity is encoded in the frequency of the spike train. Stronger stimuli elicit more spikes per second.])
 
@@ -752,7 +752,7 @@ or IBM TrueNorth, not simulation on von Neumann processors. ]
 between classical Deep Learning and spiking hardware via offline training. Foundational work
 by Rueckauer et al. demonstrated that continuous-valued networks could be losslessly converted
 into @snn:pl by carefully scaling weights and normalizing spiking thresholds
-`@rueckauer_conversion_2017`. However, the vast majority of these conversion methodologies rely
+@rueckauer_conversion_2017. However, the vast majority of these conversion methodologies rely
 on Rate Coding, requiring hundreds of simulation ticks to approximate continuous activation
 values via temporal averaging.
 
@@ -766,14 +766,6 @@ hierarchies learned by gradient descent are recoverable from a purely temporal s
 without any intermediate retraining or fine-tuning. ]
 
 #v(1em)
-=== Advancements in Sequence Modeling
-
-#serif-text()[ While the present thesis operates in the domain of static visual classification, this
-trajectory toward sequence-capable spiking architectures motivates the temporal encoding
-framework developed herein. By establishing a functional @ttfs baseline on a controlled
-benchmark, this work provides a foundation from which future extensions toward native temporal
-datasets and recurrent spiking dynamics can be evaluated.]
-
 === Unsupervised STDP and Competitive Learning
 
 #serif-text()[ The application of unsupervised Spike-Timing-Dependent Plasticity (@stdp) to benchmark
@@ -781,7 +773,7 @@ datasets like MNIST serves as the standard baseline for evaluating biologically 
 learning. The foundational architecture for this approach was established by Diehl and Cook
 (2015), who demonstrated that a spiking network utilizing @stdp, lateral inhibition, and
 adaptive homeostatic thresholds could achieve 95% accuracy on MNIST without any labels
-`@diehl_unsupervised_2015`. However, it is critical to note that their result relied on a
+@diehl_unsupervised_2015. However, it is critical to note that their result relied on a
 massive spatial population of 6,400 hidden neurons and extended rate-based integration windows
 to form robust, overlapping receptive fields.
 
@@ -824,8 +816,6 @@ Crucially, the MNIST images are pre-processed by the dataset creators to be size
 #figure( image("figures/mnist_grid.png", width:100%), caption: [Sample of the MNIST dataset. The 28x28 images are normalized and flattened into 1D vectors before being translated into temporal spike events.])
 
 Furthermore, the dataset exhibits a high degree of spatial sparsity. In a typical MNIST image, the vast majority of pixels represent the empty background. From a neuromorphic engineering perspective, this sparsity is highly advantageous. As established in the theoretical framework, event-driven systems expend energy strictly when events occur. A sparse input array ensures that the majority of input neurons remain quiescent, minimizing bus congestion and validating the energy-efficiency claims of the proposed @snn.
-
-#figure( image("figures/mnist_distribution.png"), caption: [Sample of the MNIST dataset. The 28x28 images are normalized and flattened into 1D vectors before being translated into temporal spike events.])
 
 Before the raw images can be converted into temporal spike trains, they must undergo standard spatial pre-processing to ensure compatibility with the network's mathematical boundaries. This consists of two primary transformations: ]
 

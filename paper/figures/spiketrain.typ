@@ -35,7 +35,7 @@
       {
         plot.add(
           raw-data.slice(1).map(row => (float(row.at(0)), float(row.at(1)))),
-          style: (stroke: blue.darken(40%) + 1.5pt)
+          style: (stroke: blue.darken(50%))
         )
       }
     )
@@ -44,7 +44,7 @@
   // --- BOTTOM PLOT: THE SPIKE TRAIN ---
   group(name: "raster-group", {
     // Offset the second plot vertically by 5cm
-    set-origin((0, -4))
+    set-origin((0, -2))
     set-style(axes: (y: (stroke: 0pt, mark:none)))
     plot.plot(
       size: (plot-w, 1),
@@ -65,7 +65,7 @@
         plot.add(
           spike-data,
           mark: "|",
-          mark-style: (stroke: 2pt + blue.darken(40%)),
+          mark-style: (stroke: blue.darken(50%)),
           mark-size: 0.4,
           style: (stroke: none)
         )
