@@ -18,7 +18,13 @@
     end-x = end-x - .4
     start-x = start-x + .4
 
-    bezier((start-x, start-y), (end-x, end-y), ((end-x - start-x)*0.5 + start-x, start-y),((end-x - start-x)*0.7 +start-x,end-y), mark: (end: ">", scale:0.6))
+    bezier(
+      (start-x, start-y), (end-x, end-y),
+      ((end-x - start-x)*0.5 + start-x, start-y),
+      ((end-x - start-x)*0.7 +start-x,end-y),
+      mark: (end: ">", scale:0.6),
+      stroke: gray.darken(40%)
+    )
   }
 
   let inputs = ((0, 1), (0, 2), (0,3),(0,4))
@@ -33,7 +39,7 @@
     for o in outputs { connect(h, o) }
   }
 
-  for p in inputs { circle(p, radius: 0.3, fill: yellow.lighten(50%), stroke:2pt) }
-  for p in hiddens { circle(p, radius: 0.3, fill: yellow.lighten(50%),stroke: 2pt) }
-  for p in outputs { circle(p, radius: 0.3, fill: yellow.lighten(50%), stroke: 2pt) }
+  for p in inputs { circle(p, radius: 0.3, fill: green.lighten(70%), stroke:2pt) }
+  for p in hiddens { circle(p, radius: 0.3, fill: green.lighten(70%),stroke: 2pt) }
+  for p in outputs { circle(p, radius: 0.3, fill: green.lighten(70%), stroke: 2pt) }
 })

@@ -20,8 +20,8 @@
   line(..wave-pts, stroke: (paint: gray.lighten(10%), dash: "dashed"))
   line((4, -1.2), (4, 2.5), stroke: (paint: gray, dash: "dotted"))
   line((8, -1.2), (8, 2.5), stroke: (paint: gray, dash: "dotted"))
-  content((2, -1.5), text(weight: "bold", size: 9pt, "Cycle 1"))
-  content((6, -1.5), text(weight: "bold", size: 9pt, "Cycle 2"))
+  content((2, -1.5), text(weight: "bold", size: 10pt, "Cycle 1"))
+  content((6, -1.5), text(weight: "bold", size: 10pt, "Cycle 2"))
 
   let spike-style = (paint: blue.darken(20%))
   let phase-offset = 1.2
@@ -41,6 +41,6 @@
   line((4, -0.5), (4 + phase-offset, -0.5), mark: (start: "|", end: "|"))
   content((4 + (phase-offset / 2), -0.8), $Delta t$)
 
-  content((12, 1.6), text(size: 9pt, $phi_1 = phi_2 (mod 2pi)$))
-  content((12, 0.8), text(size: 8pt, "Indistinguishable without\na cycle counter"))
+  content((12, 1.6), text($phi_1 = phi_2 (mod 2pi)$))
+  content((12, 0.8), text(size: 10pt, "Indistinguishable without\na cycle counter"))
 })

@@ -41,9 +41,9 @@
     }
 
     // Draw Nodes (Input = White, Hidden = Light Gray, Output = Dark Gray)
-    for p in inputs { circle(p, radius: 0.3, fill: yellow.lighten(50%), stroke:2pt) }
-    for p in hiddens { circle(p, radius: 0.3, fill: yellow.lighten(50%),stroke: 2pt) }
-    for p in outputs { circle(p, radius: 0.3, fill: yellow.lighten(50%), stroke: 2pt) }
+    for p in inputs { circle(p, radius: 0.3, fill: green.lighten(70%), stroke:2pt) }
+    for p in hiddens { circle(p, radius: 0.3, fill: green.lighten(70%),stroke: 2pt) }
+    for p in outputs { circle(p, radius: 0.3, fill: green.lighten(70%), stroke: 2pt) }
 
   })
 
@@ -75,9 +75,9 @@
     bezier((1.8, 3.6), (1.8, 2.4), (1.4, 3.0), mark: (end: ">", scale: 0.6, fill: rec-color), stroke: rec-color)
 
     // Draw Nodes
-    for p in inputs { circle(p, radius: 0.3, fill: yellow.lighten(50%), stroke: 2pt) }
-    for p in hiddens { circle(p, radius: 0.3, fill: yellow.lighten(50%), stroke: 2pt) }
-    for p in outputs { circle(p, radius: 0.3, fill: yellow.lighten(50%), stroke: 2pt) }
+    for p in inputs { circle(p, radius: 0.3, fill: green.lighten(70%), stroke: 2pt) }
+    for p in hiddens { circle(p, radius: 0.3, fill: green.lighten(70%), stroke: 2pt) }
+    for p in outputs { circle(p, radius: 0.3, fill: green.lighten(70%), stroke: 2pt) }
 
     // Optional Layer Labels
     content((2, -1.4), text(weight:"bold",size: 9pt, "Recurrent", fill: rec-color))

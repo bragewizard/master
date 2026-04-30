@@ -47,20 +47,20 @@
   })
 
   group({
-    translate((0, -2.0))
+    translate((0, -1.0))
 
     // Axes
     line((-0.2, 0), (8.5, 0), mark: (end: ">"))
     content((9, -0.0), text(size: 9pt, [$t$]))
-    content((-0.8, 0.5), text(size: 9pt, [Incoming\ Spikes]))
+    content((-1.0, 0.0), text(size: 9pt, [*Incoming\ Spikes*]))
 
     let spikes = (1.0, 3.0, 3.8, 4.4, 7.0)
 
     for (i, ts) in spikes.enumerate() {
-        line((ts, 0), (ts, 1.0), stroke: (paint: blue.darken(20%)))
-        circle((ts, 1.0), radius: 0.08, fill: blue.darken(20%), stroke: none)
+        line((ts, 0), (ts, 0.5), stroke: (paint: blue.darken(30%)))
+        circle((ts, 0.5), radius: 0.07, fill: blue.darken(30%), stroke: none)
 
-        line((ts, 1.2), (ts, 2.0), stroke: (paint: gray.lighten(30%), dash: "dotted"))
+        line((ts, .7), (ts, 1.0), stroke: (paint: gray.lighten(30%), dash: "dotted"))
     }
 
     content((1.0, -0.4), text(size: 7pt, [$t_1$]))
@@ -68,5 +68,23 @@
     content((3.8, -0.4), text(size: 7pt, [$t_3$]))
     content((4.4, -0.4), text(size: 7pt, [$t_4$]))
     content((7.0, -0.4), text(size: 7pt, [$t_5$]))
+  })
+  group({
+    translate((0, -2.4))
+
+    // Axes
+    line((-0.2, 0), (8.5, 0), mark: (end: ">"))
+    content((9, -0.0), text(size: 9pt, [$t$]))
+    content((-1.0, 0.0), text(size: 9pt, [*Outgoing\ Spikes*]))
+
+    let spikes = (7.0,)
+
+    for (i, ts) in spikes.enumerate() {
+        line((ts, 0), (ts, 0.5), stroke: (paint: red.darken(30%)))
+        circle((ts, 0.5), radius: 0.07, fill: red.darken(30%), stroke: none)
+
+        // line((ts, 1.2), (ts, 2.0), stroke: (paint: gray.lighten(30%), dash: "dotted"))
+    }
+
   })
 })

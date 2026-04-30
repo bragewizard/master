@@ -32,7 +32,7 @@
 This work explores the implementation of these principles on standard CPU/GPU hardware. Two primary methodologies are developed and evaluated on visual classification tasks: (1) an inference-optimized @snn that translates weights from a conventionally trained @fcn using @ttfs temporal encoding, and (2) an unsupervised, biologically inspired learning simulator incorporating structural plasticity (dynamic synaptogenesis and pruning). The results demonstrate the viability of temporal coding and local learning rules in extracting meaningful features from visual stimuli, highlighting the potential of neuromorphic algorithms to drastically reduce the computational footprint of artificial intelligence.]]
 ]]
 
-#text(size: 9pt, weight: "medium")[ #h(1fr) Wordcount: #total-words ]
+// #text(size: 9pt, weight: "medium")[ #h(1fr) Wordcount: #total-words ]
 
 #pagebreak()
 
@@ -381,7 +381,7 @@ In a network utilizing lateral inhibition (@wta), the first neuron to fire inhib
 
 #serif-text()[ A critical challenge in temporal coding is the need for a temporal reference frame. In Rate Coding, the "phase" (absolute timing) is irrelevant. However, in Temporal Coding, a spike at time $t$ only has meaning relative to a reference $t_0$. If the receiver does not know when the stimulus started, it cannot decode the latency.
 
-In engineering, this is solved by a global clock or a "frame start" signal. In the brain, evidence suggests that background oscillatory rhythms (brain waves, such as theta or gamma cycles) may serve as this global reference, allowing populations of neurons to synchronize their "clocks" and decode relative timings accurately. ]
+In engineering, this is solved by a global clock or a "frame start" signal. In the brain, evidence suggests that background oscillatory rhythms (brain waves, such as theta or gamma cycles) may serve as this global reference, allowing populations of neurons to synchronize their "clocks" and decode relative timings accurately @basso_gamma_2016. ]
 
 #figure(include("figures/phaseambiguity.typ"), caption:[The phase ambiguity problem in temporal encoding. Spikes occurring at the same relative phase ($phi_1$ and $phi_2$) across different oscillation cycles are mathematically indistinguishable ($phi_1 = phi_2 (mod 2pi)$). Without a mechanism to track the global cycle count, downstream neurons cannot determine whether a spike represents a delayed response to a previous stimulus or an early response to a new one.])
 
@@ -1714,99 +1714,43 @@ unsupervised @ttfs learning. ]
 #v(2em)
 == Future Work <s.futurework>
 
-#serif-text()[ The findings and limitations discussed in this thesis present several promising avenues for future research in neuromorphic engineering: ]
+#serif-text()[ The findings and limitations discussed in this thesis present several promising avenues for future research in neuromorphic engineering, ranging from algorithmic enhancements to physical hardware deployment. ]
 
-#box-text()[
-*Event-Based Dataset Validation:* Transitioning the experimental framework from static
-images (MNIST) to native temporal datasets, such as Neuromorphic-MNIST (N-MNIST) or DVS
-Gesture datasets, to fully exploit the asynchronous dynamics of the evaluated neuron models.
+#v(1em)
+=== Event-Based Datasets and Surrogate Gradients
 
-*Surrogate Gradient Integration:* While this work focused on direct weight transfer and
-native @stdp, future implementations should evaluate the efficacy of Surrogate Gradient
-Descent, combining the optimization power of backpropagation with the inference efficiency
-of spiking dynamics.
+#serif-text()[ Transitioning the experimental framework from static images (MNIST) to native temporal datasets, such as Neuromorphic-MNIST (N-MNIST) or DVS Gesture datasets, is essential to fully exploit the asynchronous dynamics of the evaluated neuron models. Furthermore, while this work focused on direct weight transfer and native @stdp, future implementations should evaluate the efficacy of Surrogate Gradient Descent. This approach promises to combine the optimization power of backpropagation with the inference efficiency of spiking dynamics. ]
 
-*Hardware Deployment:* Porting the verified @ttfs algorithms and current-accumulating
-neuron models from GPU simulation onto dedicated neuromorphic silicon (e.g., Intel Loihi)
-to empirically measure true joule-per-inference energy consumption against classical von
-Neumann baselines. Until non-volatile memory technologies such as memristors and
-spintronics become commercially viable, massively parallel asynchronous digital ASICs
-remain the most tractable near-term substrate for realizing the energy efficiency
-demonstrated algorithmically in this thesis.
+#v(1em)
+=== Convolutional Spiking Architectures
 
-*Structural Pruning:* Introducing aggressive synaptic pruning following the @stdp
-learning phase, leveraging the natural depression of irrelevant synapses toward zero to
-convert dense weight matrices into block-sparse structures. Utilizing Compressed Sparse
-Row tensor formats would allow software simulators and sparse-accelerator hardware to
-bypass zero-weights entirely, yielding physical reductions in memory bandwidth even
-before transitioning to dedicated neuromorphic silicon.
-
-*Convolutional Spiking Architecture:* Replacing the fully connected topology with a
-spiking CNN utilizing local receptive fields and spatially-bounded lateral inhibition.
-This would directly address the template-matching limitations identified in Phase III
-by introducing translation invariance and enabling multi-feature representation within
-a single saccade window.
-
-*Contrast-Based Encoding:* The current encoding maps absolute pixel luminance directly
-to spike latency, which is adequate for the controlled, high-contrast environment of
-MNIST but is a brittle feature for real-world vision. Robust biological and artificial
-vision systems rely on local contrast---the relative intensity difference between adjacent
-pixels---which remains invariant under shifts in global illumination. Computing true
-normalized contrast natively within a @ttfs network introduces a severe temporal
-bottleneck, as downstream neurons must wait for the slowest (darkest) signals to arrive
-before a contrast ratio can be assessed, nullifying the priority-queue advantages of
-@ttfs encoding. The optimal mitigation is to offload this computation to the sensory
-periphery via Dynamic Vision Sensors (DVS), which natively output logarithmic intensity
-differences. Because a difference in log-space corresponds mathematically to a true
-contrast ratio independent of absolute luminance, passing DVS-encoded data directly into
-the @ttfs network avoids the temporal delay problem entirely and would substantially
-improve robustness on naturalistic image datasets.
-]
-
-#v(2em)
-=== The Physical Hardware Gap
-
-#serif-text()[ Ultimately, the theoretical energy efficiency of neuromorphic algorithms is bounded by physical hardware. The connection density of the biological mammalian cortex vastly exceeds the routing capabilities of modern CMOS (Complementary Metal-Oxide-Semiconductor) fabrication.
-
-While the software simulations in this thesis demonstrate the algorithmic viability of sparse processing, achieving true biological efficiency requires novel materials. Non-volatile memory technologies, such as memristors and spintronics, offer the ability to physically colocate extreme-density analog weights with logic gates, perfectly mirroring biological synapses. Until these exotic substrates become commercially viable, the near-term future of applied neuromorphic computing lies in massively parallel, asynchronous digital ASICs designed using standard CMOS, serving as a transitional bridge to fully analog systems. ]
+#serif-text()[ Replacing the fully connected topology with a spiking Convolutional Neural Network (CNN) utilizing local receptive fields and spatially bounded lateral inhibition represents another critical next step. This architectural shift would directly address the template-matching limitations identified in Phase III by introducing translation invariance and enabling multi-feature representation within a single saccade window. ]
 
 #v(1em)
 === Mitigation via Synaptic Pruning
 
-#serif-text()[ While dynamic activation sparsity struggles on GPUs, structural sparsity offers a viable software-level mitigation. Future iterations of this work could introduce aggressive Synaptic Pruning, particularly following the unsupervised @stdp learning phase.
-
-Because @stdp naturally depresses irrelevant synapses toward zero, a thresholding function could permanently sever these connections, converting the dense weight matrices ($W^((1))$, $W^((2))$) into highly sparse structures. By utilizing block-sparse tensor formats (e.g., Compressed Sparse Row), both software simulators and specialized sparse-accelerator chips can mathematically bypass the zero-weights, yielding physical reductions in memory bandwidth and computation even before transitioning to pure neuromorphic silicon. ]
+#serif-text()[ While dynamic activation sparsity struggles on traditional GPUs, structural sparsity offers a highly viable software-level mitigation. Future iterations of this work could introduce aggressive synaptic pruning following the unsupervised @stdp learning phase. Because @stdp naturally depresses irrelevant synapses toward zero, a thresholding function could permanently sever these connections, converting dense weight matrices ($W^((1))$, $W^((2))$) into highly sparse structures. By utilizing block-sparse tensor formats (e.g., Compressed Sparse Row), both software simulators and specialized sparse-accelerator chips can mathematically bypass zero-weights. This yields physical reductions in memory bandwidth and computation even prior to transitioning to pure neuromorphic silicon. ]
 
 #v(1em)
-=== Computing Contrast In Images
+=== Computing Contrast in Images
 
-#serif-text()[ In the engineered test environment, absolute pixel intensity was mapped directly to spike latency. For a highly controlled toy dataset like MNIST, this approach yields adequate performance, as the digits are isolated in high-contrast, low-resolution environments. However, absolute luminance is a notoriously brittle feature for real-world computer vision.
+#serif-text()[ In the engineered test environment, absolute pixel luminance was mapped directly to spike latency. While this approach yields adequate performance for highly controlled, isolated datasets like MNIST, absolute luminance is a notoriously brittle feature for real-world computer vision. Robust biological and artificial vision systems rely instead on local contrast---the relative intensity difference between adjacent pixels---which remains invariant under shifts in global illumination.
 
-Robust biological and artificial vision systems rely on local contrast (the relative difference between adjacent pixels) to determine object boundaries, as contrast remains invariant under shifting global illumination. Attempting to compute true, normalized contrast directly within a @ttfs spiking network presents a severe temporal bottleneck. To accurately assess relative darkness in a purely temporal code, the downstream neurons must wait for the slowest (darkest) signals to arrive, effectively nullifying the high-speed advantages of the @ttfs priority queue.
+Attempting to compute true, normalized contrast natively within a @ttfs spiking network presents a severe temporal bottleneck. To accurately assess relative darkness in a purely temporal code, downstream neurons must wait for the slowest (darkest) signals to arrive before a contrast ratio can be assessed. This effectively nullifies the high-speed, priority-queue advantages of @ttfs encoding. The optimal mitigation is to offload this computation to the sensory periphery. Dedicated neuromorphic sensors, such as Dynamic Vision Sensors (DVS), natively output logarithmic intensity differences. Because a difference in log-space corresponds mathematically to a true contrast ratio independent of absolute luminance, passing this pre-encoded contrast data directly into the @ttfs network avoids the temporal delay problem entirely, substantially improving robustness on naturalistic image datasets. ]
 
-Consequently, attempting to calculate contrast natively within the @snn layers is computationally wasteful. The optimal solution is to offload this processing to the sensory periphery. Dedicated neuromorphic sensors, such as Dynamic Vision Sensors (DVS), natively output logarithmic intensity differences. Because the difference in log-space mathematically corresponds to a true contrast ratio independent of absolute luminance,passing this pre-encoded contrast data directly into the @ttfs network avoids the temporal delay problem entirely. ]
+#v(1em)
+=== The Physical Hardware Gap
+
+#serif-text()[ Ultimately, the theoretical energy efficiency of neuromorphic algorithms is bounded by physical hardware constraints. Porting the verified @ttfs algorithms and current-accumulating neuron models from GPU simulation onto dedicated neuromorphic silicon (e.g., Intel Loihi) is necessary to empirically measure true joule-per-inference energy consumption against classical von Neumann baselines.
+
+Currently, the connection density of the biological mammalian cortex vastly exceeds the routing capabilities of modern CMOS (Complementary Metal-Oxide-Semiconductor) fabrication. Achieving true biological efficiency will require novel materials. Until non-volatile memory technologies---such as memristors and spintronics, which offer the ability to physically colocate extreme-density analog weights with logic gates---become commercially viable, massively parallel, asynchronous digital ASICs remain the most tractable near-term substrate. These standard CMOS designs serve as a vital transitional bridge to realizing the energy efficiency demonstrated algorithmically in this thesis. ]
 
 #v(2em)
 == Closing Remarks
 
-#serif-text()[ Taken together, the three experimental phases trace a coherent arc from
-isolated neuron dynamics to self-organizing network behavior. Phase I established that
-standard integrate-and-fire models are fundamentally misaligned with @ttfs decoding, and
-that momentum-based integration provides a principled correction. Phase II demonstrated
-that this correction is sufficient to recover 94.50% of ANN accuracy via zero-shot weight
-transfer, with an 85.2% reduction in computational operations. Phase III showed that the
-same architecture, trained entirely without supervision, achieves 44.3% accuracy through
-purely local plasticity---a result whose limitations are architectural rather than
-algorithmic, attributable to global @wta, the absence of spatial invariance, and the
-representational constraints of single-spike encoding.
+#serif-text()[ Taken together, the three experimental phases of this thesis trace a coherent arc from isolated neuron dynamics to self-organizing network behavior. Phase I established that standard integrate-and-fire models are fundamentally misaligned with @ttfs decoding, and that momentum-based integration provides a principled and necessary correction. Phase II demonstrated that this correction is sufficient to recover 94.50% of Artificial Neural Network (ANN) accuracy via zero-shot weight transfer, yielding an 85.2% reduction in computational operations. Finally, Phase III showed that the same architecture, trained entirely without supervision, achieves 44.3% accuracy through purely local plasticity---a result whose limitations are architectural rather than algorithmic, largely attributable to global @wta dynamics, the absence of spatial invariance, and the representational constraints of single-spike encoding.
 
-The central finding that unifies all three phases is that the theoretical efficiency
-advantages of neuromorphic algorithms are real and measurable at the algorithmic level,
-but are presently obscured by the mismatch between event-driven computation and the
-von Neumann hardware on which it is simulated. This gap between algorithmic efficiency
-and physical realizability is not a flaw in the neuromorphic approach; it is the defining
-engineering challenge of the field, and one that is actively being closed by the
-development of native neuromorphic substrates. ]
+The central finding that unifies all three phases is that the theoretical efficiency advantages of neuromorphic algorithms are real and measurable at the algorithmic level. However, they are presently obscured by the mismatch between event-driven computation and the von Neumann hardware on which they are simulated. This gap between algorithmic efficiency and physical realizability is not a flaw in the neuromorphic approach; rather, it is the defining engineering challenge of the field, and one that is actively being closed by the ongoing development of native neuromorphic substrates. ]
 
 #pagebreak()
 
@@ -1906,5 +1850,5 @@ but of whether the hardware can yet embody them. ]
 
 #pagebreak()
 
-#set text(weight: "medium")
+#set text(weight: "medium", size: 10pt)
 #bibliography("references.bib")

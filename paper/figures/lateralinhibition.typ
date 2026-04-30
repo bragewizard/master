@@ -6,25 +6,28 @@
 
   // Global styles
   set-style(
-    stroke: (thickness: 1.6pt, cap: "butt", join: "miter"),
+    stroke: (thickness: 1.6pt, cap: "round", join: "round"),
     mark: (fill: black, scale: 1.0)
   )
 
-  // Helper function to draw exact node-to-node connections
-  let connect(p1, p2, mark-type, color ) = {
-    let dx = p2.at(0) - p1.at(0)
-    let dy = p2.at(1) - p1.at(1)
-    let d = calc.sqrt(dx * dx + dy * dy)
+  let connect(p1, p2, color) = {
     let r = 0.3 // Node radius
+    let start-x = p1.at(0)
+    let start-y = p1.at(1)
+    let end-x = p2.at(0)
+    let end-y = p2.at(1)
+    start-y = (0.17 * end-y) + (0.82 * start-y)
+    end-y = (end-y - start-y) * 0.82 + start-y
+    end-x = end-x + (start-x - end-x) * 0.1
+    start-x = end-x + (start-x - end-x) * 0.85
 
-    let start-x = p1.at(0) + dx * r / d
-    let start-y = p1.at(1) + dy * r / d
-    let end-x = p2.at(0) - dx * r / d
-    let end-y = p2.at(1) - dy * r / d
-
-    line((start-x, start-y), (end-x, end-y),
-         mark: (end: mark-type, scale: 0.8, fill: color),
-         stroke: (paint: color))
+    bezier(
+      (start-x, start-y), (end-x, end-y),
+      ((end-x - start-x)*0.4 + start-x, start-y + 0.3),
+      ((end-x - start-x)*0.7 +start-x,end-y - 0.3),
+      mark: (end: ">", scale:0.6),
+      stroke:color
+    )
   }
 
   group({
@@ -38,32 +41,32 @@
     // 1. Draw Edges
     // Feed-forward Excitatory
     for x in xs {
-      connect((x, y_in), (x, y_out), ">", black)
+      connect((x, y_in), (x, y_out), black)
     }
 
     // Lateral Inhibitory (from the strongly stimulated center node)
-    connect((3, y_in), (1.5, y_out), "|", red.darken(10%))
-    connect((3, y_in), (4.5, y_out), "|", red.darken(10%))
+    connect((3, y_in), (1.5, y_out), red.darken(15%))
+    connect((3, y_in), (4.5, y_out), red.darken(15%))
 
     // 2. Draw Nodes
     for (i, x) in xs.enumerate() {
       // Input nodes
-      circle((x, y_in), radius: 0.3, fill: white, stroke: black+3pt)
-      circle((x, y_out), radius: 0.3, fill: white, stroke: black+3pt)
+      circle((x, y_in), radius: 0.3, fill: green.lighten(70%), stroke: 2pt)
+      circle((x, y_out), radius: 0.3, fill: green.lighten(70%), stroke: 2pt)
     }
 
     line((3, -1.2), (3, -0.4), mark: (end: ">", fill:blue), stroke: (thickness: 2.5pt, paint: blue))
-    content((3, -1.8), text(weight: "bold", fill: blue, "Strong\nStimulus"))
+    content((3, -1.8), text("Strong\nStimulus"))
 
     // Neighbors (Weak)
     line((1.5, -0.8), (1.5, -0.4), mark: (end: ">", fill:blue), stroke: (thickness: 1pt, paint: blue))
     line((4.5, -0.8), (4.5, -0.4), mark: (end: ">", fill:blue), stroke: (thickness: 1pt, paint: blue))
 
     // 4. Legend
-    line((-1.0, -1.5), (0.0, -1.5), mark: (end: ">"), stroke: black)
-    content((1.0, -1.5), [Excitation])
-    line((-1.0, -2.1), (0.0, -2.1), mark: (end: "|"), stroke: red.darken(10%))
-    content((1.0, -2.1), [Inhibition])
+    line((-1.8, -1.5), (-0.8, -1.5), stroke: black)
+    content((0.2, -1.5), [Excitation])
+    line((-1.8, -2.1), (-0.8, -2.1), stroke: red.darken(15%))
+    content((0.2, -2.1), [Inhibition])
 
     // Layer Labels
     content((-1.1, y_out), text("Output\nLayer"))

@@ -1,5 +1,4 @@
 import matplotlib.pyplot as plt
-import seaborn as sns
 import numpy as np
 from _data import MNISTProvider
 
@@ -16,7 +15,6 @@ plt.rcParams.update(
 
 def create_thesis_visuals():
     provider = MNISTProvider()
-    sns.set_theme(style="whitegrid")  # Clean academic look
 
     # --- 1. 3x3 Grid of Examples ---
     plt.figure(figsize=(12, 6))
@@ -34,7 +32,7 @@ def create_thesis_visuals():
     # --- 2. Class Distribution (Bar Chart) ---
     dist = provider.get_class_distribution()
     plt.figure(figsize=(10, 5))
-    sns.barplot(x=list(dist.keys()), y=list(dist.values()), palette="viridis")
+    plt.bar(x=list(dist.keys()), height=list(dist.values()))
     plt.xlabel("Digit")
     plt.ylabel("Number of Samples")
     plt.savefig("mnist_distribution.png", dpi=300)
@@ -46,11 +44,11 @@ def create_thesis_visuals():
         np.random.choice(provider.num_samples, 1000)
     ].flatten()
     plt.figure(figsize=(10, 5))
-    plt.hist(sample_imgs, bins=50, color="skyblue", edgecolor="black", alpha=0.7)
+    plt.hist(sample_imgs, bins=50, color="yellowgreen", edgecolor="darkgreen")
     plt.yscale("log")  # Log scale helps see the middle-gray values
-    plt.xlabel("Pixel Value (0-255)")
-    plt.ylabel("Frequency (Log)")
-    plt.grid(axis="y", linestyle="--", alpha=0.7)
+    plt.xlabel("Pixel Value (0-255)", fontsize=12, fontweight="bold")
+    plt.ylabel("Frequency (Log)", fontsize=12, fontweight="bold")
+    plt.grid(axis="y", linestyle="--")
     plt.savefig("mnist_histogram.png", dpi=300)
     plt.show()
 
