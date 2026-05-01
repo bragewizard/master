@@ -18,6 +18,12 @@
     description: "",
   ),
   (
+    key: "dnf",
+    short: "DNF",
+    long: "Did Not Fire",
+    description: "",
+  ),
+  (
     key: "fpga",
     short: "FPGA",
     long: "Field Programmable Gate Array",
