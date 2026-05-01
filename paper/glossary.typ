@@ -42,12 +42,6 @@
     description: "",
   ),
   (
-    key: "dl",
-    short: "DL",
-    long: "Deep Learning",
-    description: "",
-  ),
-  (
     key: "ltd",
     short: "LTD",
     long: "Long-Term Depression",
@@ -96,12 +90,6 @@
     description: "",
   ),
   (
-    key: "dag",
-    short: "DAG",
-    long: "Directional Acyclic Graph",
-    description: "",
-  ),
-  (
     key: "if",
     short: "IF",
     long: "Integrate and Fire",
@@ -141,6 +129,12 @@
     key: "lstm",
     short: "LSTM",
     long: "Long Short-Term Memory",
+    description: "",
+  ),
+  (
+    key: "relu",
+    short: "ReLU",
+    long: "Rectified Linear Unit",
     description: "",
   ),
   (

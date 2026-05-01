@@ -30,7 +30,7 @@
     translate((3,0))
     line((-0.5, -0.15), (0.5, -0.15))
     line((-0.2, 0.15), (0.2, 0.15))
-    content((1, 0), $V_"rest"$)
+    content((1, 0), $u_"rest"$)
   })
 
   line((3, -0.15), (3, -1))
@@ -49,7 +49,7 @@
     translate((8,0))
     line((-0.5, -0.15), (0.5, -0.15))
     line((-0.2, 0.15), (0.2, 0.15))
-    content((1, 0), $V_"reset"$)
+    content((1, 0), $u_"reset"$)
   })
 
   group({
@@ -57,7 +57,7 @@
     line((-0.4, -0.1), (0.0, -0.8))
     circle((0, 0), radius:0.07, fill:black)
     circle((0, -0.8), radius:0.07, fill:black)
-    content((0.6, -0.4), $V_"th"$)
+    content((0.6, -0.4), $u_"th"$)
   })
 
   group({
