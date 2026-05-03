@@ -57,7 +57,7 @@
     line((-0.4, -0.1), (0.0, -0.8))
     circle((0, 0), radius:0.07, fill:black)
     circle((0, -0.8), radius:0.07, fill:black)
-    content((0.6, -0.4), $u_"th"$)
+    content((0.6, -0.4), $theta.alt$)
   })
 
   group({
