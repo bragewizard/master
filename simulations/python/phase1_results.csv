@@ -11,10 +11,10 @@ Critical (Balanced),Simple IF,290.0,300.0,Concordant,18
 Critical (Balanced),Simple IF,290.0,300.0,Discordant,18
 Critical (Balanced),Standard LIF,220.0,300.0,Concordant,DNF
 Critical (Balanced),Standard LIF,220.0,300.0,Discordant,18
-Critical (Balanced),Linear Ramp,1000.0,300.0,Concordant,9
-Critical (Balanced),Linear Ramp,1000.0,300.0,Discordant,21
-Critical (Balanced),State Discount,220.0,300.0,Concordant,DNF
-Critical (Balanced),State Discount,220.0,300.0,Discordant,DNF
+Critical (Balanced),Linear Ramp,1300.0,300.0,Concordant,10
+Critical (Balanced),Linear Ramp,1300.0,300.0,Discordant,DNF
+Critical (Balanced),State Discount,200.0,300.0,Concordant,18
+Critical (Balanced),State Discount,200.0,300.0,Discordant,DNF
 High (Deficit),Simple IF,310.0,300.0,Concordant,DNF
 High (Deficit),Simple IF,310.0,300.0,Discordant,DNF
 High (Deficit),Standard LIF,310.0,300.0,Concordant,DNF

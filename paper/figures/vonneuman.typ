@@ -46,7 +46,7 @@
     line((3, 1.5), (8, 1.5), mark: (end: ">", fill: black), stroke: (thickness: 2pt))
     content((5.5, 1.2), text(size: 9pt,weight:"bold", "Computed Results"))
 
-    content((5.5, 4.0), text(weight: "bold", size: 9pt, "The Von Neumann Bottleneck"))
+    content((5.5, 4.0), text(weight: "bold", size: 9pt, "The von Neumann Bottleneck"))
 
     for x in (4.5, 5.5, 6.5) {
       line((x, 0.8), (x, -0.8), mark: (end: ">", stroke:(paint:black, dash:none)), stroke: (paint: red.darken(60%), dash: "dotted"))

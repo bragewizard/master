@@ -5,6 +5,16 @@ import numpy as np
 import csv
 from _snn import SimpleSNN
 
+# Set global font family and size
+plt.rcParams.update(
+    {
+        "font.family": "sans-serif",
+        "font.sans-serif": ["Geist"],
+        "font.weight": "medium",
+        "font.size": 14,
+    }
+)
+
 
 # --- 1. DUMMY CNN FOR INITIALIZATION ---
 class DummyFCN(nn.Module):
@@ -44,7 +54,7 @@ def run_phase1_experiment():
     # --- 4. THRESHOLD REGIMES ---
     regimes = {
         "Low (Saturation)": {"A": 150.0, "B": 140.0, "C": 500.0, "D": 100.0},
-        "Critical (Balanced)": {"A": 290.0, "B": 220.0, "C": 1000.0, "D": 220.0},
+        "Critical (Balanced)": {"A": 290.0, "B": 220.0, "C": 1300.0, "D": 200.0},
         "High (Deficit)": {"A": 310.0, "B": 310.0, "C": 2000.0, "D": 310.0},
     }
 
@@ -111,44 +121,13 @@ def run_phase1_experiment():
     print("\n[+] Exported raw data to 'phase1_results.csv' for CeTZ visualization.")
 
     # --- 7. COMPOSITE VISUALIZATION ---
-    fig = plt.figure(figsize=(16, 10))
-    gs = fig.add_gridspec(2, 6, height_ratios=[1, 1.5], hspace=0.35)
-
-    # Top Row: Input Spike Trains (Raster)
-    ax_raster_c = fig.add_subplot(gs[0, 1:3])
-    ax_raster_d = fig.add_subplot(gs[0, 3:5])
-
-    y_labels = [f"Synapse {i}\n(w={w})" for i, w in enumerate(weights)]
-
-    def plot_input_raster(ax, times, title):
-        for i, t in enumerate(times):
-            ax.scatter(t, i, color="black", marker="|", s=300, linewidths=2)
-            # Add subtle horizontal guide lines
-            ax.axhline(i, color="gray", linestyle=":", alpha=0.3)
-
-        ax.set_title(title, fontsize=12, fontweight="bold")
-        ax.set_xlim(0, 25)
-        ax.set_yticks(range(len(weights)))
-        ax.set_yticklabels(y_labels, fontsize=9)
-        ax.set_xlabel("Time (Ticks)")
-        ax.invert_yaxis()  # Put highest weight at the top
-
-    plot_input_raster(
-        ax_raster_c,
-        c_delays,
-        f"Concordant Pattern Input\n(Sum of Weights: {weight_sum})",
-    )
-    plot_input_raster(
-        ax_raster_d,
-        d_delays,
-        f"Discordant Pattern Input\n(Sum of Weights: {weight_sum})",
-    )
-
+    fig = plt.figure(figsize=(16, 6))
+    gs = fig.add_gridspec(1, 3)
     # Bottom Row: Regime Results
     axes_bars = [
-        fig.add_subplot(gs[1, 0:2]),
-        fig.add_subplot(gs[1, 2:4]),
-        fig.add_subplot(gs[1, 4:6]),
+        fig.add_subplot(gs[0]),
+        fig.add_subplot(gs[1]),
+        fig.add_subplot(gs[2]),
     ]
 
     model_names = [m[0] for m in models.values()]
@@ -159,12 +138,8 @@ def run_phase1_experiment():
         c_times = [data[m][0] if data[m][0] != -1 else 64 for m in model_names]
         d_times = [data[m][1] if data[m][1] != -1 else 64 for m in model_names]
 
-        bars1 = ax.bar(
-            x - width / 2, c_times, width, label="Concordant Output", color="#2ca02c"
-        )
-        bars2 = ax.bar(
-            x + width / 2, d_times, width, label="Discordant Output", color="#d62728"
-        )
+        ax.bar(x - width / 2, c_times, width, color="#93c572")
+        ax.bar(x + width / 2, d_times, width, color="#a2bffe")
 
         for i, (ct, dt) in enumerate(zip(c_times, d_times)):
             if ct == 64:
@@ -173,9 +148,9 @@ def run_phase1_experiment():
                     60,
                     "DNF",
                     ha="center",
-                    color="white",
+                    color="black",
                     weight="bold",
-                    fontsize=9,
+                    fontsize=10,
                 )
             if dt == 64:
                 ax.text(
@@ -183,24 +158,20 @@ def run_phase1_experiment():
                     60,
                     "DNF",
                     ha="center",
-                    color="white",
+                    color="black",
                     weight="bold",
-                    fontsize=9,
+                    fontsize=10,
                 )
 
-        ax.set_title(regime_name, fontsize=13)
+        ax.set_title(regime_name, fontsize=16)
         ax.set_xticks(x)
-        ax.set_xticklabels(model_names, fontsize=10, rotation=15)
+        ax.set_xticklabels(model_names, fontsize=15, rotation=15)
         ax.axhline(y=64, color="gray", linestyle="--", alpha=0.7)
         ax.grid(axis="y", linestyle="--", alpha=0.3)
         ax.set_ylim(0, 68)
 
-    axes_bars[0].set_ylabel("Output Spike Latency (Ticks)", fontsize=12)
-    axes_bars[2].legend(loc="upper right")
+    axes_bars[0].set_ylabel("Output Spike Latency (Ticks)", fontsize=15)
 
-    fig.suptitle(
-        "Phase I: Input Patterns and Dynamic Threshold Responses", fontsize=18, y=0.98
-    )
     plt.savefig("phase1_composite_sweep.png", dpi=300, bbox_inches="tight")
     print("[+] Saved composite plot to 'phase1_composite_sweep.png'.")
     plt.show()

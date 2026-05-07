@@ -1,6 +1,6 @@
 #import "@preview/cetz:0.4.2"
 
-#cetz.canvas(length: 1cm, {
+#cetz.canvas(length: 1.2cm, {
   import cetz.draw: *
   set-style(
     stroke: (thickness: 1.6pt, cap: "round", join: "round"),
