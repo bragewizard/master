@@ -23,6 +23,8 @@
     bezier((start-x, start-y), (end-x, end-y), ((end-x - start-x)*0.5 + start-x, start-y),((end-x - start-x)*0.7 +start-x,end-y), mark: (end: ">", scale:0.6))
   }
 
+  content((2,-0.6), [*A*])
+  content((8.5,-0.6), [*B*])
   let inputs = ((0, 1), (0, 3))
   let hiddens = ((2, 0.0), (2, 2), (2, 4.0))
   let outputs = ((4, 1.0), (4, 3.0))
@@ -39,25 +41,28 @@
   for p in outputs { circle(p, radius: 0.3, fill: green.lighten(70%), stroke: 2pt) }
 
   group({
-    translate((7,3))
+    translate((7,2.7))
+    content((-0.9,1.2), [$W^1$])
+    content((3.2,1.2), [$W^2$])
     content((0,0), [
       $ mat(w,w;
             w,w;
             w,w)
-        mat(x;x)
+        mat(x;x) = mat(h;h;h)
     $])
-    content((1.4,0), [$ -> $])
-    content((3,0), [
+    content((2.0,0), [$ -> $])
+    content((4.2,0), [
       $ mat(w,w,w;
             w,w,w)
-        mat(x;x;x)
+        mat(h;h;h) = mat(y;y)
     $])
+
     content((0,-2), [
-      $ sum sum $
+      $ sum_i sum_j x_j w_(i j) = h_i$
     ])
-    content((1.4,-2), [$ -> $])
-    content((3,-2), [
-      $ sum sum $
+    content((2,-1.9), [$ -> $])
+    content((4.0,-2), [
+      $ sum_i sum_j h_i w_(i j) = y_i$
     ])
   })
 

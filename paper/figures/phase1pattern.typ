@@ -78,7 +78,7 @@
     translate((8,0))
     setup-axes($t$, "Weight")
     group({
-      translate((0, 5))
+      translate((0, 1))
       let spikes = (0.5,)
       line((0, 0), (6, 0), stroke: (paint: gray, dash: "dotted"))
       content((-0.5, 0), [100])
@@ -89,7 +89,7 @@
       }
     })
     group({
-      translate((0, 4))
+      translate((0, 2))
       let spikes = (1.5,)
       line((0, 0), (6, 0), stroke: (paint: gray, dash: "dotted"))
       content((-0.5, 0), [80])
@@ -111,7 +111,7 @@
       }
     })
     group({
-      translate((0, 2))
+      translate((0, 4))
       let spikes = (3.5,)
       line((0, 0), (6, 0), stroke: (paint: gray, dash: "dotted"))
       line((-0.1, 0), (0.1, 0))
@@ -122,7 +122,7 @@
       }
     })
     group({
-      translate((0, 1))
+      translate((0, 5))
       let spikes = (4.5,)
       line((0, 0), (6, 0), stroke: (paint: gray, dash: "dotted"))
       line((-0.1, 0), (0.1, 0))

@@ -33,9 +33,10 @@
       }
     }
 
-    line((4.5, 7.0), (5.5, 7.0), mark: (end: ">"))
-    line((5.5, 6.7), (4.5, 6.7), mark: (end: ">"))
-    content((5, 7.4), text(size: 9pt, [AER Bus]))
+    line((4.0, 7.0), (4.6, 7.0), mark: (end: ">"))
+    line((4.6, 6.7), (4.0, 6.7), mark: (end: ">"))
+    line((5.4, 7.0), (6.0, 7.0), mark: (end: ">"))
+    line((6.0, 6.7), (5.4, 6.7), mark: (end: ">"))
 
   })
 
@@ -62,17 +63,35 @@
       }
     }
 
-    line((4.5, 7.0), (5.5, 7.0), mark: (end: ">"))
-    line((5.5, 6.7), (4.5, 6.7), mark: (end: ">"))
-    content((5, 7.4), text(size: 9pt, [AER Bus]))
+    line((4.0, 7.0), (4.6, 7.0), mark: (end: ">"))
+    line((4.6, 6.7), (4.0, 6.7), mark: (end: ">"))
+    line((5.4, 7.0), (6.0, 7.0), mark: (end: ">"))
+    line((6.0, 6.7), (5.4, 6.7), mark: (end: ">"))
   })
   group({
     translate((12.5, 0.0))
-    circle((0,6.9),radius:3pt)
-    circle((0.3,6.9),radius:3pt)
-    circle((0.6,6.9),radius:3pt)
+    circle((0.0,6.9),radius:1.6pt, fill:black)
+    circle((0.3,6.9),radius:1.6pt, fill:black)
+    circle((0.6,6.9),radius:1.6pt, fill:black)
+  })
+  group({
+    translate((8.0, 3.0))
+    circle((0.0,0.0),radius:1.6pt, fill:black)
+    circle((0.0,0.3),radius:1.6pt, fill:black)
+    circle((0.0,0.6),radius:1.6pt, fill:black)
+  })
+  group({
+    translate((2.0, 3.0))
+    circle((0.0,0.0),radius:1.6pt, fill:black)
+    circle((0.0,0.3),radius:1.6pt, fill:black)
+    circle((0.0,0.6),radius:1.6pt, fill:black)
   })
 
+    content((6, 10.3), text(size: 9pt, [*AER Bus*]))
     line((0, 10.0), (12, 10.0), mark: (end: ">"))
     line((12, 9.7), (0, 9.7), mark: (end: ">"))
+    line((4.85, 5), (4.85, 9.5), mark: (end: ">"))
+    line((5.15, 9.5), (5.15, 5), mark: (end: ">"))
+    line((10.85, 5), (10.85, 9.5), mark: (end: ">"))
+    line((11.15, 9.5), (11.15, 5), mark: (end: ">"))
 })
