@@ -70,8 +70,6 @@ def plot_cumulative_accuracy(
     plt.figure(figsize=(8, 6))
     plt.plot(times, accuracies, color="#1f77b4", linewidth=3, label="FP32 SNN")
 
-    # Formatting to match academic standards
-    plt.title("Cumulative Accuracy over Time-To-First-Spike", fontsize=14, pad=15)
     plt.xlabel("Simulation Tick", fontsize=16)
     plt.ylabel("Accuracy (%)", fontsize=16)
     plt.xlim(0, max_time)
@@ -81,16 +79,16 @@ def plot_cumulative_accuracy(
     # Highlight the absolute maximum accuracy achieved
     max_acc = max(accuracies)
     max_acc_time = times[np.argmax(accuracies)]
-    plt.scatter([max_acc_time], [max_acc], color="red", zorder=5, s=60)
+    plt.scatter([max_acc_time], [max_acc], color="green", zorder=5, s=60)
     plt.annotate(
         f"{max_acc:.1f}%",
         (max_acc_time, max_acc),
         textcoords="offset points",
         xytext=(-25, -15),
         ha="center",
-        fontsize=11,
+        fontsize=14,
         weight="bold",
-        color="red",
+        color="green",
     )
 
     plt.tight_layout()

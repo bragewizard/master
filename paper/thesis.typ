@@ -1298,7 +1298,7 @@ The total computational cost for a single 64-tick @saccade is estimated as: ]
 
 #figure(
   include("figures/softwarearch.typ"),
-  caption: [Software architecture and data flow of the SNN simulator.]
+  caption: [Software architecture and data flow of the SNN simulator. If local training is activated, the yellow modules are enabled; for pure inference, they are bypassed.]
 )
 
 #table(

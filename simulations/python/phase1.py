@@ -11,7 +11,7 @@ plt.rcParams.update(
         "font.family": "sans-serif",
         "font.sans-serif": ["Geist"],
         "font.weight": "medium",
-        "font.size": 14,
+        "font.size": 18,
     }
 )
 
@@ -121,7 +121,7 @@ def run_phase1_experiment():
     print("\n[+] Exported raw data to 'phase1_results.csv' for CeTZ visualization.")
 
     # --- 7. COMPOSITE VISUALIZATION ---
-    fig = plt.figure(figsize=(16, 6))
+    fig = plt.figure(figsize=(14, 6))
     gs = fig.add_gridspec(1, 3)
     # Bottom Row: Regime Results
     axes_bars = [
@@ -163,16 +163,16 @@ def run_phase1_experiment():
                     fontsize=10,
                 )
 
-        ax.set_title(regime_name, fontsize=16)
+        ax.set_title(regime_name, weight="bold")
         ax.set_xticks(x)
-        ax.set_xticklabels(model_names, fontsize=15, rotation=15)
+        ax.set_xticklabels(model_names, rotation=15)
         ax.axhline(y=64, color="gray", linestyle="--", alpha=0.7)
         ax.grid(axis="y", linestyle="--", alpha=0.3)
         ax.set_ylim(0, 68)
 
-    axes_bars[0].set_ylabel("Output Spike Latency (Ticks)", fontsize=15)
-
-    plt.savefig("phase1_composite_sweep.png", dpi=300, bbox_inches="tight")
+    axes_bars[0].set_ylabel("Output Spike Latency (Ticks)")
+    plt.tight_layout()  # Automatically adjusts margins
+    plt.savefig("phase1_composite_sweep.png", dpi=300)
     print("[+] Saved composite plot to 'phase1_composite_sweep.png'.")
     plt.show()
 
