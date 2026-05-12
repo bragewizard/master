@@ -41,8 +41,7 @@ This work explores the implementation of these principles on standard CPU/GPU ha
 #align(left)[
 #text(weight:"semibold",size:16pt,[ACKNOWLEDGEMENTS & DECLARATIONS])
 
-#serif-text()[ I would like to thank my supervisors and the very kind and helpful community at the ROBIN and NANO research groups at the Department of Informatics.
-
+#serif-text()[ First and foremost, I would like to thank my supervisors, Philipp Häfliger and Yngve Hafting, for their invaluable mentorship throughout this project. Furthermore, I wish to extend my gratitude to the brilliant and supportive community within the ROBIN and NANO research groups at the University of Oslo's Department of Informatics. The collaborative environment, shared insights, and inspiring discussions have been fundamental to the realization of this thesis.
 
 The repository containing all source code including simulation software, source code for this document and its figures can be found at https://github.com/nammenam/neuromorphics.git ]
 

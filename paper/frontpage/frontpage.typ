@@ -151,7 +151,7 @@
           "ON NEUROMORPHIC COMPUTING",
           "Brage Wiseth",
           subtitle: "With Spiking Neural Networks",
-          sp-name: "Philip Haflinger",
+          sp-name: "Philipp Häfliger",
           co-sp-name: "Yngve Hafting",
         )
       )
