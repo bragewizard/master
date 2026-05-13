@@ -37,8 +37,8 @@
   ),
   (
     key: "fcn",
-    short: "FCN",
-    long: "Fully Connected Network",
+    short: "FCFN",
+    long: "Fully Connected Feed-Forward Network ",
     description: "",
   ),
   (
