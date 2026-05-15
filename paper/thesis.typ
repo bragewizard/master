@@ -615,7 +615,8 @@ $ bold(a)^l = sigma(bold(z)^l) $
   ]
 ) <e.feedforward>
 
-#serif-text()[ The non-linearity prevents the deep stack from collapsing into a single linear equation. Modern networks rely on the @relu, $f(x) = max(0, x)$. Its derivative (0 or 1) preserves the magnitude of the gradient, allowing error signals to travel through deep structures without vanishing. ]
+#serif-text()[ The non-linearity prevents the deep stack from collapsing into a single linear equation. Modern networks rely on the @relu, $f(x) = max(0, x)$. Its derivative (0 or 1) preserves the magnitude of the gradient, allowing error signals to travel through deep structures without vanishing.
+#footnote()[Strictly speaking, the ReLU function is non-differentiable at $x = 0$. While this could theoretically cause standard backpropagation to fail, it is rarely an issue in practice. Pre-activation values almost never evaluate to exactly zero, and modern deep learning frameworks handle this edge case by assigning a subgradient of either 0 or 1 (typically 0) at this point.]]
 
 #figure(include("figures/activations.typ"), caption:[Activation functions. The Sigmoid (top) saturates gradients. The ReLU (bottom) preserves gradient magnitude for positive inputs.]) <fig:activations>
 
