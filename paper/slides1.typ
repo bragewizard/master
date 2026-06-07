@@ -42,7 +42,7 @@ block(stroke:(thickness:1pt, paint:white), inset: 12pt, radius: 0pt, fill:rgb("#
 
 #box-text()[Let's draw more inspiration from biological intelligence → *neuromorphic computing*
 
-Key takeaway lessons from the brain and what we should base our neuromorphic architecture on:]
+Key takeaway lessons from the brain and what we should base our neuromorphic architechture on:]
 
 - *Sparse:* Only sends and computes when needed — silence is free
 - *Event driven:* Highly efficient neuron communication via binary spikes; information encoded in timing, not magnitude
@@ -53,13 +53,16 @@ Key takeaway lessons from the brain and what we should base our neuromorphic arc
 
 #box-text()[
 *Sparse Efficient Computing:* Investigate whether biologically inspired, event-driven algorithms reduce the computational footprint of visual classification when simulated on standard hardware.
+
 *Neuron Model Evaluation:* Identify which temporal integration dynamics are compatible with Time-To-First-Spike (TTFS) rank-order decoding across systematic threshold regimes.
+
 *Inference Via Weight Transfer:* Quantify the accuracy penalty of zero-shot Artificial-Neural-Network (ANN) to Spiking-Neural-Network (SNN) weight transfer under TTFS encoding, isolating the cost of transitioning to event-driven integration.
+
 *Native Unsupervised Learning:* Determine if local Spike-Time-Dependent-Plasticity (STDP) can autonomously extract meaningful geometric features from visual input without global error signals.
 ]
 
 #v(2cm)
-First let's look at how the brain works...
+First lets look at how the brain works...
 
 == NEURON STRUCTURE & FUNCTION
 
@@ -106,7 +109,9 @@ A fundamental trade-off: *biological realism* vs *computational efficiency*
 
 #grid(columns: 2, inset: 20pt,  include "figures/lifcircuit.typ", include "figures/lifdynamics.typ")
 
-#box-text()[ The LIF forms the foundation of the other neuron models in this thesis. The main properties of the LIF are:
+// TODO set correct properties for the LIF
+#box-text()[ The LIF form the foundation of the other neuron models in this thesis,
+the main properties of the LIF is
 
 *integration*,
 *firing when reaching threshold*,
@@ -123,7 +128,7 @@ The brain occupies a unique middle ground between digital and analog:
 This creates a *quantised continuous signal*: discrete amplitude, continuous time.
 
 #box-text()[
-Requires a suitable codec to be useful as a communication medium.
+Requires a suitable codec to be usefull as a comunication medium
 
 Two primary coding schemes are hypothesised...
 ]
@@ -140,23 +145,20 @@ Two primary coding schemes are hypothesised...
 @adrian_discharge_1929, @gerstner_neuronal_2014
 
 == TIME-TO-FIRST-SPIKE (TTFS) ENCODING
-
 - Unlike Rate Coding, which requires extended time windows, TTFS encodes stimulus intensity inversely to response latency
 - *Mechanism:* A high-intensity (bright) pixel triggers an early spike, compressing spatial information into a priority-driven queue
 - *Advantages:*
   - *Sparsity:* Sub-threshold noise (background pixels) is aggressively discarded and never fires
-  - *Early Exit:* Salient features arrive first, enabling confident decisions within the first ~15% of the temporal window
-  - *Latency:* Eliminates the need to wait for a time window to close; processing terminates as soon as the threshold is reached
+  - *Latency:* Eliminates the need to wait for a time window to close; processing begins as soon as salient features arrive
 - Phase ambiguity is resolved by simulating a biological saccade, establishing a global temporal reference frame ($t_0$)
 @rullen_rate_2001, @gerstner_neuronal_2014
 
-#v(2cm)
+#v(3cm)
 
 #grid(columns: 2, inset: 20pt, include "figures/rateencoding.typ", include "figures/temporalcoding.typ")
 #grid(columns: 2, inset: 20pt, [#h(3.5cm) Rate encoded #h(7cm)], [TTFS encoded])
 
-
-== TTFS PHASE AMBIGUITY
+== TTFS PHASEAMBIGUITY
 #align(center + horizon)[
 #include "figures/phaseambiguity.typ"
 ]
@@ -193,29 +195,22 @@ A causal, millisecond-scale refinement of Hebbian learning. Weight update depend
 - Fully local: no global error signal required — only pre- and post-synaptic activity at the cleft
 - *Homeostatic plasticity* prevents runaway growth: if a neuron's average rate exceeds a target, all incoming weights are globally scaled down
 
+== BACK TO WHY IS DEEP LEARNING INEFFICIENT
 
-#align(center)[
-#include "figures/stdpcurve.typ"
-]
-
-
-
-== BACK TO WHY DEEP LEARNING IS INEFFICIENT
-
-Deep learning shares many core ideas with neuroscience but has diverged into its own discipline over time.
+Deep learining shares many core ideas with neuroscience but
+has diverged into its own dicipline some time ago
 
 === SIMILARITIES
 
-- Deep learning has a version of neurons (the perceptron); it integrates and fires when reaching a threshold.
-- It has neural networks—neurons connected together in hierarchical topologies to extract features.
+- Deep learning has a version of nerons
+  percepron, it integrates and fires when reaching a threshold
+- it has neural networks--neruons connected together in similar ways
+
 
 === DIFFERENCES
 
-- *Signals:* ANNs use continuous, synchronous floating-point values (activations). The brain uses discrete, asynchronous events (spikes).
-- *Optimization:* ANNs rely on backpropagation (global error gradients and exact weight transport). The brain relies on local plasticity (STDP).
-- *Hardware Mapping:* ANNs execute dense matrix multiplications regardless of data sparsity. Biological networks communicate sparsely, saving massive amounts of energy.
 
-== BOTTLENECKS OF DEEP LEARNING
+== BOTTLENECKS OF DEEP LEARINNG
 
 Standard deep learning imposes four compounding hardware bottlenecks:
 
@@ -244,8 +239,11 @@ Information is encoded in spike timing, not magnitude. Bandwidth scales with inf
 To answer the research questions:
 #box-text()[
 *Sparse Efficient Computing:* Investigate whether biologically inspired, event-driven algorithms reduce the computational footprint of visual classification when simulated on standard hardware.
+
 *Neuron Model Evaluation:* Identify which temporal integration dynamics are compatible with Time-To-First-Spike (TTFS) rank-order decoding across systematic threshold regimes.
+
 *Inference Via Weight Transfer:* Quantify the accuracy penalty of zero-shot Artificial-Neural-Network (ANN) to Spiking-Neural-Network (SNN) weight transfer under TTFS encoding, isolating the cost of transitioning to event-driven integration.
+
 *Native Unsupervised Learning:* Determine if local Spike-Time-Dependent-Plasticity (STDP) can autonomously extract meaningful geometric features from visual input without global error signals.
 ]
 
@@ -253,22 +251,34 @@ I propose the following experimental setup...
 
 == EXPERIMENT SETUP
 
-The experiments are divided into three phases:
+The experiements are divided into three phases:
 
-- *Phase I:* Neuron model evaluation — finding a suitable and efficient neuron model to use for Phase II and Phase III.
-- *Phase II:* Weight transfer — using a pre-trained network via established methods and transferring weights to an SNN to investigate computational savings.
-- *Phase III:* Training an SNN from scratch with zero dependence on traditional frameworks for potentially maximum efficiency.
+- *Phase I:* Neuron model evaluation--finding a suitable and effecint neuron model to use for phase II and phase III
+- *Phase II:* Weigth transfer--using pretrained network using established methods and frameworks and transfering
+  weights to an SNN to investigate computational savings
+- *Phase III:* Traning SNN from scratch with zero depencene on traditional frameworks for potentially maxium effeciency
 
-== DATASET AND NETWORK ARCHITECTURE
 
-MNIST (28×28 normalized grayscale images), chosen for its high degree of spatial sparsity.
+
+== DATASET
+
+MNIST (28×28 normalized grayscale images), chosen for its high degree of spatial sparsity
+
 
 - *Topology:* Fully Connected Network (FCN) $784 arrow.r 128 arrow.r 10$
   - An FCN allows mathematically transparent, one-to-one parameter mapping without the structural overhead of convolutional unrolling
   - *No bias terms* — to preserve pure event-driven sparsity and simplify ANN→SNN transfer
 - *SNN Simulator:* Custom PyTorch discrete-time engine operating over a $T_"max" = 64$ tick saccade window
-- *WTA:* Winner-Takes-All (WTA) — first output neuron to cross threshold claims the class label
-  WTA is also used in the hidden layer durin learning with STDP
+- *Output:* Winner-Takes-All (WTA) — first output neuron to cross threshold claims the class label
+- *Metrics:* Top-1 Accuracy, Temporal Latency (Time-to-Decision), and Synaptic Operations (SyOPs) as a hardware proxy
+
+
+== DECODING TEMPORAL SEQUENCES
+- Evaluated four architectures (IF, LIF, Linear Ramp, State Discount) across saturation, critical, and deficit threshold regimes
+- *The LIF Misalignment:* Under critical constraints, the standard Leaky Integrate-and-Fire model actively penalized early, high-salience spikes due to its exponential decay
+- *The Solution (Model C):* Developed a Current-Accumulating Linear Ramp model combining integration momentum with a strict 10-tick coincidence window
+- Model C successfully preserved rank-order sequence priority without the computational overhead of continuous exponentials
+
 
 
 == PHASE I: NEURON MODEL EVALUATION
@@ -288,34 +298,9 @@ Each model is then evaluated across three threshold regimes:
 
 No MNIST data is used — this phase isolates the neuron's mathematical response to controlled spike patterns.
 
-#align(center + horizon)[
-#include "figures/phase1pattern.typ"
-]
-
-
-
-== LIF MODEL
-#align(center)[
-#include "figures/lifdynamics.typ"
-]
-== IF MODEL
-#align(center)[
-#include "figures/ifmodel.typ"
-]
-
-== LINEAR ACUMULATING RAMP MODEL
-#align(center)[
-#include "figures/rampmodel.typ"
-]
-
-== STATE DISCOUNT MODEL
-#align(center)[
-#include "figures/discountmodel.typ"
-]
-
 == PHASE II: ZERO-SHOT WEIGHT TRANSFER
 
-1. Train a standard ANN baseline ($784 arrow.r 128 arrow.r 10$, Adam optimizer, 1000 epochs, no bias terms)
+1. Train a standard ANN baseline ($784 arrow.r 128 arrow.r 10$, Adam optimiser, 1000 epochs, no bias terms)
 2. Copy FP32 weights directly to a structurally identical SNN — scaled by $times 64$ to expand dynamic range for momentum integration
 3. Run SNN inference using Model C over $T_"max" = 64$ ticks with WTA output
 
@@ -327,47 +312,55 @@ Efficiency is tracked via SyOPs vs MACs and mean time-to-decision latency across
 
 == PHASE III: LEARNING
 
-The SNN is trained *from scratch* — randomized weights, no labels, no backpropagation.
+The SNN is trained *from scratch* — randomised weights, no labels, no backpropagation.
+
 Learning loop per image (one saccade):
 1. Encode image as TTFS spike train ($t_i = (1 - p_i) dot 64$, background suppressed)
 2. Forward pass — all 128 hidden neurons integrate independently via Model C
 3. *Post-hoc Hard WTA:* Only the single earliest-firing neuron is permitted to update
-4. *Vectorized STDP:* Pre-spikes before the winner's time → LTP ($+A_+$); after or silent → LTD ($-A_-$)
+4. *Vectorised STDP:* Pre-spikes before the winner's time → LTP ($+A_+$); after or silent → LTD ($-A_-$)
 5. *Homeostatic adaptation:* Winner receives threshold penalty ($+600$); all thresholds decay ($times 0.90$)
 
 #box-text()[
-Post-hoc labeling after training: pass labeled data through the frozen network; assign each output neuron the digit class it most frequently wins for. Then measure accuracy on the test set.
+Post-hoc labelling after training: pass labelled data through the frozen network; assign each output neuron the digit class it most frequently wins for. Then measure accuracy on the test set.
 ]
 
+= RESULTS
 
-== METRICS
+== PHASE I: NEURON MODEL EVALUATION
 
-- *Metrics:* Top-1 Accuracy, Temporal Latency (Time-to-Decision), and Synaptic Operations (SyOPs) as a hardware proxy
+#table(
+  columns: (1.8fr, 1fr, 1fr, 1fr, 1fr),
+  inset: 8pt,
+  align: center,
+  [*Model*], [*Regime*], [*Threshold ($theta.alt$)*], [*Concordant ($t$)*], [*Discordant ($t$)*],
+  [A (IF)],             [Saturation], [150],  [6],   [14],
+  [A (IF)],             [Critical],  [290],  [18],  [18],
+  [B (LIF)],            [Saturation], [140], [6],   [14],
+  [B (LIF)],            [Critical],  [220],  [DNF], [18],
+  [C (Linear Ramp)],    [Saturation], [500], [6],   [18],
+  [C (Linear Ramp)],    [Critical],  [1300], [10],  [DNF],
+  [D (State Discount)], [Saturation], [100], [2],   [14],
+  [D (State Discount)], [Critical],  [200],  [18],  [DNF],
+)
 
-
-== PHASE I: NEURON MODEL EVALUATION -- RESULTS
-
-
-#align(center)[
-#image("figures/phase1_composite_sweep.png")
+#box-text()[
+*Key finding:* Under the critical regime, LIF fires *only* for the discordant (strongest-last) pattern — the inverse of TTFS priority. Model C fires *only* for the concordant one, at $t=10$ vs DNF — proving temporal discriminability through linear momentum alone.
 ]
 
-== PHASE II: ZERO-SHOT WEIGHT TRANSFER -- RESULTS
+== PHASE II: ZERO-SHOT WEIGHT TRANSFER
 
-#v(0.5em)
-#align(center)[
-#image("figures/phase2_cumulative_accuracy.png", width: 55%)
-]
-
-#v(1cm)
 ANN baseline (1000 epochs, Adam, bias=false): *98.40%*
 
 Zero-shot SNN (Model C, FP32 weights, ×64 scale): *94.50%* — temporal penalty of only *3.9 pp*
 
-The S-curve profile confirms the *early-exit hypothesis*: >80% of correct decisions are locked in between ticks 5–15.
-Mean time-to-decision: *8.4 ticks* out of 64 → *85.2% reduction* in operations (15,021 SyOPs vs 101,632 MACs).
+#v(0.5em)
 
-== PHASE III: LOCAL SNN LEARNING -- RESULTS
+#image("figures/phase2_cumulative_accuracy.png", width: 85%)
+
+The S-curve profile confirms the *early-exit hypothesis*: >80% of correct decisions are locked in between ticks 5–15. Mean time-to-decision: *8.4 ticks* out of 64 → *85.2% reduction* in operations (15,021 SyOPs vs 101,632 MACs).
+
+== PHASE III: LEARNING
 
 Unsupervised STDP + Hard WTA + homeostasis: *44.3% top-1 accuracy*
 
@@ -376,19 +369,16 @@ Unsupervised STDP + Hard WTA + homeostasis: *44.3% top-1 accuracy*
   image("figures/phase3_04_confusion_matrix.png")
 )
 
-#v(1cm)
-
 - Mean latency: *8.3 ticks* — comparable to supervised transfer
 - SyOPs: *12,954* → *87.2% reduction* (marginally sparser than Phase II)
 
 #box-text()[
-Hidden neurons self-organized into holistic digit templates without any labels. Visually simple digits ('0', '1') cluster reliably; morphologically ambiguous pairs ('5'/'0', '4'/'9') cause the most confusion — a structural limit of the single-layer WTA topology, not a failure of STDP.
+Hidden neurons self-organised into holistic digit templates without any labels. Visually simple digits ('0', '1') cluster reliably; morphologically ambiguous pairs ('5'/'0', '4'/'9') cause the most confusion — a structural limit of the single-layer WTA topology, not a failure of STDP.
 ]
 
+= DISCUSSION
 
-== DISCUSSION: KEY FINDINGS & LIMITATIONS
-
-
+== KEY FINDINGS & LIMITATIONS
 
 *Neuron Model Evaluation:*
 - Classical LIF is fundamentally misaligned with TTFS — biological fidelity must be selectively adapted for engineering objectives
@@ -413,12 +403,10 @@ Hidden neurons self-organized into holistic digit templates without any labels. 
 - *Hardware deployment:* Port verified TTFS algorithms to Intel Loihi or IBM TrueNorth to measure true joule-per-inference energy consumption
 
 #box-text()[
-Analog crossbar arrays (memristors, spintronics) represent the ultimate physical substrate — co-locating synaptic weights with computation in a single analog device, realizing the full in-memory computing vision.
+Analog crossbar arrays (memristors, spintronics) represent the ultimate physical substrate — co-locating synaptic weights with computation in a single analog device, realising the full in-memory computing vision.
 ]
 
-== CONCLUSION
-
-
+= CONCLUSION
 
 #box-text()[
 The brain runs on *~20 W*. Modern AI clusters run on *megawatts*. Closing this gap is a paradigmatic challenge — not an engineering detail.
@@ -431,16 +419,13 @@ This thesis demonstrated:
 - *Zero-shot weight transfer* recovers 94.5% accuracy with only a 3.9 pp temporal penalty — no retraining required
 - *Unsupervised STDP* successfully extracts geometric features (44.3%) without labels or backpropagation
 
+#pagebreak()
 
-The "Sparsity Paradox" — GPUs executing masked zero multiplications — confirms that *realizing these efficiency gains requires native neuromorphic substrates*.
+The "Sparsity Paradox" — GPUs executing masked zero multiplications — confirms that *realising these efficiency gains requires native neuromorphic substrates*.
 
-#align(horizon)[
 #box-text()[
-The majority of the teoretical savings come from the TTFS encoding and the challange is building systems
-around this
-
 The algorithmic foundations are proven. The remaining challenge is hardware. As Intel Loihi, IBM TrueNorth, and analog crossbar arrays mature, the 20-watt brain becomes the blueprint — not just the metaphor.
-]]
+]
 
 #pagebreak()
 #bibliography("references.bib")
