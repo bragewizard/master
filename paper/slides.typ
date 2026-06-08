@@ -67,7 +67,7 @@ First let's look at how the brain works...
 == NEURON STRUCTURE & FUNCTION
 
 #v(1cm)
-A biological neuron is a highly specialized cell that is the foundational building block in the nervous system. Functionally it is a time-dependent, event-driven processor with three functional zones:
+A biological neuron is a highly specialized cell that is the foundational building block in the nervous system. Functionally it is a event-driven processor with three functional zones:
 
 - *Dendrites (Input):* Branching tree collecting signals from thousands of upstream neurons via synaptic terminals
 - *Soma (Integration):* Cell body summing competing excitatory and inhibitory inputs; acts as a biological capacitor
@@ -175,7 +175,7 @@ Spikes occurring at the same relative phase ($phi_1$ and $phi_2$) across differe
 
 *Lateral Inhibition and Winner-Takes-All (WTA):*
 
-- An active excitatory neuron stimulates nearby inhibitory interneurons, which in turn suppress competing excitatory neighbours
+- An active excitatory neuron stimulates nearby inhibitory neurons, which in turn suppress competing excitatory neighbours
 - This creates a *WTA dynamic* — the most active neuron silences its competitors, providing a physical mechanism for categorical decisions without a central processor
 
 #box-text()[
@@ -239,14 +239,16 @@ Standard deep learning imposes four compounding hardware bottlenecks:
 Three architectural pillars that directly address each bottleneck:
 
 #box-text()[
-*Co-location of Memory and Compute (The Synaptic Principle):*
+*Co-location of Memory and Compute:*
 Synaptic weights live with the neuron — zero data transport cost. Learning and inference are co-located.
 
-*Event-Driven Asynchrony (The Action Potential Principle):*
+*Event-Driven Asynchrony:*
 No global clock. Energy scales with task activity, not network size. Silent neurons consume nothing.
 
-*Sparse Binary Communication (The Spike Principle):*
+*Sparse Binary Communication:*
 Information is encoded in spike timing, not magnitude. Bandwidth scales with information content, not data dimensionality.
+
+*Local learning rules:* Synapses can update independent of eachother avoiding the backpropagation lock.
 ]
 
 == METHOD
@@ -490,7 +492,7 @@ GPUs still perform masked zero multiplications: *realizing these efficiency gain
 #align(horizon)[
 #box-text()[
 The majority of the teoretical savings come from the TTFS encoding and the challange is building systems
-around this. The algorithmic foundations are proven. The remaining challenge is hardware.
+around this.
 ]]
 
 #pagebreak()
